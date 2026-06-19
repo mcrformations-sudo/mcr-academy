@@ -948,7 +948,7 @@ document.addEventListener('keydown',e=>{if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.ta
   var CODES = { "MCR-ESSAI":"Essai", "PARIS-DEMO":"Collaborateur Paris" };
   var KEY = "mcrAccesOk";
   function ok(){ try{ return CODES[localStorage.getItem(KEY)] != null; }catch(e){ return false; } }
-  if(ok()) return;
+  if(ok()||localStorage.getItem('sb-mmaolkpsaroxqblthmhk-auth-token')) return;
   function build(){
     if(document.getElementById('mcrGate')) return;
     var o=document.createElement('div'); o.id='mcrGate';
@@ -971,7 +971,7 @@ document.addEventListener('keydown',e=>{if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.ta
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));var r=await sb.from("attestations").insert(rec);if(r&&r.error)return r;try{await sb.from("stagiaires").insert({prenom:rec.prenom,nom:rec.nom,email:rec.email||null,entreprise:rec.entreprise||null,code_acces:(localStorage.getItem("mcrAccesOk")||null)});}catch(e){}return r;}catch(e){return{error:String(e)};}};
+window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));try{var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;if(u){rec.user_id=u.id;var pr=await sb.from("profiles").select("entreprise_id").eq("id",u.id).maybeSingle();if(pr&&pr.data&&pr.data.entreprise_id)rec.entreprise_id=pr.data.entreprise_id;var stg=await sb.from("stagiaires").select("id").eq("user_id",u.id).maybeSingle();if(stg&&stg.data)rec.stagiaire_id=stg.data.id;}}catch(e){}var r=await sb.from("attestations").insert(rec);return r;}catch(e){return{error:String(e)};}};
 </script>
 </body>
 

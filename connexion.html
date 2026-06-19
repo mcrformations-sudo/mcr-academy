@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — MCR Academy</title>
+<style>
+  :root{--gold:#d6a338;--gold-2:#b9842a;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2;--bad:#ff8c82;--ok:#5ee9a0}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);
+    background:radial-gradient(900px 600px at 50% -10%,#1a2230,#0b0e13)}
+  .box{width:min(400px,94vw);background:#12161c;border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:0 30px 80px -20px #000}
+  .crest{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:30px}
+  .sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
+  h1{text-align:center;font-size:21px;margin:10px 0 4px}
+  .lead{text-align:center;color:var(--muted);font-size:13px;margin:0 0 20px}
+  label{display:block;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
+  input{width:100%;background:#0f141a;border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);font-size:14.5px;font-family:inherit}
+  input:focus{outline:none;border-color:var(--gold)}
+  .btn{width:100%;margin-top:18px;border:0;border-radius:12px;padding:13px;font-weight:800;font-size:15px;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-family:inherit}
+  .btn:disabled{opacity:.6}
+  .switch{text-align:center;margin-top:16px;font-size:13px;color:var(--muted)}
+  .switch a{color:var(--gold);font-weight:700;cursor:pointer;text-decoration:none}
+  .msg{min-height:18px;text-align:center;font-size:13px;margin-top:10px}
+  .msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="crest">🐦</div>
+    <div class="sub">MCR Academy</div>
+    <h1 id="title">Connexion</h1>
+    <p class="lead" id="lead">Accédez à votre espace de formation.</p>
+
+    <div id="signupFields" class="hidden">
+      <label>Prénom</label><input id="prenom" autocomplete="given-name">
+      <label>Nom</label><input id="nom" autocomplete="family-name">
+    </div>
+    <label>Email</label><input id="email" type="email" autocomplete="email">
+    <label>Mot de passe</label><input id="password" type="password" autocomplete="current-password">
+    <div id="codeWrap" class="hidden">
+      <label>Code d'accès</label><input id="code" placeholder="Code reçu de votre entreprise">
+      <div class="hint">Code communiqué par votre employeur (stagiaire) ou par MCR Formations (RH / administrateur).</div>
+    </div>
+
+    <button class="btn" id="goBtn">Se connecter</button>
+    <div id="msg" class="msg"></div>
+    <div class="switch" id="switch">Pas encore de compte ? <a id="toggle">Créer un compte</a></div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SB_URL="https://mmaolkpsaroxqblthmhk.supabase.co";
+  const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
+  const sb=window.supabase.createClient(SB_URL,SB_KEY);
+  let mode="login"; // 'login' | 'signup'
+
+  const el=id=>document.getElementById(id);
+  function setMode(m){
+    mode=m;
+    const su=(m==="signup");
+    el("signupFields").classList.toggle("hidden",!su);
+    el("codeWrap").classList.toggle("hidden",!su);
+    el("title").textContent=su?"Créer un compte":"Connexion";
+    el("lead").textContent=su?"Inscrivez-vous pour accéder à vos formations.":"Accédez à votre espace de formation.";
+    el("goBtn").textContent=su?"Créer mon compte":"Se connecter";
+    el("switch").innerHTML=su?"Déjà un compte ? <a id='toggle'>Se connecter</a>":"Pas encore de compte ? <a id='toggle'>Créer un compte</a>";
+    el("toggle").onclick=()=>setMode(su?"login":"signup");
+    el("msg").textContent="";
+  }
+  el("toggle").onclick=()=>setMode("signup");
+
+  function route(role){
+    if(role==="admin") location.href="admin.html";
+    else if(role==="rh") location.href="espace-rh.html";
+    else location.href="MCR_Academy.html";
+  }
+  async function roleOf(uid){
+    const {data}=await sb.from("profiles").select("role").eq("id",uid).maybeSingle();
+    return data?data.role:null;
+  }
+
+  el("goBtn").onclick=async()=>{
+    const msg=el("msg"); msg.className="msg";
+    const email=el("email").value.trim(), pwd=el("password").value;
+    if(!email||!pwd){msg.className="msg err";msg.textContent="Email et mot de passe requis.";return;}
+    el("goBtn").disabled=true; msg.textContent="Veuillez patienter…";
+    try{
+      if(mode==="login"){
+        const {data,error}=await sb.auth.signInWithPassword({email,password:pwd});
+        if(error){msg.className="msg err";msg.textContent="Connexion impossible : "+error.message;return;}
+        const role=await roleOf(data.user.id);
+        if(!role){msg.className="msg err";msg.textContent="Compte sans rôle. Contactez MCR Formations.";return;}
+        msg.className="msg ok";msg.textContent="Connecté, redirection…";route(role);
+      } else {
+        const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim();
+        if(!prenom||!nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
+        if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
+        const {data,error}=await sb.auth.signUp({email,password:pwd});
+        if(error){msg.className="msg err";msg.textContent="Inscription impossible : "+error.message;return;}
+        if(!data.session){ // au cas où autoconfirm off
+          const r=await sb.auth.signInWithPassword({email,password:pwd});
+          if(r.error){msg.className="msg ok";msg.textContent="Compte créé. Vérifiez votre email puis connectez-vous.";return;}
+        }
+        const {data:role,error:e2}=await sb.rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom});
+        if(e2){msg.className="msg err";msg.textContent="Erreur : "+e2.message;return;}
+        if(role==="CODE_INCONNU"){msg.className="msg err";msg.textContent="Code d'accès inconnu. Vérifiez auprès de votre employeur / MCR.";return;}
+        msg.className="msg ok";msg.textContent="Compte créé, redirection…";route(role);
+      }
+    }catch(ex){msg.className="msg err";msg.textContent="Erreur : "+ex;}
+    finally{el("goBtn").disabled=false;}
+  };
+
+  // déjà connecté ? on route directement
+  (async()=>{const {data}=await sb.auth.getSession(); if(data.session){const role=await roleOf(data.session.user.id); if(role) route(role);}})();
+})();
+</script>
+</body>
+</html>

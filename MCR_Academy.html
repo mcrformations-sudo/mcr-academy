@@ -454,7 +454,7 @@ renderStats();
   var CODES = { "MCR-ESSAI":"Essai", "PARIS-DEMO":"Collaborateur Paris" };
   var KEY = "mcrAccesOk";
   function ok(){ try{ return CODES[localStorage.getItem(KEY)] != null; }catch(e){ return false; } }
-  if(ok()) return;
+  if(ok()||localStorage.getItem('sb-mmaolkpsaroxqblthmhk-auth-token')) return;
   function build(){
     if(document.getElementById('mcrGate')) return;
     var o=document.createElement('div'); o.id='mcrGate';

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace entreprise — MCR Academy</title>
+<style>
+  :root{--gold:#d6a338;--gold-2:#b9842a;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2;--ok:#22c55e;--bad:#ef4444}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(1100px 650px at 80% -10%,#1a2230,#0b0e13);color:var(--ink);min-height:100vh}
+  .wrap{max-width:1000px;margin:0 auto;padding:26px 20px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold-2));display:grid;place-items:center;font-size:22px}
+  .brand .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .brand h1{font-size:18px;margin:0;font-weight:800}
+  .btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407}
+  .btn.ghost{background:#1b2127;color:var(--ink);border:1px solid var(--line)}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{padding:9px 18px;border-radius:99px;border:1px solid var(--line);background:#1b2127;color:var(--muted);font-weight:700;font-size:13.5px;cursor:pointer}
+  .tab.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;border-color:transparent}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px}
+  .card h2{margin:0 0 4px;font-size:16px}
+  .card .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .codebox{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#0f141a;border:1px dashed var(--gold);border-radius:12px;padding:12px 16px;margin-top:8px}
+  .codebox b{font-size:18px;letter-spacing:2px;color:var(--gold)}
+  .stat{display:inline-flex;align-items:baseline;gap:7px;font-size:13px;color:var(--muted);margin-bottom:12px}
+  .stat b{font-size:22px;color:var(--gold)}
+  form.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  input{background:#0f141a;border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--ink);font-size:14px;font-family:inherit;flex:1;min-width:130px}
+  input:focus{outline:none;border-color:var(--gold)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  td{padding:11px 12px;border-bottom:1px solid var(--line)}
+  tr.clickable{cursor:pointer} tr:hover td{background:#1b2127}
+  td .go{color:var(--gold);font-weight:700;font-size:12px;white-space:nowrap}
+  .pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:700}
+  .pill.ok{background:rgba(34,197,94,.16);color:#5ee9a0}.pill.no{background:rgba(239,68,68,.16);color:#ff8c82}
+  .empty{color:var(--muted);text-align:center;padding:28px;font-size:14px}
+  .msg{font-size:13px;margin-top:8px;min-height:18px}.msg.ok{color:#5ee9a0}.msg.err{color:#ff8c82}
+  .hidden{display:none!important}
+  #certModal{position:fixed;inset:0;z-index:120;background:rgba(4,7,11,.8);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 16px}
+  #certModal.open{display:flex}
+  .cert-actions{position:sticky;top:0;display:flex;gap:10px;justify-content:flex-end;width:min(820px,96vw);margin-bottom:10px}
+  .cert-sheet{width:min(820px,96vw);background:#fff;color:#15202b;border-radius:10px;padding:54px 56px;box-shadow:0 30px 80px -20px #000;position:relative}
+  .cert-sheet::before{content:"";position:absolute;inset:14px;border:2px solid var(--gold);border-radius:6px;pointer-events:none}
+  .cert-sheet .inner{position:relative;text-align:center}
+  .cert-crest{width:74px;height:74px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold)}
+  .cert-crest span{font-size:34px}
+  .cert-org{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#b9842a;font-weight:800}
+  .cert-sheet h1{font-size:30px;margin:14px 0 2px;color:#15202b}
+  .cert-sheet .formation{font-size:15px;color:#5a6675;margin:4px 0 22px;font-style:italic}
+  .cert-sheet .to{font-size:13px;color:#5a6675;font-weight:600}
+  .cert-name{font-size:34px;font-weight:800;margin:8px 0 14px;background:linear-gradient(135deg,#d6a338,#9c6f1f);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cert-sheet .body{font-size:14px;color:#3a4654;line-height:1.7;font-weight:500;max-width:560px;margin:0 auto}
+  .cert-meta{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin:26px 0 6px;font-size:11px;color:#8a97a4;font-weight:700;text-transform:uppercase}
+  .cert-meta b{display:block;font-size:14px;color:#15202b;margin-top:3px;text-transform:none}
+  .cert-foot{font-size:10.5px;color:#9aa6b2;line-height:1.5;margin-top:24px;max-width:600px;margin:24px auto 0}
+  @media print{body{background:#fff!important}body *{visibility:hidden!important}#certModal,#certModal .cert-sheet,#certModal .cert-sheet *{visibility:visible!important}#certModal{position:absolute;inset:0;background:#fff;display:block;padding:0}.cert-actions{display:none!important}.cert-sheet{box-shadow:none;width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap hidden" id="app">
+  <header>
+    <div class="brand"><div class="logo">🐦</div><div><div class="sub">MCR Academy</div><h1 id="entName">Espace entreprise</h1></div></div>
+    <button class="btn ghost" id="logout">Se déconnecter</button>
+  </header>
+
+  <div class="tabs">
+    <div class="tab on" data-tab="sal">Mes salariés</div>
+    <div class="tab" data-tab="att">Attestations</div>
+    <div class="tab" data-tab="invit">Inviter</div>
+  </div>
+
+  <section id="tab-sal">
+    <div class="card">
+      <h2>Ajouter un salarié</h2>
+      <p class="desc">Ajoutez vos salariés à la liste. Ils pourront ensuite créer leur compte avec le code de votre entreprise (onglet « Inviter »).</p>
+      <form class="row" id="addForm">
+        <input id="f_prenom" placeholder="Prénom" required>
+        <input id="f_nom" placeholder="Nom" required>
+        <input id="f_email" type="email" placeholder="Email (optionnel)">
+        <button class="btn gold" type="submit">+ Ajouter</button>
+      </form>
+      <div id="addMsg" class="msg"></div>
+    </div>
+    <div class="card">
+      <div class="stat"><b id="salCount">—</b> salarié(s)</div>
+      <div id="salTable"></div>
+    </div>
+  </section>
+
+  <section id="tab-att" class="hidden">
+    <div class="card">
+      <div class="stat"><b id="attCount">—</b> attestation(s) de mes salariés</div>
+      <div id="attTable"></div>
+    </div>
+  </section>
+
+  <section id="tab-invit" class="hidden">
+    <div class="card">
+      <h2>Inviter mes salariés</h2>
+      <p class="desc">Transmettez ce lien et ce code à vos salariés. Ils créent leur compte et accèdent directement à leurs formations.</p>
+      <p style="font-size:13px;color:var(--muted);margin:14px 0 4px">Lien de connexion</p>
+      <div class="codebox"><b id="loginUrl" style="font-size:14px;letter-spacing:0"></b><button class="btn ghost" id="copyUrl">Copier</button></div>
+      <p style="font-size:13px;color:var(--muted);margin:18px 0 4px">Code d'accès de votre entreprise</p>
+      <div class="codebox"><b id="entCode">—</b><button class="btn ghost" id="copyCode">Copier</button></div>
+    </div>
+  </section>
+</div>
+
+<div id="loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa6b2;font-family:system-ui">Chargement…</div>
+
+<div id="certModal"><div style="display:flex;flex-direction:column;align-items:center;width:100%">
+  <div class="cert-actions"><button class="btn ghost" id="certClose">Fermer</button><button class="btn gold" id="certPrint">🖨 Imprimer / PDF</button></div>
+  <div class="cert-sheet"><div class="inner" id="certBody"></div></div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SB_URL="https://mmaolkpsaroxqblthmhk.supabase.co";
+  const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
+  const sb=window.supabase.createClient(SB_URL,SB_KEY);
+  const el=id=>document.getElementById(id);
+  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+  function fdate(s){if(!s)return"—";try{return new Date(s).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});}catch(e){return s;}}
+  let ENT=null;
+
+  (async()=>{
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session){location.href="connexion.html";return;}
+    const {data:prof}=await sb.from("profiles").select("role,entreprise_id").eq("id",session.user.id).maybeSingle();
+    if(!prof||prof.role!=="rh"){ if(prof&&prof.role==="admin"){location.href="admin.html";return;} location.href="connexion.html";return; }
+    const {data:ent}=await sb.from("entreprises").select("*").eq("id",prof.entreprise_id).maybeSingle();
+    ENT=ent;
+    el("entName").textContent=ent?ent.nom:"Mon entreprise";
+    el("entCode").textContent=ent?ent.code_acces:"—";
+    el("loginUrl").textContent=location.origin+location.pathname.replace(/espace-rh\.html$/,"connexion.html");
+    el("loading").classList.add("hidden"); el("app").classList.remove("hidden");
+    load();
+  })();
+
+  document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["sal","att","invit"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
+
+  async function load(){ await Promise.all([loadSal(),loadAtt()]); }
+
+  async function loadSal(){
+    const el2=el("salTable"); el2.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("stagiaires").select("*").eq("entreprise_id",ENT.id).order("created_at",{ascending:false});
+    if(error){el2.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    el("salCount").textContent=data.length;
+    if(!data.length){el2.innerHTML='<div class="empty">Aucun salarié pour le moment.</div>';return;}
+    el2.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Compte</th><th>Inscrit le</th></tr></thead><tbody>'+
+      data.map(s=>'<tr><td>'+esc(s.prenom)+' '+esc(s.nom)+'</td><td>'+(esc(s.email)||"—")+'</td><td>'+(s.user_id?'<span class="pill ok">Actif</span>':'<span class="pill no">À créer</span>')+'</td><td>'+fdate(s.created_at)+'</td></tr>').join("")+'</tbody></table>';
+  }
+  async function loadAtt(){
+    const el2=el("attTable"); el2.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("attestations").select("*").eq("entreprise_id",ENT.id).order("created_at",{ascending:false});
+    if(error){el2.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    el("attCount").textContent=data.length; window.__att=data;
+    if(!data.length){el2.innerHTML='<div class="empty">Aucune attestation pour le moment. Elles apparaîtront quand vos salariés valideront leurs formations.</div>';return;}
+    el2.innerHTML='<table><thead><tr><th>Salarié</th><th>Formation</th><th>Score</th><th>Résultat</th><th>Date</th><th></th></tr></thead><tbody>'+
+      data.map(a=>'<tr class="clickable" data-id="'+esc(a.id)+'"><td>'+esc(a.prenom)+' '+esc(a.nom)+'</td><td>'+esc(a.formation)+'</td><td>'+(a.pourcentage!=null?a.pourcentage+"%":"—")+'</td><td>'+(a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>')+'</td><td>'+fdate(a.created_at)+'</td><td><span class="go">📄 PDF</span></td></tr>').join("")+'</tbody></table>';
+    el2.querySelectorAll("tr.clickable").forEach(tr=>{tr.onclick=()=>openCert(data.find(x=>String(x.id)===tr.dataset.id));});
+  }
+
+  el("addForm").onsubmit=async e=>{
+    e.preventDefault(); const m=el("addMsg"); m.className="msg"; m.textContent="Enregistrement…";
+    const rec={prenom:el("f_prenom").value.trim(),nom:el("f_nom").value.trim(),email:el("f_email").value.trim(),entreprise:ENT.nom,entreprise_id:ENT.id};
+    if(!rec.prenom||!rec.nom){m.className="msg err";m.textContent="Prénom et nom requis.";return;}
+    const {error}=await sb.from("stagiaires").insert(rec);
+    if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
+    m.className="msg ok";m.textContent="✓ "+rec.prenom+" ajouté(e).";
+    ["f_prenom","f_nom","f_email"].forEach(id=>el(id).value=""); loadSal();
+  };
+
+  el("logout").onclick=async()=>{await sb.auth.signOut();location.href="connexion.html";};
+  el("copyCode").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(el("entCode").textContent);el("copyCode").textContent="Copié !";setTimeout(()=>el("copyCode").textContent="Copier",1500);};
+  el("copyUrl").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(el("loginUrl").textContent);el("copyUrl").textContent="Copié !";setTimeout(()=>el("copyUrl").textContent="Copier",1500);};
+
+  function certRef(a){const y=(a.created_at?new Date(a.created_at):new Date()).getFullYear();const idp=(String(a.id||"").replace(/[^a-zA-Z0-9]/g,"").slice(-4)||"0000").toUpperCase();return "MCR-"+y+"-"+idp;}
+  function openCert(a){
+    if(!a)return;
+    const meta='<div>Organisme<b>MCR Formations</b></div>'+(a.entreprise?'<div>Entreprise<b>'+esc(a.entreprise)+'</b></div>':'')+'<div>Délivré le<b>'+fdate(a.created_at)+'</b></div><div>Référence<b>'+certRef(a)+'</b></div>';
+    el("certBody").innerHTML='<div class="cert-crest"><span>🐦</span></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';
+    el("certModal").classList.add("open");
+  }
+  el("certClose").onclick=()=>el("certModal").classList.remove("open");
+  el("certPrint").onclick=()=>window.print();
+  el("certModal").addEventListener("click",e=>{if(e.target.id==="certModal")e.currentTarget.classList.remove("open");});
+})();
+</script>
+</body>
+</html>
