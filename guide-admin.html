@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide administrateur — MCR Academy</title>
+<style>
+  :root{--gold:#d6a338;--gold-2:#b9842a;--bg:#0d1117;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);background:radial-gradient(1100px 700px at 70% -10%,#1a2230,#0b0e13);line-height:1.6}
+  .wrap{max-width:800px;margin:0 auto;padding:40px 22px 70px}
+  .top{text-align:center;margin-bottom:14px}
+  .crest{width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:34px}
+  .sub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
+  h1{font-size:30px;margin:10px 0 6px}
+  .lead{color:var(--muted);font-size:16px;max-width:640px;margin:0 auto}
+  h2.section{font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin:34px 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .schema{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}
+  .role{flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .role .ic{font-size:24px}
+  .role h3{margin:6px 0 4px;font-size:16px}
+  .role p{margin:0;color:#c7d0da;font-size:13.5px}
+  .role .tag{display:inline-block;margin-top:8px;font-size:11px;font-weight:800;color:var(--gold);background:rgba(214,163,56,.12);border-radius:99px;padding:3px 10px}
+  .step{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:14px}
+  .num{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;font-size:17px;display:grid;place-items:center}
+  .step h3{margin:1px 0 5px;font-size:17px}
+  .step p{margin:0;color:#c7d0da;font-size:14.5px}
+  .hl{color:var(--gold);font-weight:700}
+  code{background:#0f141a;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--gold);font-weight:700;font-size:13px}
+  .tip{background:rgba(214,163,56,.1);border:1px solid rgba(214,163,56,.4);border-radius:14px;padding:15px 20px;margin:14px 0;font-size:14px}
+  .tip b{color:var(--gold)}
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:36px;line-height:1.7}
+  .foot a{color:var(--gold)}
+  .btn{display:inline-block;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;padding:13px 24px;border-radius:12px;font-size:15px;margin-top:8px}
+  @media print{body{background:#fff;color:#111}.step,.role,.tip{background:#fff;border-color:#ddd}.crest{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="crest">🐦</div>
+    <div class="sub">MCR Academy · Guide administrateur</div>
+    <h1>Le fonctionnement de votre plateforme</h1>
+    <p class="lead">Tout ce qu'il faut savoir pour gérer MCR Academy : les rôles, la création d'une entreprise cliente, le suivi et les attestations.</p>
+  </div>
+
+  <h2 class="section">Comment c'est organisé</h2>
+  <p style="color:#c7d0da;font-size:15px">La plateforme repose sur <span class="hl">3 niveaux d'accès</span>. Chacun se connecte au même endroit (<code>connexion.html</code>) et est dirigé automatiquement vers son espace :</p>
+  <div class="schema">
+    <div class="role"><div class="ic">👑</div><h3>Vous (admin)</h3><p>Toi et Fred. Vous voyez tout : entreprises, stagiaires, attestations. Vous créez les entreprises clientes.</p><span class="tag">Code : MCR-PATRON</span></div>
+    <div class="role"><div class="ic">🏢</div><h3>Le RH / patron</h3><p>Le client. Voit uniquement sa société : ses salariés, leur avancement, leurs attestations.</p><span class="tag">Code RH propre à sa société</span></div>
+    <div class="role"><div class="ic">🎓</div><h3>Le salarié</h3><p>Suit ses formations et obtient son attestation. Voit seulement son parcours.</p><span class="tag">Code stagiaire de sa société</span></div>
+  </div>
+
+  <h2 class="section">Vos étapes au quotidien</h2>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>Connectez-vous en administrateur</h3>
+    <p>La première fois : sur la page de connexion, cliquez sur <span class="hl">« Créer un compte »</span> et utilisez le code <code>MCR-PATRON</code>. Vous arrivez sur la console. Fred fait pareil de son côté : vous partagez les mêmes données.</p>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>Créez une entreprise quand vous vendez une formation</h3>
+    <p>Onglet <span class="hl">« Entreprises »</span> → saisissez le nom de la société → <span class="hl">« Créer »</span>. La plateforme génère automatiquement <span class="hl">deux codes</span> : un <span class="hl">code RH</span> (pour le patron) et un <span class="hl">code stagiaire</span> (pour les salariés).</p>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>Distribuez les accès</h3>
+    <p>Envoyez au patron / RH : le lien de connexion + son <span class="hl">code RH</span> + le <span class="hl">guide entreprise</span>. Le code stagiaire, lui, sera distribué par le RH à ses salariés (ou par vous si besoin).</p>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>Suivez l'activité</h3>
+    <p>Onglet <span class="hl">« Stagiaires »</span> : toutes les personnes inscrites, toutes entreprises confondues. Onglet <span class="hl">« Attestations »</span> : toutes les attestations délivrées, avec <span class="hl">export CSV</span> pour vos archives.</p>
+  </div></div>
+
+  <div class="step"><div class="num">5</div><div>
+    <h3>Générez une attestation en PDF</h3>
+    <p>Dans <span class="hl">« Attestations »</span>, cliquez sur une ligne → l'attestation s'affiche → <span class="hl">« Imprimer / PDF »</span>. Pratique si un employeur la réclame et que le salarié ne l'a plus.</p>
+  </div></div>
+
+  <div class="tip"><b>📋 Qualiopi :</b> toutes les attestations sont conservées dans la base et exportables en CSV — pratique pour justifier le suivi sur les 5 ans demandés.</div>
+
+  <h2 class="section">Bon à savoir</h2>
+  <div class="tip"><b>Confidentialité :</b> un RH ne voit jamais les autres entreprises, un salarié ne voit que son parcours. Vous deux êtes les seuls à tout voir.</div>
+  <div class="tip"><b>Mise à jour :</b> quand on améliore la plateforme, c'est instantané pour tout le monde — personne n'a rien à réinstaller.</div>
+
+  <div style="text-align:center"><a class="btn" href="admin.html">Ouvrir ma console admin →</a></div>
+
+  <div class="foot">
+    MCR Academy · Plateforme e-learning — MCR Formations<br>
+    <a href="mailto:mcr.formations@gmail.com">mcr.formations@gmail.com</a>
+  </div>
+</div>
+</body>
+</html>
