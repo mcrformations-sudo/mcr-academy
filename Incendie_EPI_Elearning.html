@@ -931,6 +931,8 @@ function renderCert(){
   ni.oninput=()=>{state.name=ni.value;saveState();document.getElementById("nameDisplay").textContent=ni.value||"—";};
   document.getElementById("backHome").onclick=()=>go("home");
   document.getElementById("printBtn").onclick=()=>window.print();
+  (function(){var nav=document.querySelector('.cert .nav-btns');if(!nav||document.getElementById('saveAttBtn'))return;var b=document.createElement('button');b.className='btn primary';b.id='saveAttBtn';b.textContent='✅ Valider mon attestation';nav.appendChild(b);var info=document.createElement('div');info.id='saveAttMsg';info.style.cssText='width:100%;text-align:center;font-size:12.5px;margin-top:10px;color:var(--muted)';nav.parentNode.appendChild(info);b.onclick=async function(){var nm=(state.name||'').trim();if(!nm){info.textContent='Saisissez votre nom avant d’enregistrer.';return;}var parts=nm.split(' ');var prenom=parts.shift()||nm;var nom=parts.join(' ');b.disabled=true;info.textContent='Enregistrement…';var rec={prenom:prenom,nom:nom,email:'',entreprise:'',formation:document.title.split(' — ')[0],score:null,total:null,pourcentage:avg,reussi:true};var r=await window.MCR_saveAttestation(rec);if(r&&!r.error){info.textContent='✓ Attestation enregistrée dans la base MCR Formations.';b.textContent='✔ Enregistrée';}else{b.disabled=false;info.textContent='Échec de l’enregistrement, réessayez.';}};})();
+
 }
 
 document.getElementById("resetBtn").onclick=()=>{if(confirm("Réinitialiser toute votre progression ?")){state={done:{},quiz:{},viewed:{},name:state.name,fs:state.fs,dark:state.dark,tts:state.tts};saveState();go("home");}};
@@ -967,5 +969,10 @@ document.addEventListener('keydown',e=>{if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.ta
   if(document.body) build(); else document.addEventListener('DOMContentLoaded',build);
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));var r=await sb.from("attestations").insert(rec);if(r&&r.error)return r;try{await sb.from("stagiaires").insert({prenom:rec.prenom,nom:rec.nom,email:rec.email||null,entreprise:rec.entreprise||null,code_acces:(localStorage.getItem("mcrAccesOk")||null)});}catch(e){}return r;}catch(e){return{error:String(e)};}};
+</script>
 </body>
+
 </html>
