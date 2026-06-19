@@ -5,77 +5,183 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guide entreprise — MCR Academy</title>
 <style>
-  :root{--gold:#d6a338;--gold-2:#b9842a;--bg:#0d1117;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);background:radial-gradient(1100px 700px at 70% -10%,#1a2230,#0b0e13);line-height:1.6}
-  .wrap{max-width:780px;margin:0 auto;padding:40px 22px 70px}
-  .top{text-align:center;margin-bottom:14px}
-  .crest{width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:34px}
-  .sub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
-  h1{font-size:30px;margin:10px 0 6px}
-  .lead{color:var(--muted);font-size:16px;max-width:600px;margin:0 auto}
-  .intro{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin:28px 0;font-size:15px}
-  .intro b{color:var(--gold)}
-  .step{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px}
-  .num{flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;font-size:18px;display:grid;place-items:center}
-  .step h3{margin:2px 0 6px;font-size:18px}
-  .step p{margin:0;color:#c7d0da;font-size:14.5px}
-  .step .hl{color:var(--gold);font-weight:700}
-  .tip{background:rgba(214,163,56,.1);border:1px solid rgba(214,163,56,.4);border-radius:14px;padding:16px 20px;margin:8px 0 16px;font-size:14px}
-  .tip b{color:var(--gold)}
-  .cta{text-align:center;margin-top:30px}
-  .btn{display:inline-block;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;padding:14px 26px;border-radius:12px;font-size:15px}
-  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:34px;line-height:1.7}
-  .foot a{color:var(--gold)}
-  @media print{body{background:#fff;color:#111}.step,.intro,.tip{background:#fff;border-color:#ddd}.crest{background:#fff}.sub,.btn{color:#000}}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#d6a338;--gold-2:#f0c462;--line:#2a2a30}
+body{font-family:"Segoe UI",system-ui,sans-serif;background:
+  radial-gradient(1200px 700px at 80% -10%,rgba(214,163,56,.18),transparent 60%),
+  radial-gradient(900px 600px at 0% 100%,rgba(214,163,56,.10),transparent 60%),#0b0b0d;
+  color:#f3efe6;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;gap:18px}
+.head{text-align:center}
+.head .brand{font-size:13px;letter-spacing:3px;font-weight:800;color:var(--gold);text-transform:uppercase}
+.head h1{font-size:22px;font-weight:800;margin-top:4px}
+.head p{font-size:13px;color:#a59f93;margin-top:3px}
+.player{width:min(960px,96vw)}
+.bezel{position:relative;border-radius:20px;padding:14px;background:linear-gradient(180deg,#1b1b20,#101013);
+  border:1px solid var(--line);box-shadow:0 40px 90px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
+.bar{display:flex;align-items:center;gap:7px;padding:0 4px 11px}
+.dot{width:11px;height:11px;border-radius:50%;background:#34343c}
+.bar .url{margin-left:10px;flex:1;height:24px;border-radius:7px;background:#0e0e11;border:1px solid var(--line);
+  display:flex;align-items:center;padding:0 10px;font-size:11px;color:#7d7870;gap:7px}
+.screen{position:relative;height:540px;border-radius:13px;overflow:hidden;background:radial-gradient(900px 600px at 80% -10%,#1a2230,#0b0e13)}
+.scene{position:absolute;inset:0;padding:34px 38px;opacity:0;transform:translateY(14px) scale(.99);
+  transition:opacity .5s ease,transform .5s ease;pointer-events:none;overflow:hidden}
+.scene.on{opacity:1;transform:none}
+.center{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
+.kick{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.title{font-size:28px;font-weight:800;color:#eef1f4;line-height:1.15}
+.sub{font-size:14.5px;color:#9aa7b4;font-weight:500;max-width:560px}
+.crest{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:34px}
+.panel{background:#12161c;border:1px solid #262c34;border-radius:16px;padding:20px 22px;margin-top:18px}
+.panel h3{font-size:16px;color:#eef1f4;margin-bottom:4px}
+.panel p{font-size:13px;color:#9aa7b4}
+.field{background:#0f141a;border:1px solid #262c34;border-radius:10px;padding:11px 13px;color:#cdd6df;font-size:13.5px;margin-top:10px}
+.gbtn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;padding:11px 18px;border-radius:11px;font-size:13.5px;margin-top:14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabpill{padding:8px 16px;border-radius:99px;border:1px solid #262c34;background:#1b2127;color:#9aa7b4;font-weight:700;font-size:12.5px}
+.tabpill.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;border-color:transparent}
+.codebox{display:flex;align-items:center;gap:12px;background:#0f141a;border:1px dashed var(--gold);border-radius:12px;padding:14px 18px;margin-top:12px}
+.codebox b{font-size:18px;letter-spacing:2px;color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th{text-align:left;color:#9aa7b4;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;padding:9px 10px;border-bottom:1px solid #262c34}
+td{padding:10px 10px;border-bottom:1px solid #262c34;color:#dfe6ed}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(34,197,94,.16);color:#5ee9a0}
+.pdf{color:var(--gold);font-weight:700;font-size:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:18px}
+.role{background:#12161c;border:1px solid #262c34;border-radius:14px;padding:16px}
+.role .ic{font-size:22px}.role h4{font-size:14px;color:#eef1f4;margin:6px 0 3px}.role p{font-size:11.5px;color:#9aa7b4}
+.cursor{position:absolute;width:26px;height:26px;z-index:20;left:50%;top:50%;transition:transform 1.05s cubic-bezier(.5,.05,.2,1);pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.ripple{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid var(--gold);z-index:19;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4)}
+.ripple.go{animation:rip .6s ease-out}
+@keyframes rip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+.cap{min-height:58px;margin-top:14px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}
+.cap .step{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
+.cap .txt{font-size:18px;font-weight:700;color:#f3efe6;line-height:1.35;max-width:760px}
+.ctrl{display:flex;align-items:center;gap:14px;width:min(960px,96vw);margin-top:2px}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#16161a;color:#f3efe6;font-size:17px;display:grid;place-items:center;cursor:pointer;flex:none;transition:.2s}
+.cbtn:hover{border-color:var(--gold);color:var(--gold)}
+.timeline{flex:1;display:flex;gap:6px}
+.seg{flex:1;height:6px;border-radius:6px;background:#2a2a30;overflow:hidden;cursor:pointer}
+.seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.seg.done i{width:100%}
+.count{font-size:12px;font-weight:700;color:#a59f93;flex:none;min-width:46px;text-align:right}
+.foot{font-size:11px;color:#6f6a60;margin-top:2px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div class="crest">🐦</div>
-    <div class="sub">MCR Academy · MCR Formations</div>
-    <h1>Bienvenue sur votre espace entreprise</h1>
-    <p class="lead">Ce guide vous explique, en 5 étapes simples, comment former vos salariés et récupérer leurs attestations.</p>
-  </div>
+<div class="head">
+  <div class="brand">MCR Academy · Guide entreprise</div>
+  <h1>Votre espace, en 6 étapes</h1>
+  <p>Un mini-film avec voix off — appuyez sur ▶ et laissez-vous guider.</p>
+</div>
 
-  <div class="intro">
-    En tant que responsable (RH ou chef d'entreprise), vous disposez d'un <b>espace dédié à votre société</b>. Vous y inscrivez vos salariés, suivez leur avancement et téléchargez leurs attestations — <b>vous ne voyez que votre entreprise</b>, en toute confidentialité.
-  </div>
-
-  <div class="step"><div class="num">1</div><div>
-    <h3>Créez votre compte responsable</h3>
-    <p>Ouvrez le lien de connexion qui vous a été transmis, cliquez sur <span class="hl">« Créer un compte »</span>, renseignez vos nom, email et mot de passe, puis saisissez votre <span class="hl">code RH</span> communiqué par MCR Formations. Vous arrivez directement sur votre espace.</p>
-  </div></div>
-
-  <div class="step"><div class="num">2</div><div>
-    <h3>Communiquez le code à vos salariés</h3>
-    <p>Dans l'onglet <span class="hl">« Inviter »</span>, vous trouverez le <span class="hl">lien de connexion</span> et le <span class="hl">code d'accès de votre entreprise</span>. Transmettez-les à vos salariés (email, message…). Chaque salarié crée son compte avec ce code et accède aussitôt à ses formations.</p>
-  </div></div>
-
-  <div class="step"><div class="num">3</div><div>
-    <h3>Suivez l'avancement de vos salariés</h3>
-    <p>L'onglet <span class="hl">« Mes salariés »</span> liste les personnes de votre entreprise et indique qui a créé son compte. La liste se met à jour automatiquement au fur et à mesure des inscriptions.</p>
-  </div></div>
-
-  <div class="step"><div class="num">4</div><div>
-    <h3>Récupérez les attestations</h3>
-    <p>Dès qu'un salarié valide une formation, son attestation apparaît dans l'onglet <span class="hl">« Attestations »</span>. Cliquez dessus pour l'afficher, puis sur <span class="hl">« Imprimer / PDF »</span> pour l'enregistrer ou l'imprimer.</p>
-  </div></div>
-
-  <div class="step"><div class="num">5</div><div>
-    <h3>C'est tout !</h3>
-    <p>Vous pouvez vous reconnecter à tout moment avec votre email et mot de passe. Vos données et celles de vos salariés sont conservées en sécurité par MCR Formations.</p>
-  </div></div>
-
-  <div class="tip"><b>💡 Astuce :</b> ajoutez la page de connexion à vos favoris pour la retrouver facilement. En cas d'oubli de mot de passe ou de question, contactez directement MCR Formations.</div>
-
-  <div class="cta"><a class="btn" href="connexion.html">Accéder à mon espace →</a></div>
-
-  <div class="foot">
-    Une question ? Contactez <b>MCR Formations</b> — <a href="mailto:mcr.formations@gmail.com">mcr.formations@gmail.com</a><br>
-    MCR Academy · Plateforme e-learning · Organisme de formation
+<div class="player">
+  <div class="bezel">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="url">🔒 mcr-academy · espace entreprise</span></div>
+    <div class="screen" id="screen">
+      <div class="cursor" id="cursor"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.4L9 21 4 2z" fill="#fff" stroke="#111" stroke-width="1.2"/></svg></div>
+      <div class="ripple" id="ripple"></div>
+    </div>
   </div>
 </div>
+
+<div class="cap" id="cap"><div class="step" id="capStep"></div><div class="txt" id="capTxt"></div></div>
+
+<div class="ctrl">
+  <button class="cbtn" id="playBtn" title="Lecture / Pause">▶</button>
+  <button class="cbtn" id="replayBtn" title="Recommencer">↺</button>
+  <button class="cbtn" id="voixBtn" title="Voix off">🔊</button>
+  <div class="timeline" id="timeline"></div>
+  <div class="count" id="count">1 / 6</div>
+</div>
+<div class="foot">Astuce : cliquez sur un segment de la barre pour aller directement à une étape.</div>
+
+<script>
+const screen=document.getElementById('screen');
+const cursor=document.getElementById('cursor'), ripple=document.getElementById('ripple');
+const capStep=document.getElementById('capStep'), capTxt=document.getElementById('capTxt');
+function move(xp,yp){const r=screen.getBoundingClientRect();cursor.style.transform=`translate(${xp/100*r.width-13}px,${yp/100*r.height-13}px)`;}
+function clickAt(xp,yp){const r=screen.getBoundingClientRect();ripple.style.left=(xp/100*r.width)+'px';ripple.style.top=(yp/100*r.height)+'px';ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');}
+function scn(html){return `<div class="scene">${html}</div>`;}
+
+const scenes=[
+{step:'Bienvenue',txt:"Bienvenue sur votre espace entreprise MCR Academy. En six étapes, vous saurez tout faire.",
+ html:scn(`<div class="center"><div class="crest">🐦</div><div class="kick">MCR Academy · Espace entreprise</div>
+   <div class="title">Formez vos salariés, simplement</div>
+   <div class="sub">Suivez le guide pas à pas 👇</div></div>`),
+ act:()=>{move(50,46);}},
+
+{step:'Étape 1 — Votre compte',txt:"Créez votre compte responsable avec le code RH que MCR Formations vous a communiqué.",
+ html:scn(`<div class="center"><div style="width:min(380px,90%)">
+   <div class="kick" style="text-align:center">Connexion</div>
+   <div class="title" style="font-size:22px;text-align:center;margin-bottom:6px">Créer mon compte</div>
+   <div class="field">Nom et prénom</div><div class="field">Email · mot de passe</div>
+   <div class="field" style="border-color:#d6a338;color:#d6a338;font-weight:700">Code RH : ACME-RH4820</div>
+   <div style="text-align:center"><span class="gbtn">Créer mon compte</span></div></div></div>`),
+ act:()=>{move(50,82);setTimeout(()=>clickAt(50,82),1400);}},
+
+{step:'Étape 2 — Inviter',txt:"Dans l'onglet Inviter, récupérez le lien et le code de votre entreprise, et transmettez-les à vos salariés.",
+ html:scn(`<div class="tabs"><span class="tabpill">Mes salariés</span><span class="tabpill">Attestations</span><span class="tabpill on">Inviter</span></div>
+   <div class="panel"><h3>Inviter mes salariés</h3><p>Transmettez ce lien et ce code à vos salariés.</p>
+   <div class="codebox"><span style="color:#9aa7b4;font-size:12px">Lien</span><b style="font-size:13px;letter-spacing:0">mcr-academy · connexion</b></div>
+   <div class="codebox"><span style="color:#9aa7b4;font-size:12px">Code</span><b>ACME-9520</b></div></div>`),
+ act:()=>{move(80,30);setTimeout(()=>move(60,74),900);}},
+
+{step:'Étape 3 — Mes salariés',txt:"L'onglet Mes salariés liste vos collaborateurs et indique qui a déjà créé son compte.",
+ html:scn(`<div class="tabs"><span class="tabpill on">Mes salariés</span><span class="tabpill">Attestations</span><span class="tabpill">Inviter</span></div>
+   <div class="panel"><table><thead><tr><th>Nom</th><th>Email</th><th>Compte</th></tr></thead><tbody>
+   <tr><td>Julie Martin</td><td>julie@acme.fr</td><td><span class="pill">Actif</span></td></tr>
+   <tr><td>Marc Petit</td><td>marc@acme.fr</td><td><span class="pill">Actif</span></td></tr>
+   <tr><td>Sophie Roy</td><td>sophie@acme.fr</td><td><span class="pill" style="background:rgba(239,68,68,.16);color:#ff8c82">À créer</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(30,30);setTimeout(()=>move(50,55),900);}},
+
+{step:'Étape 4 — Les attestations',txt:"Dès qu'un salarié valide une formation, son attestation apparaît. Cliquez dessus puis sur Imprimer ou PDF.",
+ html:scn(`<div class="tabs"><span class="tabpill">Mes salariés</span><span class="tabpill on">Attestations</span><span class="tabpill">Inviter</span></div>
+   <div class="panel"><table><thead><tr><th>Salarié</th><th>Formation</th><th>Score</th><th></th></tr></thead><tbody>
+   <tr><td>Julie Martin</td><td>Sécurité Incendie — EPI</td><td>90%</td><td><span class="pdf">📄 PDF</span></td></tr>
+   <tr><td>Marc Petit</td><td>SST — Prévention</td><td>78%</td><td><span class="pdf">📄 PDF</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(85,46);setTimeout(()=>clickAt(85,46),1300);}},
+
+{step:'C\'est à vous !',txt:"Vous savez tout. Reconnectez-vous quand vous voulez ; vos données sont conservées en sécurité par MCR Formations.",
+ html:scn(`<div class="center"><div style="font-size:46px">🚀</div>
+   <div class="title">Vous êtes prêt !</div>
+   <div class="sub">Distribuez le code à vos salariés et suivez leur formation en temps réel.</div></div>`),
+ act:()=>{move(50,44);}}
+];
+
+const timeline=document.getElementById('timeline');
+const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
+const count=document.getElementById('count');
+const DUR=4200;
+let idx=0,playing=false,timer=null,segTimer=null,t0=0;
+const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
+function pickVoice(){try{const vs=synth.getVoices();frVoice=vs.find(v=>/fr[-_]?FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null;}catch(e){}}
+pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
+function speak(t){try{synth.cancel();if(!voixOn||!t)return;const u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-''!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
+function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
+function showScene(i){
+  idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
+  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;const node=wrap.firstElementChild;screen.appendChild(node);
+  void node.offsetWidth;node.classList.add('on');
+  capStep.textContent=scenes[i].step;capTxt.textContent=scenes[i].txt;count.textContent=(i+1)+' / '+scenes.length;
+  segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
+  try{scenes[i].act&&scenes[i].act();}catch(e){}
+}
+function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
+  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
+  segTimer=requestAnimationFrame(step);}
+function play(){playing=true;document.getElementById('playBtn').textContent='⏸';speak(scenes[idx].txt);animateSeg();
+  timer=setTimeout(()=>{if(idx<scenes.length-1){goTo(idx+1);}else{pause();}},curDur());}
+function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
+function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
+function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
+document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
+document.getElementById('replayBtn').onclick=replay;
+document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
+window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
+showScene(0);setTimeout(()=>play(),600);
+</script>
 </body>
 </html>

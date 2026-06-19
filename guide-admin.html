@@ -5,92 +5,198 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guide administrateur — MCR Academy</title>
 <style>
-  :root{--gold:#d6a338;--gold-2:#b9842a;--bg:#0d1117;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);background:radial-gradient(1100px 700px at 70% -10%,#1a2230,#0b0e13);line-height:1.6}
-  .wrap{max-width:800px;margin:0 auto;padding:40px 22px 70px}
-  .top{text-align:center;margin-bottom:14px}
-  .crest{width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:34px}
-  .sub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
-  h1{font-size:30px;margin:10px 0 6px}
-  .lead{color:var(--muted);font-size:16px;max-width:640px;margin:0 auto}
-  h2.section{font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin:34px 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px}
-  .schema{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}
-  .role{flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-  .role .ic{font-size:24px}
-  .role h3{margin:6px 0 4px;font-size:16px}
-  .role p{margin:0;color:#c7d0da;font-size:13.5px}
-  .role .tag{display:inline-block;margin-top:8px;font-size:11px;font-weight:800;color:var(--gold);background:rgba(214,163,56,.12);border-radius:99px;padding:3px 10px}
-  .step{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:14px}
-  .num{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;font-size:17px;display:grid;place-items:center}
-  .step h3{margin:1px 0 5px;font-size:17px}
-  .step p{margin:0;color:#c7d0da;font-size:14.5px}
-  .hl{color:var(--gold);font-weight:700}
-  code{background:#0f141a;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--gold);font-weight:700;font-size:13px}
-  .tip{background:rgba(214,163,56,.1);border:1px solid rgba(214,163,56,.4);border-radius:14px;padding:15px 20px;margin:14px 0;font-size:14px}
-  .tip b{color:var(--gold)}
-  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:36px;line-height:1.7}
-  .foot a{color:var(--gold)}
-  .btn{display:inline-block;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;padding:13px 24px;border-radius:12px;font-size:15px;margin-top:8px}
-  @media print{body{background:#fff;color:#111}.step,.role,.tip{background:#fff;border-color:#ddd}.crest{background:#fff}}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#d6a338;--gold-2:#f0c462;--line:#2a2a30}
+body{font-family:"Segoe UI",system-ui,sans-serif;background:
+  radial-gradient(1200px 700px at 80% -10%,rgba(214,163,56,.18),transparent 60%),
+  radial-gradient(900px 600px at 0% 100%,rgba(214,163,56,.10),transparent 60%),#0b0b0d;
+  color:#f3efe6;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;gap:18px}
+.head{text-align:center}
+.head .brand{font-size:13px;letter-spacing:3px;font-weight:800;color:var(--gold);text-transform:uppercase}
+.head h1{font-size:22px;font-weight:800;margin-top:4px}
+.head p{font-size:13px;color:#a59f93;margin-top:3px}
+.player{width:min(960px,96vw)}
+.bezel{position:relative;border-radius:20px;padding:14px;background:linear-gradient(180deg,#1b1b20,#101013);
+  border:1px solid var(--line);box-shadow:0 40px 90px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
+.bar{display:flex;align-items:center;gap:7px;padding:0 4px 11px}
+.dot{width:11px;height:11px;border-radius:50%;background:#34343c}
+.bar .url{margin-left:10px;flex:1;height:24px;border-radius:7px;background:#0e0e11;border:1px solid var(--line);
+  display:flex;align-items:center;padding:0 10px;font-size:11px;color:#7d7870;gap:7px}
+.screen{position:relative;height:540px;border-radius:13px;overflow:hidden;background:radial-gradient(900px 600px at 80% -10%,#1a2230,#0b0e13)}
+.scene{position:absolute;inset:0;padding:34px 38px;opacity:0;transform:translateY(14px) scale(.99);
+  transition:opacity .5s ease,transform .5s ease;pointer-events:none;overflow:hidden}
+.scene.on{opacity:1;transform:none}
+.center{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
+.kick{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.title{font-size:28px;font-weight:800;color:#eef1f4;line-height:1.15}
+.sub{font-size:14.5px;color:#9aa7b4;font-weight:500;max-width:560px}
+.crest{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:34px}
+.panel{background:#12161c;border:1px solid #262c34;border-radius:16px;padding:20px 22px;margin-top:18px}
+.panel h3{font-size:16px;color:#eef1f4;margin-bottom:4px}
+.panel p{font-size:13px;color:#9aa7b4}
+.field{background:#0f141a;border:1px solid #262c34;border-radius:10px;padding:11px 13px;color:#cdd6df;font-size:13.5px;margin-top:10px}
+.gbtn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;padding:11px 18px;border-radius:11px;font-size:13.5px;margin-top:14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabpill{padding:8px 16px;border-radius:99px;border:1px solid #262c34;background:#1b2127;color:#9aa7b4;font-weight:700;font-size:12.5px}
+.tabpill.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;border-color:transparent}
+.codetag{background:#0f141a;border:1px solid #262c34;border-radius:7px;padding:3px 9px;color:var(--gold);font-weight:700;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th{text-align:left;color:#9aa7b4;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;padding:9px 10px;border-bottom:1px solid #262c34}
+td{padding:10px 10px;border-bottom:1px solid #262c34;color:#dfe6ed}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(34,197,94,.16);color:#5ee9a0}
+.pdf{color:var(--gold);font-weight:700;font-size:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:24px}
+.role{background:#12161c;border:1px solid #262c34;border-radius:14px;padding:16px;text-align:left}
+.role .ic{font-size:22px}.role h4{font-size:14px;color:#eef1f4;margin:6px 0 3px}.role p{font-size:11.5px;color:#9aa7b4;line-height:1.45}
+.role .tag2{display:inline-block;margin-top:8px;font-size:10px;font-weight:800;color:var(--gold);background:rgba(214,163,56,.12);border-radius:99px;padding:3px 9px}
+.mail{background:#12161c;border:1px solid #262c34;border-radius:14px;padding:18px 20px;margin-top:18px;text-align:left}
+.mail .to{font-size:12px;color:#9aa7b4}.mail .li{font-size:13.5px;color:#dfe6ed;margin-top:8px;display:flex;gap:8px;align-items:center}
+.cursor{position:absolute;width:26px;height:26px;z-index:20;left:50%;top:50%;transition:transform 1.05s cubic-bezier(.5,.05,.2,1);pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.ripple{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid var(--gold);z-index:19;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4)}
+.ripple.go{animation:rip .6s ease-out}
+@keyframes rip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+.cap{min-height:58px;margin-top:14px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}
+.cap .step{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
+.cap .txt{font-size:18px;font-weight:700;color:#f3efe6;line-height:1.35;max-width:760px}
+.ctrl{display:flex;align-items:center;gap:14px;width:min(960px,96vw);margin-top:2px}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#16161a;color:#f3efe6;font-size:17px;display:grid;place-items:center;cursor:pointer;flex:none;transition:.2s}
+.cbtn:hover{border-color:var(--gold);color:var(--gold)}
+.timeline{flex:1;display:flex;gap:6px}
+.seg{flex:1;height:6px;border-radius:6px;background:#2a2a30;overflow:hidden;cursor:pointer}
+.seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.seg.done i{width:100%}
+.count{font-size:12px;font-weight:700;color:#a59f93;flex:none;min-width:46px;text-align:right}
+.foot{font-size:11px;color:#6f6a60;margin-top:2px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div class="crest">🐦</div>
-    <div class="sub">MCR Academy · Guide administrateur</div>
-    <h1>Le fonctionnement de votre plateforme</h1>
-    <p class="lead">Tout ce qu'il faut savoir pour gérer MCR Academy : les rôles, la création d'une entreprise cliente, le suivi et les attestations.</p>
-  </div>
+<div class="head">
+  <div class="brand">MCR Academy · Guide administrateur</div>
+  <h1>Gérer votre plateforme, pas à pas</h1>
+  <p>Un mini-film avec voix off — appuyez sur ▶ et laissez-vous guider.</p>
+</div>
 
-  <h2 class="section">Comment c'est organisé</h2>
-  <p style="color:#c7d0da;font-size:15px">La plateforme repose sur <span class="hl">3 niveaux d'accès</span>. Chacun se connecte au même endroit (<code>connexion.html</code>) et est dirigé automatiquement vers son espace :</p>
-  <div class="schema">
-    <div class="role"><div class="ic">👑</div><h3>Vous (admin)</h3><p>Toi et Fred. Vous voyez tout : entreprises, stagiaires, attestations. Vous créez les entreprises clientes.</p><span class="tag">Code : MCR-PATRON</span></div>
-    <div class="role"><div class="ic">🏢</div><h3>Le RH / patron</h3><p>Le client. Voit uniquement sa société : ses salariés, leur avancement, leurs attestations.</p><span class="tag">Code RH propre à sa société</span></div>
-    <div class="role"><div class="ic">🎓</div><h3>Le salarié</h3><p>Suit ses formations et obtient son attestation. Voit seulement son parcours.</p><span class="tag">Code stagiaire de sa société</span></div>
-  </div>
-
-  <h2 class="section">Vos étapes au quotidien</h2>
-
-  <div class="step"><div class="num">1</div><div>
-    <h3>Connectez-vous en administrateur</h3>
-    <p>La première fois : sur la page de connexion, cliquez sur <span class="hl">« Créer un compte »</span> et utilisez le code <code>MCR-PATRON</code>. Vous arrivez sur la console. Fred fait pareil de son côté : vous partagez les mêmes données.</p>
-  </div></div>
-
-  <div class="step"><div class="num">2</div><div>
-    <h3>Créez une entreprise quand vous vendez une formation</h3>
-    <p>Onglet <span class="hl">« Entreprises »</span> → saisissez le nom de la société → <span class="hl">« Créer »</span>. La plateforme génère automatiquement <span class="hl">deux codes</span> : un <span class="hl">code RH</span> (pour le patron) et un <span class="hl">code stagiaire</span> (pour les salariés).</p>
-  </div></div>
-
-  <div class="step"><div class="num">3</div><div>
-    <h3>Distribuez les accès</h3>
-    <p>Envoyez au patron / RH : le lien de connexion + son <span class="hl">code RH</span> + le <span class="hl">guide entreprise</span>. Le code stagiaire, lui, sera distribué par le RH à ses salariés (ou par vous si besoin).</p>
-  </div></div>
-
-  <div class="step"><div class="num">4</div><div>
-    <h3>Suivez l'activité</h3>
-    <p>Onglet <span class="hl">« Stagiaires »</span> : toutes les personnes inscrites, toutes entreprises confondues. Onglet <span class="hl">« Attestations »</span> : toutes les attestations délivrées, avec <span class="hl">export CSV</span> pour vos archives.</p>
-  </div></div>
-
-  <div class="step"><div class="num">5</div><div>
-    <h3>Générez une attestation en PDF</h3>
-    <p>Dans <span class="hl">« Attestations »</span>, cliquez sur une ligne → l'attestation s'affiche → <span class="hl">« Imprimer / PDF »</span>. Pratique si un employeur la réclame et que le salarié ne l'a plus.</p>
-  </div></div>
-
-  <div class="tip"><b>📋 Qualiopi :</b> toutes les attestations sont conservées dans la base et exportables en CSV — pratique pour justifier le suivi sur les 5 ans demandés.</div>
-
-  <h2 class="section">Bon à savoir</h2>
-  <div class="tip"><b>Confidentialité :</b> un RH ne voit jamais les autres entreprises, un salarié ne voit que son parcours. Vous deux êtes les seuls à tout voir.</div>
-  <div class="tip"><b>Mise à jour :</b> quand on améliore la plateforme, c'est instantané pour tout le monde — personne n'a rien à réinstaller.</div>
-
-  <div style="text-align:center"><a class="btn" href="admin.html">Ouvrir ma console admin →</a></div>
-
-  <div class="foot">
-    MCR Academy · Plateforme e-learning — MCR Formations<br>
-    <a href="mailto:mcr.formations@gmail.com">mcr.formations@gmail.com</a>
+<div class="player">
+  <div class="bezel">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="url">🔒 mcr-academy · console admin</span></div>
+    <div class="screen" id="screen">
+      <div class="cursor" id="cursor"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.4L9 21 4 2z" fill="#fff" stroke="#111" stroke-width="1.2"/></svg></div>
+      <div class="ripple" id="ripple"></div>
+    </div>
   </div>
 </div>
+
+<div class="cap" id="cap"><div class="step" id="capStep"></div><div class="txt" id="capTxt"></div></div>
+
+<div class="ctrl">
+  <button class="cbtn" id="playBtn" title="Lecture / Pause">▶</button>
+  <button class="cbtn" id="replayBtn" title="Recommencer">↺</button>
+  <button class="cbtn" id="voixBtn" title="Voix off">🔊</button>
+  <div class="timeline" id="timeline"></div>
+  <div class="count" id="count">1 / 8</div>
+</div>
+<div class="foot">Astuce : cliquez sur un segment de la barre pour aller directement à une étape.</div>
+
+<script>
+const screen=document.getElementById('screen');
+const cursor=document.getElementById('cursor'), ripple=document.getElementById('ripple');
+const capStep=document.getElementById('capStep'), capTxt=document.getElementById('capTxt');
+function move(xp,yp){const r=screen.getBoundingClientRect();cursor.style.transform=`translate(${xp/100*r.width-13}px,${yp/100*r.height-13}px)`;}
+function clickAt(xp,yp){const r=screen.getBoundingClientRect();ripple.style.left=(xp/100*r.width)+'px';ripple.style.top=(yp/100*r.height)+'px';ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');}
+function scn(html){return `<div class="scene">${html}</div>`;}
+
+const scenes=[
+{step:'Bienvenue',txt:"Voici votre console MCR Academy. En quelques étapes, vous saurez tout gérer.",
+ html:scn(`<div class="center"><div class="crest">🐦</div><div class="kick">MCR Academy · Administration</div>
+   <div class="title">Votre plateforme, sous contrôle</div><div class="sub">Suivez le guide pas à pas 👇</div></div>`),
+ act:()=>{move(50,46);}},
+
+{step:'Étape 1 — Connexion admin',txt:"La première fois, créez votre compte administrateur avec le code MCR-PATRON. Fred fait de même : vous partagez les mêmes données.",
+ html:scn(`<div class="center"><div style="width:min(380px,90%)">
+   <div class="kick" style="text-align:center">Connexion</div>
+   <div class="title" style="font-size:22px;text-align:center;margin-bottom:6px">Créer mon compte</div>
+   <div class="field">Nom · email · mot de passe</div>
+   <div class="field" style="border-color:#d6a338;color:#d6a338;font-weight:700">Code : MCR-PATRON</div>
+   <div style="text-align:center"><span class="gbtn">Entrer dans la console</span></div></div></div>`),
+ act:()=>{move(50,76);setTimeout(()=>clickAt(50,76),1400);}},
+
+{step:'Étape 2 — Les 3 rôles',txt:"La plateforme a trois niveaux : vous voyez tout, le responsable voit sa société, le salarié voit son parcours.",
+ html:scn(`<div class="kick">Comment c'est organisé</div><div class="title" style="font-size:22px">Trois niveaux d'accès</div>
+   <div class="row3">
+   <div class="role"><div class="ic">👑</div><h4>Vous (admin)</h4><p>Toi et Fred. Vous voyez tout et créez les entreprises.</p><span class="tag2">MCR-PATRON</span></div>
+   <div class="role"><div class="ic">🏢</div><h4>Le RH / patron</h4><p>Voit uniquement sa société et ses salariés.</p><span class="tag2">Code RH</span></div>
+   <div class="role"><div class="ic">🎓</div><h4>Le salarié</h4><p>Suit ses formations, obtient son attestation.</p><span class="tag2">Code stagiaire</span></div></div>`),
+ act:()=>{move(50,50);}},
+
+{step:'Étape 3 — Créer une entreprise',txt:"Quand vous vendez une formation, onglet Entreprises, saisissez le nom de la société et cliquez sur Créer.",
+ html:scn(`<div class="tabs"><span class="tabpill on">Entreprises</span><span class="tabpill">Stagiaires</span><span class="tabpill">Attestations</span></div>
+   <div class="panel"><h3>Créer une entreprise cliente</h3><p>Génère automatiquement les codes d'accès.</p>
+   <div class="field">Nom de l'entreprise : ACME Sécurité</div>
+   <div style="text-align:left"><span class="gbtn">+ Créer</span></div></div>`),
+ act:()=>{move(28,70);setTimeout(()=>clickAt(28,70),1400);}},
+
+{step:'Étape 4 — Les codes générés',txt:"La plateforme crée automatiquement deux codes : un code RH pour le patron, un code stagiaire pour les salariés.",
+ html:scn(`<div class="tabs"><span class="tabpill on">Entreprises</span><span class="tabpill">Stagiaires</span><span class="tabpill">Attestations</span></div>
+   <div class="panel"><table><thead><tr><th>Entreprise</th><th>Code stagiaire</th><th>Code RH</th></tr></thead><tbody>
+   <tr><td>ACME Sécurité</td><td><span class="codetag">ACME-9520</span></td><td><span class="codetag">ACME-RH4820</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(55,46);}},
+
+{step:'Étape 5 — Distribuer les accès',txt:"Envoyez au patron : le lien de connexion, son code RH, et le guide entreprise. Le code stagiaire ira aux salariés.",
+ html:scn(`<div class="kick">À envoyer au responsable</div><div class="title" style="font-size:21px">Donner l'accès</div>
+   <div class="mail"><div class="to">À : le RH / patron de l'entreprise</div>
+   <div class="li">🔗 Le lien de connexion</div>
+   <div class="li">🔑 Son code RH</div>
+   <div class="li">📘 Le guide entreprise</div></div>`),
+ act:()=>{move(50,55);}},
+
+{step:'Étape 6 — Suivre & attester',txt:"Vous voyez tous les stagiaires et toutes les attestations. Cliquez sur une attestation pour la générer en PDF.",
+ html:scn(`<div class="tabs"><span class="tabpill">Entreprises</span><span class="tabpill">Stagiaires</span><span class="tabpill on">Attestations</span></div>
+   <div class="panel"><table><thead><tr><th>Stagiaire</th><th>Entreprise</th><th>Score</th><th></th></tr></thead><tbody>
+   <tr><td>Julie Martin</td><td>ACME Sécurité</td><td>90%</td><td><span class="pdf">📄 PDF</span></td></tr>
+   <tr><td>Marc Petit</td><td>BTP Solutions</td><td>78%</td><td><span class="pdf">📄 PDF</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(85,46);setTimeout(()=>clickAt(85,46),1300);}},
+
+{step:'Vous gérez tout !',txt:"Toutes les attestations sont conservées pour votre suivi Qualiopi. Chaque entreprise reste cloisonnée, en toute confidentialité.",
+ html:scn(`<div class="center"><div style="font-size:46px">📋</div>
+   <div class="title">Plateforme maîtrisée</div>
+   <div class="sub">Vendez, créez l'entreprise, suivez — les attestations remontent automatiquement à vous.</div></div>`),
+ act:()=>{move(50,44);}}
+];
+
+const timeline=document.getElementById('timeline');
+const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
+const count=document.getElementById('count');
+const DUR=4200;
+let idx=0,playing=false,timer=null,segTimer=null,t0=0;
+const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
+function pickVoice(){try{const vs=synth.getVoices();frVoice=vs.find(v=>/fr[-_]?FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null;}catch(e){}}
+pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
+function speak(t){try{synth.cancel();if(!voixOn||!t)return;const u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-''!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
+function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
+function showScene(i){
+  idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
+  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;const node=wrap.firstElementChild;screen.appendChild(node);
+  void node.offsetWidth;node.classList.add('on');
+  capStep.textContent=scenes[i].step;capTxt.textContent=scenes[i].txt;count.textContent=(i+1)+' / '+scenes.length;
+  segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
+  try{scenes[i].act&&scenes[i].act();}catch(e){}
+}
+function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
+  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
+  segTimer=requestAnimationFrame(step);}
+function play(){playing=true;document.getElementById('playBtn').textContent='⏸';speak(scenes[idx].txt);animateSeg();
+  timer=setTimeout(()=>{if(idx<scenes.length-1){goTo(idx+1);}else{pause();}},curDur());}
+function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
+function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
+function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
+document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
+document.getElementById('replayBtn').onclick=replay;
+document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
+window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
+showScene(0);setTimeout(()=>play(),600);
+</script>
 </body>
 </html>
