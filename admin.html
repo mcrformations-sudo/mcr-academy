@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — MCR Academy</title>
+<style>
+  :root{--gold:#d6a338;--gold-2:#b9842a;--bg:#0d1117;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2;--ok:#22c55e;--bad:#ef4444}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(1100px 650px at 80% -10%,#1a2230,#0b0e13);color:var(--ink);min-height:100vh}
+  .wrap{max-width:1050px;margin:0 auto;padding:26px 20px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold-2));display:grid;place-items:center;font-size:22px;color:#1a1407}
+  .brand h1{font-size:19px;margin:0;font-weight:800}
+  .brand .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407}
+  .btn.ghost{background:#1b2127;color:var(--ink);border:1px solid var(--line)}
+  .tabs{display:flex;gap:8px;margin-bottom:18px}
+  .tab{padding:9px 18px;border-radius:99px;border:1px solid var(--line);background:#1b2127;color:var(--muted);font-weight:700;font-size:13.5px;cursor:pointer}
+  .tab.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;border-color:transparent}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px}
+  .card h2{margin:0 0 4px;font-size:16px}
+  .card .desc{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .stat{display:inline-flex;align-items:baseline;gap:7px;font-size:13px;color:var(--muted);margin-bottom:14px}
+  .stat b{font-size:22px;color:var(--gold)}
+  form.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  input,select{background:#0f141a;border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--ink);font-size:14px;font-family:inherit;flex:1;min-width:140px}
+  input:focus,select:focus{outline:none;border-color:var(--gold)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  td{padding:11px 12px;border-bottom:1px solid var(--line)}
+  tr:hover td{background:#1b2127}
+  .pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:700}
+  .pill.ok{background:rgba(34,197,94,.16);color:#5ee9a0}
+  .pill.no{background:rgba(239,68,68,.16);color:#ff8c82}
+  .empty{color:var(--muted);text-align:center;padding:30px;font-size:14px}
+  .msg{font-size:13px;margin-top:8px;min-height:18px}
+  .msg.ok{color:#5ee9a0}.msg.err{color:#ff8c82}
+  /* gate */
+  #gate{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;background:radial-gradient(900px 600px at 50% -10%,#1a2230,#0b0e13);padding:24px}
+  #gate .box{width:min(370px,92vw);background:#12161c;border:1px solid var(--line);border-radius:18px;padding:30px 28px;text-align:center}
+  #gate h2{margin:12px 0 6px;font-size:19px}
+  #gate p{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="box">
+    <div class="sub" style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800">MCR Academy</div>
+    <h2>Espace administration</h2>
+    <p>Réservé à MCR Formations. Saisissez le code administrateur.</p>
+    <input id="adminCode" type="password" placeholder="Code admin" style="width:100%;text-align:center;margin-bottom:10px">
+    <div id="gateErr" class="msg err"></div>
+    <button class="btn gold" id="gateBtn" style="width:100%">Entrer</button>
+  </div>
+</div>
+
+<div class="wrap hidden" id="app">
+  <header>
+    <div class="brand">
+      <div class="logo">🐦</div>
+      <div><div class="sub">MCR Academy</div><h1>Administration des stagiaires</h1></div>
+    </div>
+    <button class="btn ghost" id="refreshBtn">↻ Rafraîchir</button>
+  </header>
+
+  <div class="tabs">
+    <div class="tab on" data-tab="stag">Stagiaires</div>
+    <div class="tab" data-tab="att">Attestations</div>
+  </div>
+
+  <!-- STAGIAIRES -->
+  <section id="tab-stag">
+    <div class="card">
+      <h2>Inscrire un stagiaire</h2>
+      <p class="desc">Ajoutez manuellement un stagiaire à la base. Les stagiaires qui terminent une formation y sont aussi ajoutés automatiquement.</p>
+      <form class="row" id="addForm">
+        <input id="f_prenom" placeholder="Prénom" required>
+        <input id="f_nom" placeholder="Nom" required>
+        <input id="f_email" type="email" placeholder="Email">
+        <input id="f_entreprise" placeholder="Entreprise">
+        <button class="btn gold" type="submit">+ Ajouter</button>
+      </form>
+      <div id="addMsg" class="msg"></div>
+    </div>
+    <div class="card">
+      <div class="stat"><b id="stagCount">—</b> stagiaire(s) enregistré(s)</div>
+      <div id="stagTable"></div>
+    </div>
+  </section>
+
+  <!-- ATTESTATIONS -->
+  <section id="tab-att" class="hidden">
+    <div class="card">
+      <div class="stat"><b id="attCount">—</b> attestation(s) délivrée(s)</div>
+      <button class="btn ghost" id="csvBtn" style="float:right">⬇ Export CSV</button>
+      <div id="attTable"></div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  // ===== Config Supabase (clé publique — sûre côté navigateur avec RLS) =====
+  const SB_URL = "https://mmaolkpsaroxqblthmhk.supabase.co";
+  const SB_KEY = "sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
+  const ADMIN_CODE = "MCR-ADMIN"; // code d'accès administrateur (modifiable ici)
+  let sb = null;
+
+  // ===== Gate admin =====
+  const KEY="mcrAdminOk";
+  function unlocked(){try{return localStorage.getItem(KEY)===ADMIN_CODE;}catch(e){return false;}}
+  function openApp(){
+    document.getElementById("gate").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    sb = window.supabase.createClient(SB_URL, SB_KEY);
+    loadAll();
+  }
+  function tryGate(){
+    const v=(document.getElementById("adminCode").value||"").trim().toUpperCase();
+    if(v===ADMIN_CODE){try{localStorage.setItem(KEY,ADMIN_CODE);}catch(e){} openApp();}
+    else document.getElementById("gateErr").textContent="Code incorrect.";
+  }
+  document.getElementById("gateBtn").onclick=tryGate;
+  document.getElementById("adminCode").addEventListener("keydown",e=>{if(e.key==="Enter")tryGate();});
+  if(unlocked()) openApp(); else document.getElementById("adminCode").focus();
+
+  // ===== Onglets =====
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.onclick=()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+      t.classList.add("on");
+      const tab=t.dataset.tab;
+      document.getElementById("tab-stag").classList.toggle("hidden",tab!=="stag");
+      document.getElementById("tab-att").classList.toggle("hidden",tab!=="att");
+    };
+  });
+
+  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+  function fdate(s){if(!s)return"—";try{return new Date(s).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});}catch(e){return s;}}
+
+  // ===== Chargement =====
+  async function loadAll(){ await Promise.all([loadStagiaires(), loadAttestations()]); }
+
+  async function loadStagiaires(){
+    const el=document.getElementById("stagTable");
+    el.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("stagiaires").select("*").order("created_at",{ascending:false});
+    if(error){el.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    document.getElementById("stagCount").textContent=data.length;
+    if(!data.length){el.innerHTML='<div class="empty">Aucun stagiaire pour le moment.</div>';return;}
+    let rows=data.map(s=>`<tr><td>${esc(s.prenom)} ${esc(s.nom)}</td><td>${esc(s.email)||"—"}</td><td>${esc(s.entreprise)||"—"}</td><td>${fdate(s.created_at)}</td></tr>`).join("");
+    el.innerHTML=`<table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Inscrit le</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  async function loadAttestations(){
+    const el=document.getElementById("attTable");
+    el.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("attestations").select("*").order("created_at",{ascending:false});
+    if(error){el.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    document.getElementById("attCount").textContent=data.length;
+    window.__att=data;
+    if(!data.length){el.innerHTML='<div class="empty">Aucune attestation délivrée pour le moment.</div>';return;}
+    let rows=data.map(a=>`<tr><td>${esc(a.prenom)} ${esc(a.nom)}</td><td>${esc(a.formation)}</td><td>${esc(a.entreprise)||"—"}</td><td>${a.pourcentage!=null?a.pourcentage+"%":"—"}</td><td>${a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>'}</td><td>${fdate(a.created_at)}</td></tr>`).join("");
+    el.innerHTML=`<table><thead><tr><th>Stagiaire</th><th>Formation</th><th>Entreprise</th><th>Score</th><th>Résultat</th><th>Date</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  // ===== Ajout stagiaire =====
+  document.getElementById("addForm").onsubmit=async e=>{
+    e.preventDefault();
+    const msg=document.getElementById("addMsg"); msg.className="msg"; msg.textContent="Enregistrement…";
+    const rec={prenom:val("f_prenom"),nom:val("f_nom"),email:val("f_email"),entreprise:val("f_entreprise")};
+    if(!rec.prenom||!rec.nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
+    const {error}=await sb.from("stagiaires").insert(rec);
+    if(error){msg.className="msg err";msg.textContent="Erreur : "+error.message;return;}
+    msg.className="msg ok";msg.textContent="✓ "+rec.prenom+" "+rec.nom+" ajouté(e).";
+    ["f_prenom","f_nom","f_email","f_entreprise"].forEach(id=>document.getElementById(id).value="");
+    loadStagiaires();
+  };
+  function val(id){return document.getElementById(id).value.trim();}
+
+  // ===== Export CSV attestations =====
+  document.getElementById("csvBtn").onclick=()=>{
+    const d=window.__att||[]; if(!d.length)return;
+    const head=["Prénom","Nom","Email","Entreprise","Formation","Score","Total","Pourcentage","Réussi","Date"];
+    const lines=[head.join(";")].concat(d.map(a=>[a.prenom,a.nom,a.email,a.entreprise,a.formation,a.score,a.total,a.pourcentage,a.reussi?"Oui":"Non",fdate(a.created_at)].map(x=>'"'+String(x==null?"":x).replace(/"/g,'""')+'"').join(";")));
+    const blob=new Blob(["﻿"+lines.join("\n")],{type:"text/csv;charset=utf-8"});
+    const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download="attestations_mcr.csv";a.click();URL.revokeObjectURL(u);
+  };
+
+  document.getElementById("refreshBtn").onclick=loadAll;
+})();
+</script>
+</body>
+</html>
