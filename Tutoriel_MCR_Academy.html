@@ -297,7 +297,7 @@ const DUR=4200; // ms par scène (mode sans voix)
 let idx=0,playing=false,timer=null,segTimer=null,t0=0;
 /* ---- Voix off (synthèse vocale FR du navigateur) ---- */
 const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
-function pickVoice(){try{const vs=synth.getVoices();frVoice=vs.find(v=>/fr[-_]?FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null;}catch(e){}}
+function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
 pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
 function speak(t){try{synth.cancel();if(!voixOn||!t)return;const u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-''!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
 function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
@@ -324,21 +324,4 @@ function animateSeg(){
 }
 function play(){
   playing=true;document.getElementById('playBtn').textContent='⏸';
-  speak(scenes[idx].txt);
-  animateSeg();
-  timer=setTimeout(()=>{ if(idx<scenes.length-1){goTo(idx+1);} else {pause();} }, curDur());
-}
-function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
-function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
-function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
-
-document.getElementById('playBtn').onclick=()=>{ if(playing)pause(); else { if(idx>=scenes.length-1)showScene(0); play(); } };
-document.getElementById('replayBtn').onclick=replay;
-document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
-window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
-
-showScene(0);
-setTimeout(()=>play(),600);
-</script>
-</body>
-</html>
+  speak(scenes[idx]
