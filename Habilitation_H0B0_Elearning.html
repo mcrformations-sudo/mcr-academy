@@ -555,6 +555,7 @@ const COURSE={ modules:[
    ===================================================================== */
 const STORE_KEY="habilitation_h0b0_progress_v1";
 let state=loadState();
+function shuffleQuiz(src){return src.map(function(q){var idx=q.opts.map(function(_,i){return i;});for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}return {q:q.q,ex:q.ex,opts:idx.map(function(i){return q.opts[i];}),a:idx.indexOf(q.a)};});}
 function loadState(){try{const s=JSON.parse(localStorage.getItem(STORE_KEY))||{};return{done:s.done||{},quiz:s.quiz||{},viewed:s.viewed||{},name:s.name||""};}catch(e){return{done:{},quiz:{},viewed:{},name:""};}}
 function saveState(){localStorage.setItem(STORE_KEY,JSON.stringify(state));}
 
@@ -724,11 +725,12 @@ function renderLesson(m,l){
 
 function renderModuleQuiz(m){
   const mi=moduleIndex(m.id)+1;
-  let answers=new Array(m.quiz.length).fill(null);
+  let quiz=shuffleQuiz(m.quiz);
+  let answers=new Array(quiz.length).fill(null);
   let submitted=false;
   function draw(){
     let qs="";
-    m.quiz.forEach((q,qi)=>{
+    quiz.forEach((q,qi)=>{
       let opts="";
       q.opts.forEach((o,oi)=>{
         let cls="opt";
@@ -740,7 +742,7 @@ function renderModuleQuiz(m){
     });
     let result="",footer="";
     if(submitted){
-      const score=m.quiz.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
+      const score=quiz.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
       const ratio=score/m.quiz.length, passed=ratio>=PASS, pc=Math.round(ratio*100);
       state.quiz[m.id]={score,total:m.quiz.length,passed};
       if(passed)state.done[m.id]=true;
@@ -772,7 +774,7 @@ function renderModuleQuiz(m){
       main.querySelectorAll(".opt").forEach(b=>{b.onclick=()=>{answers[+b.dataset.q]=+b.dataset.o;draw();};});
       const sb=document.getElementById("submitBtn");if(sb)sb.onclick=()=>{submitted=true;window.scrollTo(0,0);draw();};
     } else {
-      const rb=document.getElementById("retryBtn");if(rb)rb.onclick=()=>{answers=new Array(m.quiz.length).fill(null);submitted=false;window.scrollTo(0,0);draw();};
+      const rb=document.getElementById("retryBtn");if(rb)rb.onclick=()=>{quiz=shuffleQuiz(m.quiz);answers=new Array(quiz.length).fill(null);submitted=false;window.scrollTo(0,0);draw();};
       const nb=document.getElementById("nextBtn");if(nb)nb.onclick=()=>{const idx=moduleIndex(m.id),nm=COURSE.modules[idx+1];renderNav();nm?go(nm.lessons[0].id):go(allComplete()?"cert":"home");};
     }
     const rv=document.getElementById("reviewBtn");if(rv)rv.onclick=()=>go(m.lessons[0].id);

@@ -658,6 +658,7 @@ const COURSE = {
    ===================================================================== */
 const STORE_KEY="sst_prev_progress_v2";
 let state=loadState();
+function shuffleQuiz(src){return src.map(function(q){var idx=q.opts.map(function(_,i){return i;});for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}return {q:q.q,ex:q.ex,opts:idx.map(function(i){return q.opts[i];}),a:idx.indexOf(q.a)};});}
 function loadState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{done:{},quiz:{},name:""};}catch(e){return{done:{},quiz:{},name:""};}}
 function saveState(){localStorage.setItem(STORE_KEY,JSON.stringify(state));}
 
@@ -793,7 +794,8 @@ function renderHome(){
 function renderTheme(m,t){
   const mi=COURSE.modules.indexOf(m)+1;
   let phase="lesson";
-  let answers=new Array(t.quiz.length).fill(null);
+  let quiz=shuffleQuiz(t.quiz);
+  let answers=new Array(quiz.length).fill(null);
   let submitted=false;
 
   function header(phaseName){
@@ -837,13 +839,13 @@ function renderTheme(m,t){
     if(TTS.supported)wireTts(()=>lessonNarration(t));
     const pb=document.getElementById("prevBtn");if(pb)pb.onclick=()=>go(pv);
     const hb=document.getElementById("homeBtn");if(hb)hb.onclick=()=>go("home");
-    document.getElementById("toQuiz").onclick=()=>{phase="quiz";answers=new Array(t.quiz.length).fill(null);submitted=false;window.scrollTo(0,0);drawQuiz();};
+    document.getElementById("toQuiz").onclick=()=>{phase="quiz";quiz=shuffleQuiz(t.quiz);answers=new Array(quiz.length).fill(null);submitted=false;window.scrollTo(0,0);drawQuiz();};
   }
 
   function drawQuiz(){
     TTS.stop();
     let qs="";
-    t.quiz.forEach((q,qi)=>{
+    quiz.forEach((q,qi)=>{
       let opts="";
       q.opts.forEach((o,oi)=>{
         let cls="opt";
@@ -855,7 +857,7 @@ function renderTheme(m,t){
     });
     let result="",footer="";
     if(submitted){
-      const score=t.quiz.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
+      const score=quiz.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
       const ratio=score/t.quiz.length, passed=ratio>=PASS, pc=Math.round(ratio*100);
       state.quiz[t.id]={score,total:t.quiz.length,passed};
       if(passed)state.done[t.id]=true;
@@ -890,7 +892,7 @@ function renderTheme(m,t){
       const sb=document.getElementById("submitBtn");if(sb)sb.onclick=()=>{submitted=true;window.scrollTo(0,0);drawQuiz();};
       document.getElementById("backLesson").onclick=()=>{phase="lesson";drawLesson();};
     } else {
-      const rb=document.getElementById("retryBtn");if(rb)rb.onclick=()=>{answers=new Array(t.quiz.length).fill(null);submitted=false;window.scrollTo(0,0);drawQuiz();};
+      const rb=document.getElementById("retryBtn");if(rb)rb.onclick=()=>{quiz=shuffleQuiz(t.quiz);answers=new Array(quiz.length).fill(null);submitted=false;window.scrollTo(0,0);drawQuiz();};
       const rv=document.getElementById("reviewBtn");if(rv)rv.onclick=()=>{phase="lesson";drawLesson();};
       const nb=document.getElementById("nextBtn");if(nb)nb.onclick=()=>{const nx=nextTheme(t.id);renderNav();nx?go(nx):go(allComplete()?"cert":"home");};
     }
