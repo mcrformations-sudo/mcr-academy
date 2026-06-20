@@ -209,4 +209,15 @@ function showScene(i){
 function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
   function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
   segTimer=requestAnimationFrame(step);}
-function play(){play
+function play(){playing=true;document.getElementById('playBtn').textContent='⏸';animateSeg();var myIdx=idx,adv1=false;function adv(){if(adv1||!playing||idx!==myIdx)return;adv1=true;if(idx<scenes.length-1){goTo(idx+1);}else{pause();}}if(voixOn){speak(scenes[idx].txt,adv);timer=setTimeout(adv,curDur()+6000);}else{speak(scenes[idx].txt);timer=setTimeout(adv,DUR);}}
+function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
+function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
+function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
+document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
+document.getElementById('replayBtn').onclick=replay;
+document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
+window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
+showScene(0);setTimeout(()=>play(),600);
+</script>
+</body>
+</html>
