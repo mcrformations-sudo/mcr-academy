@@ -70,7 +70,7 @@ td{padding:10px 10px;border-bottom:1px solid #262c34;color:#dfe6ed}
 <body>
 <div class="head">
   <div class="brand">MCR Academy · Guide entreprise</div>
-  <h1>Votre espace, en 6 étapes</h1>
+  <h1>Votre espace, pas à pas</h1>
   <p>Un mini-film avec voix off — appuyez sur ▶ et laissez-vous guider.</p>
 </div>
 
@@ -111,14 +111,18 @@ const scenes=[
    <div class="sub">Suivez le guide pas à pas 👇</div></div>`),
  act:()=>{move(50,46);}},
 
-{step:'Étape 1 — Votre compte',txt:"Créez votre compte responsable avec le code RH que MCR Formations vous a communiqué.",
- html:scn(`<div class="center"><div style="width:min(380px,90%)">
-   <div class="kick" style="text-align:center">Connexion</div>
-   <div class="title" style="font-size:22px;text-align:center;margin-bottom:6px">Créer mon compte</div>
-   <div class="field">Nom et prénom</div><div class="field">Email · mot de passe</div>
-   <div class="field" style="border-color:#d6a338;color:#d6a338;font-weight:700">Code RH : ACME-RH4820</div>
+{step:'Étape 1 — Votre compte',txt:"À l'inscription, choisissez d'abord le profil « Responsable d'entreprise ». Pas de profil stagiaire pour vous : vous saisissez votre code responsable.",
+ html:scn(`<div class="center"><div style="width:min(400px,92%)">
+   <div class="kick" style="text-align:center">Créer un compte</div>
+   <div class="title" style="font-size:21px;text-align:center;margin-bottom:8px">Je m'inscris comme…</div>
+   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
+     <div class="field" style="text-align:center;margin:0;font-size:12px">🎓<br>Stagiaire</div>
+     <div class="field" style="text-align:center;margin:0;font-size:12px;border-color:#d6a338;color:#d6a338;font-weight:800">🏢<br>Responsable</div>
+     <div class="field" style="text-align:center;margin:0;font-size:12px">🛡️<br>Admin</div>
+   </div>
+   <div class="field" style="border-color:#d6a338;color:#d6a338;font-weight:700">Code responsable : ACME-RH4820</div>
    <div style="text-align:center"><span class="gbtn">Créer mon compte</span></div></div></div>`),
- act:()=>{move(50,82);setTimeout(()=>clickAt(50,82),1400);}},
+ act:()=>{move(50,40);setTimeout(()=>clickAt(50,40),1300);}},
 
 {step:'Étape 2 — Inviter',txt:"Dans l'onglet Inviter, récupérez le lien et le code de votre entreprise, et transmettez-les à vos salariés.",
  html:scn(`<div class="tabs"><span class="tabpill">Mes salariés</span><span class="tabpill">Attestations</span><span class="tabpill on">Inviter</span></div>
@@ -140,11 +144,19 @@ const scenes=[
  html:scn(`<div class="tabs"><span class="tabpill">Mes salariés</span><span class="tabpill on">Attestations</span><span class="tabpill">Inviter</span></div>
    <div class="panel"><table><thead><tr><th>Salarié</th><th>Formation</th><th>Score</th><th></th></tr></thead><tbody>
    <tr><td>Julie Martin</td><td>Sécurité Incendie — EPI</td><td>90%</td><td><span class="pdf">📄 PDF</span></td></tr>
-   <tr><td>Marc Petit</td><td>SST — Prévention</td><td>78%</td><td><span class="pdf">📄 PDF</span></td></tr>
+   <tr><td>Marc Petit</td><td>Prévention des Risques</td><td>78%</td><td><span class="pdf">📄 PDF</span></td></tr>
    </tbody></table></div>`),
  act:()=>{move(85,46);setTimeout(()=>clickAt(85,46),1300);}},
 
-{step:'C\'est à vous !',txt:"Vous savez tout. Reconnectez-vous quand vous voulez ; vos données sont conservées en sécurité par MCR Formations.",
+{step:'Étape 5 — Noter MCR Formations',txt:"Dans l'onglet Noter MCR, donnez votre avis sur l'organisme : des étoiles et un commentaire. Votre retour nous aide à progresser.",
+ html:scn(`<div class="tabs"><span class="tabpill">Mes salariés</span><span class="tabpill">Attestations</span><span class="tabpill">Inviter</span><span class="tabpill on">Noter MCR ★</span></div>
+   <div class="panel"><h3>Votre avis sur MCR Formations</h3><p>Notez la qualité de l'accompagnement.</p>
+   <div style="font-size:30px;color:#f5c451;margin:12px 0;letter-spacing:7px">★★★★★</div>
+   <div class="field">Un commentaire ? (facultatif)</div>
+   <div style="text-align:left"><span class="gbtn">Envoyer mon avis</span></div></div>`),
+ act:()=>{move(50,42);setTimeout(()=>clickAt(50,42),1300);}},
+
+{step:'C\'est à vous !',txt:"Vous savez tout. Vos données sont conservées en sécurité par MCR Formations, et votre accès reste actif tant que vos formations sont réglées.",
  html:scn(`<div class="center"><div style="font-size:46px">🚀</div>
    <div class="title">Vous êtes prêt !</div>
    <div class="sub">Distribuez le code à vos salariés et suivez leur formation en temps réel.</div></div>`),

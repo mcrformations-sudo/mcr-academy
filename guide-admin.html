@@ -159,10 +159,35 @@ const scenes=[
    </tbody></table></div>`),
  act:()=>{move(85,46);setTimeout(()=>clickAt(85,46),1300);}},
 
-{step:'Vous gérez tout !',txt:"Toutes les attestations sont conservées pour votre suivi Qualiopi. Chaque entreprise reste cloisonnée, en toute confidentialité.",
+{step:'Étape 7 — Bloquer un stagiaire',txt:"En cas de manquement au règlement, onglet Stagiaires : le bouton Bloquer coupe l'accès. Le stagiaire ne pourra plus se connecter, un message l'invite à vous contacter.",
+ html:scn(`<div class="tabs"><span class="tabpill">Entreprises</span><span class="tabpill on">Stagiaires</span><span class="tabpill">Attestations</span><span class="tabpill">Notes ★</span></div>
+   <div class="panel"><h3>Vos stagiaires</h3><table><thead><tr><th>Nom</th><th>Entreprise</th><th>Statut</th><th></th></tr></thead><tbody>
+   <tr><td>Karim Bara</td><td>ACME Sécurité</td><td><span class="pill" style="background:rgba(239,68,68,.16);color:#ff8c82">Bloqué</span></td><td><span class="gbtn" style="margin:0;padding:6px 13px;font-size:12px">Débloquer</span></td></tr>
+   <tr><td>Julie Martin</td><td>ACME Sécurité</td><td><span class="pill">Actif</span></td><td><span class="codetag">Bloquer</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(86,40);setTimeout(()=>clickAt(86,40),1300);}},
+
+{step:'Étape 8 — Suspendre une entreprise',txt:"En cas d'impayés, onglet Entreprises : le bouton Suspendre bloque toute la société d'un coup. Le patron et tous ses salariés sont coupés jusqu'au règlement.",
+ html:scn(`<div class="tabs"><span class="tabpill on">Entreprises</span><span class="tabpill">Stagiaires</span><span class="tabpill">Attestations</span><span class="tabpill">Notes ★</span></div>
+   <div class="panel"><h3>Entreprises clientes</h3><table><thead><tr><th>Entreprise</th><th>Code stagiaire</th><th>Statut</th><th></th></tr></thead><tbody>
+   <tr><td>ACME Sécurité</td><td><span class="codetag">ACME-9520</span></td><td><span class="pill">Active</span></td><td><span class="codetag">Suspendre</span></td></tr>
+   <tr><td>BTP Solutions</td><td><span class="codetag">BTP-3071</span></td><td><span class="pill" style="background:rgba(239,68,68,.16);color:#ff8c82">Suspendue</span></td><td><span class="gbtn" style="margin:0;padding:6px 13px;font-size:12px">Réactiver</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(86,55);setTimeout(()=>clickAt(86,55),1300);}},
+
+{step:'Étape 9 — Les notes ★',txt:"Onglet Notes : les étoiles laissées par les stagiaires sur chaque formation, et les avis des responsables sur MCR Formations, avec la moyenne. De quoi piloter votre qualité.",
+ html:scn(`<div class="tabs"><span class="tabpill">Entreprises</span><span class="tabpill">Stagiaires</span><span class="tabpill">Attestations</span><span class="tabpill on">Notes ★</span></div>
+   <div class="panel"><h3>Notes des formations</h3><p style="margin:2px 0 4px"><span style="color:#f5c451;font-size:19px;font-weight:800">★ 4,8</span> <span style="color:#9aa7b4;font-size:12px">de moyenne · 12 avis</span></p>
+   <table><thead><tr><th>Stagiaire</th><th>Formation</th><th>Note</th></tr></thead><tbody>
+   <tr><td>Karim Bara</td><td>Prévention des Risques</td><td style="color:#f5c451">★★★★★</td></tr>
+   <tr><td>Julie Martin</td><td>Incendie EPI</td><td style="color:#f5c451">★★★★<span style="color:#3a4250">★</span></td></tr>
+   </tbody></table></div>`),
+ act:()=>{move(78,30);}},
+
+{step:'Vous gérez tout !',txt:"Création d'entreprise, blocage, suspension pour impayés, notes et attestations Qualiopi : tout est centralisé chez vous, et chaque entreprise reste cloisonnée en toute confidentialité.",
  html:scn(`<div class="center"><div style="font-size:46px">📋</div>
    <div class="title">Plateforme maîtrisée</div>
-   <div class="sub">Vendez, créez l'entreprise, suivez — les attestations remontent automatiquement à vous.</div></div>`),
+   <div class="sub">Vendez, créez l'entreprise, suivez, sanctionnez si besoin — tout remonte automatiquement à vous.</div></div>`),
  act:()=>{move(50,44);}}
 ];
 

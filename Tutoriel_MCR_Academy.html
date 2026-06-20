@@ -15,6 +15,8 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .head .brand{font-size:13px;letter-spacing:3px;font-weight:800;color:var(--gold);text-transform:uppercase}
 .head h1{font-size:22px;font-weight:800;margin-top:4px}
 .head p{font-size:13px;color:#a59f93;margin-top:3px}
+
+/* ---- "video" stage ---- */
 .player{width:min(960px,96vw)}
 .bezel{position:relative;border-radius:20px;padding:14px;background:linear-gradient(180deg,#1b1b20,#101013);
   border:1px solid var(--line);box-shadow:0 40px 90px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
@@ -22,11 +24,16 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .dot{width:11px;height:11px;border-radius:50%;background:#34343c}
 .bar .url{margin-left:10px;flex:1;height:24px;border-radius:7px;background:#0e0e11;border:1px solid var(--line);
   display:flex;align-items:center;padding:0 10px;font-size:11px;color:#7d7870;gap:7px}
-.screen{position:relative;height:540px;border-radius:13px;overflow:hidden;background:#f6f3ee;transition:background .5s}
+.screen{position:relative;height:540px;border-radius:13px;overflow:hidden;background:#f6f3ee;
+  transition:background .5s}
 .screen.dark{background:#14181d}
+
+/* scenes */
 .scene{position:absolute;inset:0;padding:30px 34px;opacity:0;transform:translateY(14px) scale(.99);
   transition:opacity .5s ease,transform .5s ease;pointer-events:none;overflow:hidden}
 .scene.on{opacity:1;transform:none}
+
+/* mock UI bits */
 .s-kicker{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
 .dark .s-kicker{color:var(--gold-2)}
 .s-title{font-size:27px;font-weight:800;color:#1a1714;margin:6px 0 4px;line-height:1.12}
@@ -48,6 +55,15 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .mc .btn{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#fff;
   background:linear-gradient(120deg,#e11d2a,#ff7a3d);padding:9px 16px;border-radius:10px}
 .mc.tq .btn{background:linear-gradient(120deg,#10cfc0,#2bb6ff)}
+
+.hero{background:linear-gradient(125deg,#1a0c0a,#3a1410 60%,#5a1d16);border-radius:18px;padding:24px 26px;color:#fff}
+.hero .cat{font-size:10px;font-weight:800;letter-spacing:1px;background:rgba(255,255,255,.14);
+  padding:6px 12px;border-radius:99px;display:inline-block}
+.hero h2{font-size:26px;font-weight:800;margin:12px 0 6px}
+.hero .stats{display:flex;gap:26px;margin-top:14px;font-weight:800}
+.hero .stats div span{display:block;font-size:10px;font-weight:700;color:#f0c9b9;letter-spacing:.5px}
+.hero .stats div b{font-size:20px;color:#ffd9a8}
+
 .lesson{background:#fff;border:1px solid #ececec;border-radius:16px;padding:22px;height:100%}
 .dark .lesson{background:#1b2127;border-color:#2b323b}
 .crumbrow{display:flex;align-items:center;justify-content:space-between}
@@ -63,13 +79,15 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .ll{height:9px;border-radius:5px;background:#eee;margin:9px 0}
 .dark .ll{background:#262c34}
 .ll.w1{width:96%}.ll.w2{width:88%}.ll.w3{width:70%}
-.voix{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:#6a635a;border:1px solid #eee;border-radius:10px;padding:8px 12px;margin-bottom:14px}
+.voix{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:#6a635a;
+  border:1px solid #eee;border-radius:10px;padding:8px 12px;margin-bottom:14px}
 .dark .voix{color:#cdd6df;border-color:#2b323b;background:#222932}
 .navrow{display:flex;justify-content:space-between;margin-top:18px}
 .nbtn{font-size:12px;font-weight:800;padding:10px 16px;border-radius:11px;border:1px solid #e7e7e7;color:#7a726a;background:#fff}
 .dark .nbtn{background:#222932;border-color:#2b323b;color:#cdd6df}
 .nbtn.prim{color:#fff;border:none;background:linear-gradient(120deg,#e11d2a,#ff7a3d)}
 .nbtn.off{opacity:.45}
+
 .q{background:#fff;border:1px solid #ececec;border-radius:16px;padding:22px;height:100%}
 .dark .q{background:#1b2127;border-color:#2b323b}
 .opt{display:flex;align-items:center;gap:11px;border:1.5px solid #ededed;border-radius:11px;padding:12px 14px;margin-top:10px;font-size:13px;font-weight:600;color:#2a2622}
@@ -78,39 +96,63 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .opt.sel{border-color:#e11d2a;background:#fdeeec;color:#e11d2a}
 .opt.ok{border-color:#15a05f;background:#e8f7ef;color:#15a05f}
 .opt.ok .mk{background:#15a05f;border-color:#15a05f}
-.ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;background:conic-gradient(#15a05f var(--p,0%),#e7efe9 0);transition:--p 1s}
+.ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;
+  background:conic-gradient(#15a05f var(--p,0%),#e7efe9 0);transition:--p 1s}
 .ringIn{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:21px;font-weight:800;color:#15a05f}
 .dark .ringIn{background:#1b2127}
-.cert{height:100%;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid var(--gold);background:radial-gradient(700px 300px at 50% 0%,rgba(214,163,56,.12),transparent),#fff;gap:8px;padding:20px}
+
+.cert{height:100%;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;border:2px solid var(--gold);background:
+  radial-gradient(700px 300px at 50% 0%,rgba(214,163,56,.12),transparent),#fff;gap:8px;padding:20px}
 .dark .cert{background:radial-gradient(700px 300px at 50% 0%,rgba(214,163,56,.16),transparent),#161b21}
 .cert .crow{font-size:46px}
 .cert h2{font-size:24px;font-weight:800;color:#1a1714}
 .dark .cert h2{color:#eef1f4}
-.cert .nm{font-size:26px;font-weight:800;background:linear-gradient(120deg,var(--gold),var(--gold-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cert .nm{font-size:26px;font-weight:800;background:linear-gradient(120deg,var(--gold),var(--gold-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
 .cert .meta{display:flex;gap:22px;margin-top:8px;font-size:11px;color:#8a8278;font-weight:700}
 .dark .cert .meta{color:#9aa7b4}
-.tag{position:absolute;font-size:11px;font-weight:800;color:#fff;background:#111;padding:6px 11px;border-radius:9px;box-shadow:0 8px 20px -8px rgba(0,0,0,.6);opacity:0;transition:opacity .4s;z-index:6}
+
+/* badges / highlight ring used to point at UI */
+.tag{position:absolute;font-size:11px;font-weight:800;color:#fff;background:#111;padding:6px 11px;border-radius:9px;
+  box-shadow:0 8px 20px -8px rgba(0,0,0,.6);opacity:0;transition:opacity .4s;z-index:6}
 .tag.on{opacity:1}
 .tag::after{content:"";position:absolute;width:9px;height:9px;background:#111;transform:rotate(45deg)}
 .tag.tl::after{left:14px;top:-4px}.tag.bl::after{left:14px;bottom:-4px}
-.cfgbtn{position:absolute;right:20px;bottom:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(120deg,#e11d2a,#ff7a3d);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:0 12px 26px -8px rgba(0,0,0,.5);border:2px solid #fff;z-index:5}
-.cfgpanel{position:absolute;right:20px;bottom:82px;width:230px;background:#fff;border-radius:14px;padding:13px 15px;box-shadow:0 24px 50px -18px rgba(0,0,0,.5);z-index:5;opacity:0;transform:translateY(8px);transition:.35s;font-size:12px;color:#222}
+
+/* fake confort widgets */
+.cfgbtn{position:absolute;right:20px;bottom:20px;width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(120deg,#e11d2a,#ff7a3d);color:#fff;display:grid;place-items:center;font-size:22px;
+  box-shadow:0 12px 26px -8px rgba(0,0,0,.5);border:2px solid #fff;z-index:5}
+.cfgpanel{position:absolute;right:20px;bottom:82px;width:230px;background:#fff;border-radius:14px;padding:13px 15px;
+  box-shadow:0 24px 50px -18px rgba(0,0,0,.5);z-index:5;opacity:0;transform:translateY(8px);transition:.35s;font-size:12px;color:#222}
 .dark .cfgpanel{background:#1b2127;color:#e8edf2}
 .cfgpanel.on{opacity:1;transform:none}
 .cfgpanel .r{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-weight:700}
 .cfgpanel .r+.r{border-top:1px solid rgba(0,0,0,.08)}
 .tog{font-size:11px;font-weight:800;padding:5px 11px;border-radius:99px;background:#eee;color:#555}
 .tog.on{background:#e11d2a;color:#fff}
-.sidemenu{position:absolute;left:18px;top:18px;font-size:11px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);padding:8px 12px;border-radius:9px;z-index:5}
-.cursor{position:absolute;width:26px;height:26px;z-index:20;left:50%;top:50%;transition:transform 1.05s cubic-bezier(.5,.05,.2,1);pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
-.ripple{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid var(--gold);z-index:19;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4)}
+.sidemenu{position:absolute;left:18px;top:18px;font-size:11px;font-weight:800;color:#fff;
+  background:rgba(0,0,0,.55);padding:8px 12px;border-radius:9px;z-index:5}
+
+/* fake cursor */
+.cursor{position:absolute;width:26px;height:26px;z-index:20;left:50%;top:50%;
+  transition:transform 1.05s cubic-bezier(.5,.05,.2,1);pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.cursor svg{display:block}
+.ripple{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid var(--gold);
+  z-index:19;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4)}
 .ripple.go{animation:rip .6s ease-out}
 @keyframes rip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+
+/* caption */
 .cap{min-height:58px;margin-top:14px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}
 .cap .step{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
 .cap .txt{font-size:18px;font-weight:700;color:#f3efe6;line-height:1.35;max-width:760px}
+
+/* controls */
 .ctrl{display:flex;align-items:center;gap:14px;width:min(960px,96vw);margin-top:2px}
-.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#16161a;color:#f3efe6;font-size:17px;display:grid;place-items:center;cursor:pointer;flex:none;transition:.2s}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#16161a;color:#f3efe6;
+  font-size:17px;display:grid;place-items:center;cursor:pointer;flex:none;transition:.2s}
 .cbtn:hover{border-color:var(--gold);color:var(--gold)}
 .timeline{flex:1;display:flex;gap:6px}
 .seg{flex:1;height:6px;border-radius:6px;background:#2a2a30;overflow:hidden;cursor:pointer}
@@ -124,7 +166,7 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 <div class="head">
   <div class="brand">MCR Academy</div>
   <h1>Comment suivre votre formation</h1>
-  <p>Un mini-film avec voix off — appuyez sur ▶ et laissez-vous guider.</p>
+  <p>Un mini-film pour bien démarrer — appuyez sur ▶ et laissez-vous guider.</p>
 </div>
 
 <div class="player">
@@ -138,7 +180,10 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
   </div>
 </div>
 
-<div class="cap" id="cap"><div class="step" id="capStep"></div><div class="txt" id="capTxt"></div></div>
+<div class="cap" id="cap">
+  <div class="step" id="capStep"></div>
+  <div class="txt" id="capTxt"></div>
+</div>
 
 <div class="ctrl">
   <button class="cbtn" id="playBtn" title="Lecture / Pause">▶</button>
@@ -151,12 +196,18 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 
 <script>
 const screen=document.getElementById('screen');
-const cursor=document.getElementById('cursor'), ripple=document.getElementById('ripple');
-const capStep=document.getElementById('capStep'), capTxt=document.getElementById('capTxt');
+const cursor=document.getElementById('cursor');
+const ripple=document.getElementById('ripple');
+const cap=document.getElementById('cap'), capStep=document.getElementById('capStep'), capTxt=document.getElementById('capTxt');
+
+// move cursor to % position of screen
 function move(xp,yp){const r=screen.getBoundingClientRect();cursor.style.transform=`translate(${xp/100*r.width-13}px,${yp/100*r.height-13}px)`;}
 function clickAt(xp,yp){const r=screen.getBoundingClientRect();ripple.style.left=(xp/100*r.width)+'px';ripple.style.top=(yp/100*r.height)+'px';ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');}
+
 function scn(html){return `<div class="scene">${html}</div>`;}
-const cardPortal=(cls,cat,title,desc,btn)=>`<div class="mc ${cls}"><div class="top"></div><div class="cat">${cat}</div><h3>${title}</h3><p>${desc}</p><span class="btn">${btn} →</span></div>`;
+
+const cardPortal=(cls,cat,title,desc,btn)=>`<div class="mc ${cls}"><div class="top"></div>
+  <div class="cat">${cat}</div><h3>${title}</h3><p>${desc}</p><span class="btn">${btn} →</span></div>`;
 
 const scenes=[
 {step:'Bienvenue',txt:"Voici MCR Academy. En quelques étapes, vous saurez tout faire.",
@@ -165,20 +216,39 @@ const scenes=[
    <div class="s-title" style="font-size:32px">Votre formation, en toute simplicité</div>
    <div class="s-sub" style="font-size:15px">Suivez le guide pas à pas 👇</div></div>`),
  act:()=>{move(50,46);}},
+
+{step:'Pour commencer — votre inscription',txt:"Choisissez le profil « Stagiaire » et entrez le code de votre entreprise. Le numéro de sécurité sociale est facultatif : vous pourrez le renseigner plus tard.",
+ html:scn(`<div class="s-kicker">Inscription</div><div class="s-title">Créez votre compte</div>
+   <div style="max-width:440px;margin:16px auto 0">
+     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
+       <div style="border:1.5px solid #d6a338;background:#fff7e6;border-radius:11px;padding:9px;text-align:center;font-size:11.5px;font-weight:800;color:#9a6a12">🎓<br>Stagiaire</div>
+       <div style="border:1px solid #e7e7e7;border-radius:11px;padding:9px;text-align:center;font-size:11.5px;font-weight:700;color:#9a948b">🏢<br>Responsable</div>
+       <div style="border:1px solid #e7e7e7;border-radius:11px;padding:9px;text-align:center;font-size:11.5px;font-weight:700;color:#9a948b">🛡️<br>Admin</div>
+     </div>
+     <div style="border:1px solid #e7e7e7;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#7a726a;margin-bottom:8px">Prénom · Nom · date de naissance</div>
+     <div style="border:1.5px solid #d6a338;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#9a6a12;font-weight:700">N° de sécurité sociale <span style="font-weight:600;color:#a89067">(facultatif)</span></div>
+     <div style="border:1px solid #e7e7e7;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#7a726a;margin-top:8px">Code entreprise reçu de votre employeur</div>
+   </div>`),
+ act:()=>{move(50,30);setTimeout(()=>move(50,62),1100);}},
+
 {step:'Étape 1 — Choisir',txt:"Sur l'accueil, choisissez votre formation et cliquez sur « Ouvrir ».",
  html:scn(`<div class="s-kicker">Catalogue</div><div class="s-title">Choisissez votre formation</div>
    <div class="cards">
-     ${cardPortal('tq','Prévention','SST — Acteur de la Prévention','Repérer et remonter les risques. Conforme INRS.','Ouvrir')}
+     ${cardPortal('tq','Prévention','Acteur de la Prévention des Risques','Repérer et remonter les risques. Conforme INRS.','Ouvrir')}
      ${cardPortal('','Incendie','Sécurité Incendie — EPI','Théorie du feu, extinction, évacuation. 6 modules.','Ouvrir')}
    </div>`),
  act:()=>{move(20,30);setTimeout(()=>move(78,57),650);setTimeout(()=>clickAt(78,57),1700);}},
+
 {step:'Étape 2 — Le programme',txt:"Vous voyez le programme. Cliquez sur « Démarrer la formation » pour commencer.",
  html:scn(`<div class="hero"><span class="cat">FORMATION · CONFORME INRS</span><h2>Sécurité Incendie — EPI</h2>
      <div class="stats"><div><span>DURÉE</span><b>4h</b></div><div><span>MODULES</span><b>6</b></div><div><span>SEUIL</span><b>60%</b></div></div></div>
-   <div style="display:flex;justify-content:flex-end;margin-top:18px"><span class="nbtn prim" style="font-size:13px">Démarrer la formation ▶</span></div>
-   <div class="sidemenu">← Menu principal</div>`),
- act:()=>{move(20,16);setTimeout(()=>move(86,46),900);setTimeout(()=>clickAt(86,46),1900);}},
-{step:'Étape 3 — Le confort',txt:"Le bouton réglages ajuste le confort : taille du texte, mode sombre, et voix off.",
+   <div style="display:flex;justify-content:flex-end;margin-top:18px">
+     <span class="nbtn prim" style="font-size:13px">Démarrer la formation ▶</span></div>
+   <div class="sidemenu">← Menu principal</div>
+   <div class="tag tl" id="tag1" style="left:20px;top:64px">⬅ Ici pour revenir au menu</div>`),
+ act:()=>{document.getElementById('tag1').classList.add('on');move(20,16);setTimeout(()=>move(86,46),900);setTimeout(()=>clickAt(86,46),1900);}},
+
+{step:'Étape 3 — Le confort',txt:"Le bouton ⚙ règle le confort : taille du texte, mode sombre, et voix off.",
  html:scn(`<div class="s-kicker">Réglages</div><div class="s-title">À votre confort</div>
    <div class="s-sub">Agrandissez le texte, passez en sombre, activez la lecture à voix haute.</div>
    <div class="cfgbtn">⚙</div>
@@ -187,7 +257,8 @@ const scenes=[
      <div class="r"><span>Mode sombre</span><span class="tog on">Activé</span></div>
      <div class="r"><span>Voix off</span><span class="tog on">Activée</span></div></div>`),
  act:()=>{move(89,90);setTimeout(()=>clickAt(89,90),700);setTimeout(()=>{screen.classList.add('dark');},1300);setTimeout(()=>move(80,60),1700);}},
-{step:'Étape 4 — Lire le cours',txt:"Lisez le cours. Le bouton Suivant s'active une fois arrivé en bas de page.",
+
+{step:'Étape 4 — Lire le cours',txt:"Lisez le cours. Le bouton « Suivant » s'active une fois arrivé en bas de page.",
  html:scn(`<div class="lesson"><div class="crumbrow"><span class="crumb">MODULE 1 · Théorie du feu</span><span class="pill">⏱ 8 min</span></div>
    <div class="pbar"><i id="pb"></i></div>
    <div class="lh">Le triangle du feu</div>
@@ -197,6 +268,7 @@ const scenes=[
  act:()=>{move(50,30);setTimeout(()=>{const pb=document.getElementById('pb');if(pb)pb.style.width='100%';move(50,80);},700);
    setTimeout(()=>{const nx=document.getElementById('nx');if(nx)nx.classList.remove('off');},2000);
    setTimeout(()=>{move(86,84);clickAt(86,84);},2500);}},
+
 {step:'Étape 5 — Le quiz',txt:"À la fin du module, un petit quiz. Il faut 60% de bonnes réponses pour valider.",
  html:scn(`<div class="q"><div class="crumb" style="margin-bottom:8px">QUIZ · MODULE 1 — seuil 60%</div>
    <div class="lh" style="font-size:16px">Que faut-il pour qu'un feu démarre ?</div>
@@ -207,52 +279,72 @@ const scenes=[
  act:()=>{move(40,46);setTimeout(()=>{clickAt(40,46);document.getElementById('o2').classList.add('sel');},900);
    setTimeout(()=>{move(85,82);clickAt(85,82);},1800);
    setTimeout(()=>{const o2=document.getElementById('o2');o2.classList.remove('sel');o2.classList.add('ok');},2400);}},
-{step:'Étape 6 — Votre attestation',txt:"Tous les modules validés ? Vous obtenez votre attestation, prête à imprimer.",
+
+{step:'Étape 6 — Réussite',txt:"Quiz validé ! Vous débloquez le module suivant.",
+ html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px">
+   <div class="ring" id="ring"><div class="ringIn" id="ringv">0%</div></div>
+   <div class="s-title" style="font-size:22px">Module validé 🎉</div>
+   <div class="s-sub">Continuez avec le module suivant.</div></div>`),
+ act:()=>{const ring=document.getElementById('ring');let p=0;const t=setInterval(()=>{p+=4;if(p>80){clearInterval(t);return;}ring.style.setProperty('--p',p+'%');document.getElementById('ringv').textContent=p+'%';},40);move(50,40);}},
+
+{step:'Étape 7 — Votre attestation',txt:"Tous les modules validés ? Vous obtenez votre attestation, prête à imprimer.",
  html:scn(`<div class="cert"><div class="crow">🏆</div><h2>Attestation de réussite</h2>
    <div class="s-sub">Décerné à</div><div class="nm">Votre Nom</div>
    <div class="s-sub">Sécurité Incendie — EPI · score moyen 88%</div>
    <div class="meta"><div>ORGANISME<br><b style="color:#d6a338">MCR Academy</b></div><div>DÉLIVRÉ LE<br><b style="color:#d6a338">aujourd'hui</b></div></div></div>`),
  act:()=>{move(50,46);}},
-{step:'C\'est à vous !',txt:"Vous êtes prêt. Bonne formation ! Appuyez sur recommencer pour revoir ce guide.",
+
+{step:'Pour finir — votre avis',txt:"Juste après l'attestation, notez votre formation : des étoiles et un petit commentaire si vous voulez. C'est rapide, et ça aide à améliorer les parcours.",
+ html:scn(`<div class="s-kicker">Votre avis compte</div><div class="s-title">Notez votre formation</div>
+   <div style="max-width:440px;margin:18px auto 0;text-align:center">
+     <div style="font-size:36px;color:#f5c451;letter-spacing:9px">★★★★★</div>
+     <div style="border:1px solid #e7e7e7;border-radius:10px;padding:12px;font-size:12.5px;color:#7a726a;margin-top:16px">Un commentaire ? (facultatif)</div>
+     <div style="margin-top:16px"><span class="nbtn prim" style="font-size:13px">Envoyer ma note</span></div>
+   </div>`),
+ act:()=>{move(50,34);setTimeout(()=>{move(50,78);clickAt(50,78);},1400);}},
+
+{step:'C\'est à vous !',txt:"Vous êtes prêt. Bonne formation 👏 — appuyez sur ↺ pour revoir ce guide.",
  html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
-   <div style="font-size:46px">🚀</div>
+   <div class="crow" style="font-size:46px">🚀</div>
    <div class="s-title" style="font-size:30px">Vous savez tout !</div>
    <div class="s-sub" style="font-size:15px">Choisissez une formation et lancez-vous.</div></div>`),
- act:()=>{move(50,44);}}
+ act:()=>{move(50,44);}},
 ];
 
+// build timeline
 const timeline=document.getElementById('timeline');
-const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
+const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';
+  s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
 const count=document.getElementById('count');
-const DUR=4200;
+const DUR=4200; // ms par scène (mode sans voix)
 let idx=0,playing=false,timer=null,segTimer=null,t0=0;
+/* ---- Voix off (synthèse vocale FR du navigateur) ---- */
 const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
-function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
+function pickVoice(){try{const vs=synth.getVoices();frVoice=vs.find(v=>/fr[-_]?FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null;}catch(e){}}
 pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
-function speak(t,cb){try{synth.cancel();if(!voixOn||!t){if(cb)cb();return;}var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-'’!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.9;u.pitch=1.02;if(frVoice)u.voice=frVoice;u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};synth.speak(u);}catch(e){if(cb)cb();}}
+function speak(t){try{synth.cancel();if(!voixOn||!t)return;const u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-''!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
 function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
+
 function showScene(i){
-  idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
+  idx=i;
+  // reset screen content (keep cursor + ripple)
+  [...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
   screen.classList.remove('dark');
-  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;const node=wrap.firstElementChild;screen.appendChild(node);
-  void node.offsetWidth;node.classList.add('on');
-  capStep.textContent=scenes[i].step;capTxt.textContent=scenes[i].txt;count.textContent=(i+1)+' / '+scenes.length;
+  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;
+  const node=wrap.firstElementChild;screen.appendChild(node);
+  void node.offsetWidth; node.classList.add('on');
+  capStep.textContent=scenes[i].step; capTxt.textContent=scenes[i].txt;
+  count.textContent=(i+1)+' / '+scenes.length;
   segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
   try{scenes[i].act&&scenes[i].act();}catch(e){}
 }
-function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
-  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
-  segTimer=requestAnimationFrame(step);}
-function play(){playing=true;document.getElementById('playBtn').textContent='⏸';animateSeg();var myIdx=idx,adv1=false;function adv(){if(adv1||!playing||idx!==myIdx)return;adv1=true;if(idx<scenes.length-1){goTo(idx+1);}else{pause();}}if(voixOn){speak(scenes[idx].txt,adv);timer=setTimeout(adv,curDur()+6000);}else{speak(scenes[idx].txt);timer=setTimeout(adv,DUR);}}
-function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
-function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
-function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
-document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
-document.getElementById('replayBtn').onclick=replay;
-document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
-window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
-showScene(0);setTimeout(()=>play(),600);
-</script>
-</body>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+function animateSeg(){
+  const bar=segs[idx].querySelector('i');t0=performance.now();
+  cancelAnimationFrame(segTimer);
+  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';
+    if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
+  segTimer=requestAnimationFrame(step);
+}
+function play(){
+  playing=true;document.getElementById('playBtn').textContent='⏸';
+  speak(scenes[idx]
