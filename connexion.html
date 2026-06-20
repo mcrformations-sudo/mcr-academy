@@ -10,12 +10,12 @@
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
     font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);
     background:radial-gradient(900px 600px at 50% -10%,#1a2230,#0b0e13)}
-  .box{width:min(400px,94vw);background:#12161c;border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:0 30px 80px -20px #000}
+  .box{width:min(420px,94vw);background:#12161c;border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:0 30px 80px -20px #000}
   .crest{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);overflow:hidden}
   .crest img{width:100%;height:100%;object-fit:contain}
   .sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
   h1{text-align:center;font-size:21px;margin:10px 0 4px}
-  .lead{text-align:center;color:var(--muted);font-size:13px;margin:0 0 20px}
+  .lead{text-align:center;color:var(--muted);font-size:13px;margin:0 0 18px}
   label{display:block;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
   input{width:100%;background:#0f141a;border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);font-size:14.5px;font-family:inherit}
   input:focus{outline:none;border-color:var(--gold)}
@@ -26,10 +26,16 @@
   .msg{min-height:18px;text-align:center;font-size:13px;margin-top:10px}
   .msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
   .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+  .opt{font-weight:600;text-transform:none;letter-spacing:0;color:#7d8895}
   .consent{margin-top:14px}
   .consent .ck{display:flex;gap:9px;align-items:flex-start;font-size:11.8px;line-height:1.5;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer}
   .consent .ck input{width:auto;margin-top:2px;accent-color:var(--gold);flex:0 0 auto}
   .consent a{color:var(--gold);font-weight:700}
+  /* sélecteur de rôle */
+  .roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:6px 0 4px}
+  .roles button{border:1px solid var(--line);background:#0f141a;color:var(--muted);border-radius:11px;padding:9px 4px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.25;text-align:center}
+  .roles button .ic{display:block;font-size:18px;margin-bottom:3px}
+  .roles button.on{border-color:var(--gold);color:var(--ink);background:#1a1610;box-shadow:0 0 0 1px var(--gold) inset}
   .hidden{display:none!important}
 </style>
 </head>
@@ -40,17 +46,38 @@
     <h1 id="title">Connexion</h1>
     <p class="lead" id="lead">Accédez à votre espace de formation.</p>
 
+    <!-- Choix du profil (inscription uniquement) -->
+    <div id="roleWrap" class="hidden">
+      <label>Je crée un compte en tant que</label>
+      <div class="roles">
+        <button type="button" data-role="stagiaire" class="on"><span class="ic">🎓</span>Stagiaire</button>
+        <button type="button" data-role="rh"><span class="ic">🏢</span>Responsable d'entreprise</button>
+        <button type="button" data-role="admin"><span class="ic">🛡️</span>Administrateur</button>
+      </div>
+    </div>
+
     <div id="signupFields" class="hidden">
       <label>Prénom</label><input id="prenom" autocomplete="given-name">
       <label>Nom</label><input id="nom" autocomplete="family-name">
-      <label>Date de naissance</label><input id="naissance" type="date">
+      <div id="naissanceWrap">
+        <label>Date de naissance</label><input id="naissance" type="date">
+      </div>
+      <div id="secuWrap">
+        <label>N° de sécurité sociale <span class="opt">(facultatif)</span></label>
+        <input id="secu" inputmode="numeric" placeholder="Fourni par votre employeur — non obligatoire">
+        <div class="hint">Optionnel pour l'instant. Vous pourrez le renseigner plus tard ; il peut être transmis par votre employeur.</div>
+      </div>
     </div>
+
     <label>Email</label><input id="email" type="email" autocomplete="email">
     <label>Mot de passe</label><input id="password" type="password" autocomplete="current-password">
+
     <div id="codeWrap" class="hidden">
-      <label>Code d'accès</label><input id="code" placeholder="Code reçu de votre entreprise">
-      <div class="hint">Code communiqué par votre employeur (stagiaire) ou par MCR Formations (RH / administrateur).</div>
+      <label id="codeLabel">Code d'accès</label>
+      <input id="code" placeholder="Code reçu de votre entreprise">
+      <div class="hint" id="codeHint">Code communiqué par votre employeur.</div>
     </div>
+
     <div id="consentWrap" class="hidden consent">
       <label class="ck"><input id="consent" type="checkbox">
         <span>J'accepte que mes données (nom, prénom, date de naissance, e-mail, progression) soient traitées par MCR Formations pour la gestion de mes formations, et j'ai pris connaissance de la <a href="politique-confidentialite.html" target="_blank">politique de confidentialité</a>.</span>
@@ -69,20 +96,45 @@
   const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
   let _sb=null;
   function getSB(){ if(!_sb){ _sb=window.supabase.createClient(SB_URL,SB_KEY); } return _sb; }
-  let mode="login"; // 'login' | 'signup'
+  let mode="login";       // 'login' | 'signup'
+  let signRole="stagiaire"; // rôle choisi à l'inscription
 
   const el=id=>document.getElementById(id);
+
+  // textes du champ "code" selon le profil choisi
+  const CODE_UI={
+    stagiaire:{label:"Code entreprise",      ph:"Code reçu de votre employeur",        hint:"Code communiqué par votre employeur."},
+    rh:       {label:"Code responsable",      ph:"Code RH fourni par MCR Formations",    hint:"Code « responsable » remis par MCR Formations à la création de votre société."},
+    admin:    {label:"Code administrateur",   ph:"Code administrateur MCR",              hint:"Réservé à l'équipe MCR Formations."}
+  };
+
+  function applyRole(r){
+    signRole=r;
+    [...document.querySelectorAll('.roles button')].forEach(b=>b.classList.toggle('on',b.dataset.role===r));
+    // champs propres au stagiaire
+    const isStag=(r==="stagiaire");
+    el("naissanceWrap").classList.toggle("hidden",!isStag);
+    el("secuWrap").classList.toggle("hidden",!isStag);
+    const ui=CODE_UI[r];
+    el("codeLabel").textContent=ui.label;
+    el("code").placeholder=ui.ph;
+    el("codeHint").textContent=ui.hint;
+  }
+  [...document.querySelectorAll('.roles button')].forEach(b=>b.onclick=()=>applyRole(b.dataset.role));
+
   function setMode(m){
     mode=m;
     const su=(m==="signup");
+    el("roleWrap").classList.toggle("hidden",!su);
     el("signupFields").classList.toggle("hidden",!su);
     el("codeWrap").classList.toggle("hidden",!su);
     el("consentWrap").classList.toggle("hidden",!su);
     el("title").textContent=su?"Créer un compte":"Connexion";
-    el("lead").textContent=su?"Inscrivez-vous pour accéder à vos formations.":"Accédez à votre espace de formation.";
+    el("lead").textContent=su?"Choisissez votre profil pour vous inscrire.":"Accédez à votre espace de formation.";
     el("goBtn").textContent=su?"Créer mon compte":"Se connecter";
     el("switch").innerHTML=su?"Déjà un compte ? <a id='toggle'>Se connecter</a>":"Pas encore de compte ? <a id='toggle'>Créer un compte</a>";
     el("toggle").onclick=()=>setMode(su?"login":"signup");
+    if(su) applyRole(signRole);
     el("msg").textContent="";
   }
   el("toggle").onclick=()=>setMode("signup");
@@ -96,6 +148,15 @@
     const {data}=await getSB().from("profiles").select("role").eq("id",uid).maybeSingle();
     return data?data.role:null;
   }
+  // refus si compte bloqué / entreprise suspendue
+  async function blockedReason(){
+    try{
+      const {data}=await getSB().rpc("account_active");
+      if(data==="BLOQUE")   return "Votre accès a été suspendu (manquement au règlement). Contactez MCR Formations.";
+      if(data==="SUSPENDU") return "L'accès de votre entreprise est suspendu. Contactez MCR Formations.";
+      return null;
+    }catch(e){ return null; } // RPC absente = on ne bloque pas (avant migration)
+  }
 
   el("goBtn").onclick=async()=>{
     const msg=el("msg"); msg.className="msg";
@@ -106,11 +167,15 @@
       if(mode==="login"){
         const {data,error}=await getSB().auth.signInWithPassword({email,password:pwd});
         if(error){msg.className="msg err";msg.textContent="Connexion impossible : "+error.message;return;}
+        const reason=await blockedReason();
+        if(reason){ await getSB().auth.signOut(); msg.className="msg err"; msg.textContent=reason; return; }
         const role=await roleOf(data.user.id);
         if(!role){msg.className="msg err";msg.textContent="Compte sans rôle. Contactez MCR Formations.";return;}
         msg.className="msg ok";msg.textContent="Connecté, redirection…";route(role);
       } else {
-        const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim(), naissance=el("naissance").value||null;
+        const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim();
+        const naissance=(signRole==="stagiaire") ? (el("naissance").value||null) : null;
+        const secu=(signRole==="stagiaire") ? el("secu").value.trim() : "";
         if(!prenom||!nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
         if(!el("consent").checked){msg.className="msg err";msg.textContent="Veuillez accepter la politique de confidentialité.";return;}
@@ -123,16 +188,25 @@
         const {data:role,error:e2}=await getSB().rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom,p_naissance:naissance});
         if(e2){msg.className="msg err";msg.textContent="Erreur : "+e2.message;return;}
         if(role==="CODE_INCONNU"){msg.className="msg err";msg.textContent="Code d'accès inconnu. Vérifiez auprès de votre employeur / MCR.";return;}
+        // n° de sécu (stagiaire, facultatif) — enregistré après création du profil
+        if(role==="stagiaire" && secu){ try{ await getSB().rpc("set_my_secu",{p_secu:secu}); }catch(e){} }
         msg.className="msg ok";msg.textContent="Compte créé, redirection…";route(role);
       }
     }catch(ex){msg.className="msg err";msg.textContent="Erreur : "+ex;}
     finally{el("goBtn").disabled=false;}
   };
 
-  // déjà connecté ? on route directement (en attendant que supabase soit chargé)
+  // déjà connecté ? on route directement (sauf si bloqué)
   (function waitSB(n){
     if(!window.supabase){ if(n<50){return setTimeout(()=>waitSB(n+1),100);} return; }
-    (async()=>{try{const {data}=await getSB().auth.getSession(); if(data.session){const role=await roleOf(data.session.user.id); if(role) route(role);}}catch(e){}})();
+    (async()=>{try{
+      const {data}=await getSB().auth.getSession();
+      if(data.session){
+        const reason=await blockedReason();
+        if(reason){ await getSB().auth.signOut(); el("msg").className="msg err"; el("msg").textContent=reason; return; }
+        const role=await roleOf(data.session.user.id); if(role) route(role);
+      }
+    }catch(e){}})();
   })(0);
 })();
 </script>

@@ -71,6 +71,7 @@
     <div class="tab on" data-tab="sal">Mes salariés</div>
     <div class="tab" data-tab="att">Attestations</div>
     <div class="tab" data-tab="invit">Inviter</div>
+    <div class="tab" data-tab="avis">Noter MCR ★</div>
   </div>
 
   <section id="tab-sal">
@@ -108,6 +109,17 @@
       <div class="codebox"><b id="entCode">—</b><button class="btn ghost" id="copyCode">Copier</button></div>
     </div>
   </section>
+
+  <section id="tab-avis" class="hidden">
+    <div class="card">
+      <h2>Votre avis sur MCR Formations</h2>
+      <p class="desc">Notez la qualité de l'organisme et de l'accompagnement. Votre retour est transmis à l'équipe MCR Formations.</p>
+      <div id="avisStars" style="font-size:34px;letter-spacing:8px;cursor:pointer;user-select:none;margin:6px 0"></div>
+      <textarea id="avisTxt" placeholder="Un commentaire ? (facultatif)" style="width:100%;background:#0f141a;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:11px 13px;font-family:inherit;font-size:14px;resize:vertical;min-height:64px"></textarea>
+      <div><button class="btn gold" id="avisSend" style="margin-top:12px">Envoyer mon avis</button></div>
+      <div id="avisMsg" class="msg"></div>
+    </div>
+  </section>
 </div>
 
 <div id="loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa6b2;font-family:system-ui">Chargement…</div>
@@ -142,7 +154,26 @@
     load();
   })();
 
-  document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["sal","att","invit"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
+  document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["sal","att","invit","avis"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
+
+  // ---- Avis sur l'organisme MCR ----
+  let avisN=0;
+  function paintAvis(n){let h='';for(let i=1;i<=5;i++){h+='<span data-n="'+i+'" style="color:'+(i<=n?'#f5c451':'#3a4250')+'">★</span>';}el("avisStars").innerHTML=h;}
+  paintAvis(0);
+  el("avisStars").addEventListener("click",e=>{const t=e.target.closest("[data-n]");if(t){avisN=+t.dataset.n;paintAvis(avisN);}});
+  el("avisStars").addEventListener("mouseover",e=>{const t=e.target.closest("[data-n]");if(t)paintAvis(+t.dataset.n);});
+  el("avisStars").addEventListener("mouseout",()=>paintAvis(avisN));
+  // pré-remplir si déjà noté
+  (async()=>{try{const {data}=await sb.from("organisme_ratings").select("note,commentaire").order("created_at",{ascending:false}).limit(1).maybeSingle();if(data){avisN=data.note||0;paintAvis(avisN);if(data.commentaire)el("avisTxt").value=data.commentaire;}}catch(e){}})();
+  el("avisSend").onclick=async()=>{
+    const m=el("avisMsg"); m.className="msg";
+    if(!avisN){m.className="msg err";m.textContent="Choisissez un nombre d'étoiles.";return;}
+    el("avisSend").disabled=true; m.textContent="Envoi…";
+    try{const {data,error}=await sb.rpc("save_rating",{p_type:"organisme",p_note:avisN,p_commentaire:el("avisTxt").value.trim()});
+      if(error){m.className="msg err";m.textContent="Erreur : "+error.message;el("avisSend").disabled=false;return;}
+      m.className="msg ok";m.textContent="★ Merci, votre avis a bien été transmis.";
+    }catch(e){m.className="msg err";m.textContent="Erreur : "+e;el("avisSend").disabled=false;}
+  };
 
   async function load(){ await Promise.all([loadSal(),loadAtt()]); }
 

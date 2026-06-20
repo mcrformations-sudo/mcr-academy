@@ -782,7 +782,35 @@ render();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));try{var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;if(u){rec.user_id=u.id;var pr=await sb.from("profiles").select("entreprise_id").eq("id",u.id).maybeSingle();if(pr&&pr.data&&pr.data.entreprise_id)rec.entreprise_id=pr.data.entreprise_id;var stg=await sb.from("stagiaires").select("id").eq("user_id",u.id).maybeSingle();if(stg&&stg.data)rec.stagiaire_id=stg.data.id;}}catch(e){}var r=await sb.from("attestations").insert(rec);return r;}catch(e){return{error:String(e)};}};
+window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));try{var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;if(u){rec.user_id=u.id;var pr=await sb.from("profiles").select("entreprise_id").eq("id",u.id).maybeSingle();if(pr&&pr.data&&pr.data.entreprise_id)rec.entreprise_id=pr.data.entreprise_id;var stg=await sb.from("stagiaires").select("id").eq("user_id",u.id).maybeSingle();if(stg&&stg.data)rec.stagiaire_id=stg.data.id;}}catch(e){}var r=await sb.from("attestations").insert(rec);if(r&&!r.error){try{window.MCR_mountRating(rec.formation);}catch(e){}}return r;}catch(e){return{error:String(e)};}};
+window.MCR_mountRating=function(formation){
+  if(document.getElementById('mcrRateBox'))return;
+  var anchor=document.getElementById('saveAttMsg');var host=anchor?anchor.parentNode:document.body;
+  var box=document.createElement('div');box.id='mcrRateBox';
+  box.style.cssText='width:100%;max-width:520px;margin:16px auto 0;padding:16px 18px;border:1px solid rgba(214,163,56,.35);border-radius:14px;background:rgba(214,163,56,.06);text-align:center;font-family:system-ui,Segoe UI,Roboto,sans-serif';
+  box.innerHTML='<div style="font-weight:800;font-size:14px;margin-bottom:8px">Notez cette formation</div>'+
+    '<div id="mcrStars" style="font-size:32px;letter-spacing:7px;cursor:pointer;user-select:none"></div>'+
+    '<textarea id="mcrRateTxt" placeholder="Un commentaire ? (facultatif)" style="width:100%;margin-top:10px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:inherit;padding:9px 11px;font-family:inherit;font-size:13px;resize:vertical;min-height:46px"></textarea>'+
+    '<button id="mcrRateSend" style="margin-top:10px;border:0;border-radius:10px;padding:10px 18px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#d6a338,#b9842a);color:#1a1407;font-family:inherit">Envoyer ma note</button>'+
+    '<div id="mcrRateMsg" style="font-size:12.5px;margin-top:8px;min-height:16px;color:#9aa6b2"></div>';
+  host.appendChild(box);
+  var cur=0;var st=box.querySelector('#mcrStars');
+  function paint(n){var h='';for(var i=1;i<=5;i++){h+='<span data-n="'+i+'" style="color:'+(i<=n?'#f5c451':'#3a4250')+'">\u2605</span>';}st.innerHTML=h;}
+  paint(0);
+  st.addEventListener('click',function(e){var t=e.target.closest('[data-n]');if(t){cur=+t.getAttribute('data-n');paint(cur);}});
+  st.addEventListener('mouseover',function(e){var t=e.target.closest('[data-n]');if(t)paint(+t.getAttribute('data-n'));});
+  st.addEventListener('mouseout',function(){paint(cur);});
+  box.querySelector('#mcrRateSend').onclick=async function(){
+    var msg=box.querySelector('#mcrRateMsg');
+    if(!cur){msg.textContent='Choisissez un nombre d\u2019\u00e9toiles.';return;}
+    this.disabled=true;msg.textContent='Envoi\u2026';
+    try{var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));
+      var r=await sb.rpc('save_rating',{p_type:'formation',p_note:cur,p_commentaire:box.querySelector('#mcrRateTxt').value.trim(),p_formation:formation});
+      if(r&&r.error){msg.textContent='Erreur : '+r.error.message;this.disabled=false;return;}
+      box.innerHTML='<div style="font-weight:800;font-size:14px;color:#5ee9a0">\u2605 Merci pour votre note !</div>';
+    }catch(e){msg.textContent='Erreur : '+e;this.disabled=false;}
+  };
+};
 </script>
 </body>
 
