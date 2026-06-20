@@ -66,7 +66,8 @@
 (function(){
   const SB_URL="https://mmaolkpsaroxqblthmhk.supabase.co";
   const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
-  const sb=window.supabase.createClient(SB_URL,SB_KEY);
+  let _sb=null;
+  function getSB(){ if(!_sb){ _sb=window.supabase.createClient(SB_URL,SB_KEY); } return _sb; }
   let mode="login"; // 'login' | 'signup'
 
   const el=id=>document.getElementById(id);
@@ -91,7 +92,7 @@
     else location.href="MCR_Academy.html";
   }
   async function roleOf(uid){
-    const {data}=await sb.from("profiles").select("role").eq("id",uid).maybeSingle();
+    const {data}=await getSB().from("profiles").select("role").eq("id",uid).maybeSingle();
     return data?data.role:null;
   }
 
@@ -102,7 +103,7 @@
     el("goBtn").disabled=true; msg.textContent="Veuillez patienter…";
     try{
       if(mode==="login"){
-        const {data,error}=await sb.auth.signInWithPassword({email,password:pwd});
+        const {data,error}=await getSB().auth.signInWithPassword({email,password:pwd});
         if(error){msg.className="msg err";msg.textContent="Connexion impossible : "+error.message;return;}
         const role=await roleOf(data.user.id);
         if(!role){msg.className="msg err";msg.textContent="Compte sans rôle. Contactez MCR Formations.";return;}
@@ -112,5 +113,5 @@
         if(!prenom||!nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
         if(!el("consent").checked){msg.className="msg err";msg.textContent="Veuillez accepter la politique de confidentialité.";return;}
-        const {data,error}=await sb.auth.signUp({email,password:pwd});
-        if(error){msg.className="msg err";msg.textContent="Inscription impossible : "
+        const {data,error}=await getSB().auth.signUp({email,password:pwd});
+        if(erro
