@@ -11,7 +11,8 @@
     font-family:system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);
     background:radial-gradient(900px 600px at 50% -10%,#1a2230,#0b0e13)}
   .box{width:min(400px,94vw);background:#12161c;border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:0 30px 80px -20px #000}
-  .crest{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);font-size:30px}
+  .crest{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold);overflow:hidden}
+  .crest img{width:100%;height:100%;object-fit:contain}
   .sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
   h1{text-align:center;font-size:21px;margin:10px 0 4px}
   .lead{text-align:center;color:var(--muted);font-size:13px;margin:0 0 20px}
@@ -34,7 +35,7 @@
 </head>
 <body>
   <div class="box">
-    <div class="crest">🐦</div>
+    <div class="crest"><img src="MCR_corbeau.png" alt="MCR"></div>
     <div class="sub">MCR Academy</div>
     <h1 id="title">Connexion</h1>
     <p class="lead" id="lead">Accédez à votre espace de formation.</p>
@@ -114,4 +115,26 @@
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
         if(!el("consent").checked){msg.className="msg err";msg.textContent="Veuillez accepter la politique de confidentialité.";return;}
         const {data,error}=await getSB().auth.signUp({email,password:pwd});
-        if(erro
+        if(error){msg.className="msg err";msg.textContent="Inscription impossible : "+error.message;return;}
+        if(!data.session){ // au cas où autoconfirm off
+          const r=await getSB().auth.signInWithPassword({email,password:pwd});
+          if(r.error){msg.className="msg ok";msg.textContent="Compte créé. Vérifiez votre email puis connectez-vous.";return;}
+        }
+        const {data:role,error:e2}=await getSB().rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom,p_naissance:naissance});
+        if(e2){msg.className="msg err";msg.textContent="Erreur : "+e2.message;return;}
+        if(role==="CODE_INCONNU"){msg.className="msg err";msg.textContent="Code d'accès inconnu. Vérifiez auprès de votre employeur / MCR.";return;}
+        msg.className="msg ok";msg.textContent="Compte créé, redirection…";route(role);
+      }
+    }catch(ex){msg.className="msg err";msg.textContent="Erreur : "+ex;}
+    finally{el("goBtn").disabled=false;}
+  };
+
+  // déjà connecté ? on route directement (en attendant que supabase soit chargé)
+  (function waitSB(n){
+    if(!window.supabase){ if(n<50){return setTimeout(()=>waitSB(n+1),100);} return; }
+    (async()=>{try{const {data}=await getSB().auth.getSession(); if(data.session){const role=await roleOf(data.session.user.id); if(role) route(role);}}catch(e){}})();
+  })(0);
+})();
+</script>
+</body>
+</html>
