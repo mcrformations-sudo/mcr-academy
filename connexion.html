@@ -38,6 +38,7 @@
     <div id="signupFields" class="hidden">
       <label>Prénom</label><input id="prenom" autocomplete="given-name">
       <label>Nom</label><input id="nom" autocomplete="family-name">
+      <label>Date de naissance</label><input id="naissance" type="date">
     </div>
     <label>Email</label><input id="email" type="email" autocomplete="email">
     <label>Mot de passe</label><input id="password" type="password" autocomplete="current-password">
@@ -97,7 +98,7 @@
         if(!role){msg.className="msg err";msg.textContent="Compte sans rôle. Contactez MCR Formations.";return;}
         msg.className="msg ok";msg.textContent="Connecté, redirection…";route(role);
       } else {
-        const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim();
+        const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim(), naissance=el("naissance").value||null;
         if(!prenom||!nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
         const {data,error}=await sb.auth.signUp({email,password:pwd});
@@ -106,7 +107,7 @@
           const r=await sb.auth.signInWithPassword({email,password:pwd});
           if(r.error){msg.className="msg ok";msg.textContent="Compte créé. Vérifiez votre email puis connectez-vous.";return;}
         }
-        const {data:role,error:e2}=await sb.rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom});
+        const {data:role,error:e2}=await sb.rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom,p_naissance:naissance});
         if(e2){msg.className="msg err";msg.textContent="Erreur : "+e2.message;return;}
         if(role==="CODE_INCONNU"){msg.className="msg err";msg.textContent="Code d'accès inconnu. Vérifiez auprès de votre employeur / MCR.";return;}
         msg.className="msg ok";msg.textContent="Compte créé, redirection…";route(role);

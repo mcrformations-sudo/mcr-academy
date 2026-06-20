@@ -475,5 +475,33 @@ renderStats();
   if(document.body) build(); else document.addEventListener('DOMContentLoaded',build);
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function(){try{
+  if(!window.supabase)return;
+  var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));
+  var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;
+  if(!u)return;
+  var pr=await sb.from("profiles").select("role").eq("id",u.id).maybeSingle();
+  if(!pr.data||pr.data.role!=="stagiaire")return;
+  var st=await sb.from("stagiaires").select("date_debut").eq("user_id",u.id).order("created_at",{ascending:true}).limit(1).maybeSingle();
+  if(!st.data||!st.data.date_debut)return;
+  var start=new Date(st.data.date_debut);
+  var reste=30-Math.floor((Date.now()-start.getTime())/86400000);
+  if(reste<=0){
+    var o=document.createElement('div');
+    o.style.cssText="position:fixed;inset:0;z-index:99998;background:radial-gradient(900px 600px at 50% -10%,#2a1414,#0b0e13);display:flex;align-items:center;justify-content:center;padding:24px;font-family:system-ui,Segoe UI,Roboto,sans-serif";
+    o.innerHTML='<div style="max-width:440px;text-align:center;background:#12161c;border:1px solid #3a2222;border-radius:18px;padding:34px 30px;color:#e8edf2"><div style="font-size:42px">&#9203;</div><h2 style="margin:10px 0 8px;font-size:21px;color:#ff8c82">Acc&egrave;s expir&eacute;</h2><p style="color:#9aa6b2;font-size:14px;line-height:1.6">Votre d&eacute;lai de 30 jours pour suivre vos formations est &eacute;coul&eacute;. Contactez votre responsable d&rsquo;entreprise ou MCR Formations pour r&eacute;activer votre acc&egrave;s.</p></div>';
+    document.body.appendChild(o);document.body.style.overflow="hidden";
+  }else{
+    var urgent=reste<=5;
+    var b=document.createElement('div');
+    b.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:9000;background:"+(urgent?'#2a1414':'#12161c')+";border:1px solid "+(urgent?'#ef4444':'#262c34')+";color:"+(urgent?'#ffd9d4':'#e8edf2')+";padding:10px 18px;border-radius:99px;font-family:system-ui,Segoe UI,Roboto,sans-serif;font-size:13.5px;font-weight:700;box-shadow:0 12px 30px -10px #000";
+    b.textContent="⏳ Il vous reste "+reste+" jour"+(reste>1?"s":"")+" pour terminer vos formations";
+    document.body.appendChild(b);
+  }
+}catch(e){}})();
+</script>
 </body>
+
 </html>
