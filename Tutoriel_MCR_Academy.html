@@ -229,7 +229,7 @@ let idx=0,playing=false,timer=null,segTimer=null,t0=0;
 const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
 function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
 pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
-function speak(t){try{synth.cancel();if(!voixOn||!t)return;var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
+function speak(t,cb){try{synth.cancel();if(!voixOn||!t){if(cb)cb();return;}var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-'’!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.95;if(frVoice)u.voice=frVoice;u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};synth.speak(u);}catch(e){if(cb)cb();}}
 function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
 function showScene(i){
   idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
@@ -243,8 +243,7 @@ function showScene(i){
 function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
   function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
   segTimer=requestAnimationFrame(step);}
-function play(){playing=true;document.getElementById('playBtn').textContent='⏸';speak(scenes[idx].txt);animateSeg();
-  timer=setTimeout(()=>{if(idx<scenes.length-1){goTo(idx+1);}else{pause();}},curDur());}
+function play(){playing=true;document.getElementById('playBtn').textContent='⏸';animateSeg();var myIdx=idx,adv1=false;function adv(){if(adv1||!playing||idx!==myIdx)return;adv1=true;if(idx<scenes.length-1){goTo(idx+1);}else{pause();}}if(voixOn){speak(scenes[idx].txt,adv);timer=setTimeout(adv,curDur()+6000);}else{speak(scenes[idx].txt);timer=setTimeout(adv,DUR);}}
 function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
 function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
 function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
@@ -256,3 +255,4 @@ showScene(0);setTimeout(()=>play(),600);
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
