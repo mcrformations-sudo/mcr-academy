@@ -173,19 +173,40 @@
 (function(){
   const SB_URL="https://mmaolkpsaroxqblthmhk.supabase.co";
   const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
-  const sb=window.supabase.createClient(SB_URL,SB_KEY);
+  let sb=(window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null);
   const el=id=>document.getElementById(id);
+  function showFatal(msg){
+    var l=el("loading"); l.classList.remove("hidden");
+    l.innerHTML='<div style="max-width:400px;text-align:center;padding:24px">'
+      +'<div style="font-size:16px;color:#e8edf2;font-weight:800;margin-bottom:8px">Connexion impossible</div>'
+      +'<div style="font-size:13.5px;color:#9aa6b2;line-height:1.55;margin-bottom:20px">'+msg+'</div>'
+      +'<button onclick="location.reload()" style="border:0;border-radius:11px;padding:11px 18px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#d6a338,#b9842a);color:#1a1407;font-family:inherit;margin:0 6px 8px">↻ Réessayer</button>'
+      +'<button onclick="location.href=\'connexion.html\'" style="border:1px solid #262c34;border-radius:11px;padding:11px 18px;font-weight:800;cursor:pointer;background:#1b2127;color:#e8edf2;font-family:inherit;margin:0 6px 8px">Se reconnecter</button>'
+      +'</div>';
+  }
+  function withTimeout(p,ms,label){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error("TIMEOUT_"+label)),ms))]);}
+  function waitForLib(){return new Promise((res,rej)=>{if(window.supabase)return res();var n=0,t=setInterval(()=>{if(window.supabase){clearInterval(t);res();}else if(++n>80){clearInterval(t);rej(new Error("LIB"));}},100);});}
   function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
   function fdate(s){if(!s)return"—";try{return new Date(s).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});}catch(e){return s;}}
 
   (async()=>{
-    const {data:{session}}=await sb.auth.getSession();
-    if(!session){location.href="connexion.html";return;}
-    const {data:prof}=await sb.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
-    if(!prof||prof.role!=="admin"){ if(prof&&prof.role==="rh"){location.href="espace-rh.html";return;} location.href="connexion.html"; return; }
-    el("loading").classList.add("hidden"); el("app").classList.remove("hidden");
-    loadAll();
-    el("formList").innerHTML=[["SST_Prevention_Elearning.html","Acteur de la Prévention des Risques Professionnels"],["Incendie_EPI_Elearning.html","Sécurité Incendie — EPI"],["Guide_Serre_File_Evacuation_Elearning.html","Guide-File, Serre-File & Évacuation"],["Gestes_Postures_TMS_Elearning.html","Gestes, Postures & Prévention des TMS"],["Prevention_RPS_Elearning.html","Prévention des Risques Psychosociaux (RPS)"],["Habilitation_H0B0_Elearning.html","Habilitation Électrique H0 B0"],["Habilitation_BS_BE_Manoeuvre_Elearning.html","Habilitation Électrique BS / BE Manœuvre"]].map(f=>'<div class="fcard"><h4>'+esc(f[1])+'</h4><a class="open" href="'+f[0]+'" target="_blank" rel="noopener">Ouvrir ▶</a></div>').join("");
+    try{
+      await waitForLib();
+      if(!sb) sb=window.supabase.createClient(SB_URL,SB_KEY);
+      const {data:{session}}=await withTimeout(sb.auth.getSession(),9000,"SESSION");
+      if(!session){location.href="connexion.html";return;}
+      const {data:prof,error:pe}=await withTimeout(sb.from("profiles").select("role").eq("id",session.user.id).maybeSingle(),9000,"PROFILE");
+      if(pe) throw pe;
+      if(!prof||prof.role!=="admin"){ if(prof&&prof.role==="rh"){location.href="espace-rh.html";return;} location.href="connexion.html"; return; }
+      el("loading").classList.add("hidden"); el("app").classList.remove("hidden");
+      loadAll();
+      el("formList").innerHTML=[["SST_Prevention_Elearning.html","Acteur de la Prévention des Risques Professionnels"],["Incendie_EPI_Elearning.html","Sécurité Incendie — EPI"],["Guide_Serre_File_Evacuation_Elearning.html","Guide-File, Serre-File & Évacuation"],["Gestes_Postures_TMS_Elearning.html","Gestes, Postures & Prévention des TMS"],["Prevention_RPS_Elearning.html","Prévention des Risques Psychosociaux (RPS)"],["Habilitation_H0B0_Elearning.html","Habilitation Électrique H0 B0"],["Habilitation_BS_BE_Manoeuvre_Elearning.html","Habilitation Électrique BS / BE Manœuvre"]].map(f=>'<div class="fcard"><h4>'+esc(f[1])+'</h4><a class="open" href="'+f[0]+'" target="_blank" rel="noopener">Ouvrir ▶</a></div>').join("");
+    }catch(ex){
+      var m=String((ex&&ex.message)||ex);
+      if(m.indexOf("TIMEOUT")>=0) showFatal("Le serveur met trop de temps à répondre (connexion lente ou instable). Réessayez dans un instant.");
+      else if(m==="LIB") showFatal("Impossible de charger le module de connexion. Vérifiez votre connexion internet (ou désactivez un éventuel bloqueur de publicité) puis réessayez.");
+      else showFatal("Une erreur est survenue : "+m);
+    }
   })();
 
   document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["ent","stag","att","notes","form"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
