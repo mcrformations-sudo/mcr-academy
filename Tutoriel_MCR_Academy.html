@@ -329,4 +329,268 @@ const scenes=[
  act:()=>{move(50,34);setTimeout(()=>{move(50,78);clickAt(50,78);},1400);}},
 
 {step:'C\'est à vous !',txt:"Vous êtes prêt. Bonne formation 👏 — appuyez sur ↺ pour revoir ce guide.",
- html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-item
+ html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
+   <div class="crow" style="font-size:46px">🚀</div>
+   <div class="s-title" style="font-size:30px">Vous savez tout !</div>
+   <div class="s-sub" style="font-size:15px">Choisissez une formation et lancez-vous.</div></div>`),
+ act:()=>{move(50,44);}},
+];
+
+// build timeline
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutoriel — MCR Academy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#d6a338;--gold-2:#f0c462;--ink:#10100f;--panel:#16161a;--line:#2a2a30}
+body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
+  radial-gradient(1200px 700px at 80% -10%,rgba(214,163,56,.18),transparent 60%),
+  radial-gradient(900px 600px at 0% 100%,rgba(214,163,56,.10),transparent 60%),#0b0b0d;
+  color:#f3efe6;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;gap:18px}
+.head{text-align:center}
+.head .brand{font-size:13px;letter-spacing:3px;font-weight:800;color:var(--gold);text-transform:uppercase}
+.head h1{font-size:22px;font-weight:800;margin-top:4px}
+.head p{font-size:13px;color:#a59f93;margin-top:3px}
+.player{width:min(960px,96vw)}
+.bezel{position:relative;border-radius:20px;padding:14px;background:linear-gradient(180deg,#1b1b20,#101013);
+  border:1px solid var(--line);box-shadow:0 40px 90px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
+.bar{display:flex;align-items:center;gap:7px;padding:0 4px 11px}
+.dot{width:11px;height:11px;border-radius:50%;background:#34343c}
+.bar .url{margin-left:10px;flex:1;height:24px;border-radius:7px;background:#0e0e11;border:1px solid var(--line);
+  display:flex;align-items:center;padding:0 10px;font-size:11px;color:#7d7870;gap:7px}
+.screen{position:relative;height:540px;border-radius:13px;overflow:hidden;background:#f6f3ee;transition:background .5s}
+.screen.dark{background:#14181d}
+.scene{position:absolute;inset:0;padding:30px 34px;opacity:0;transform:translateY(14px) scale(.99);
+  transition:opacity .5s ease,transform .5s ease;pointer-events:none;overflow:hidden}
+.scene.on{opacity:1;transform:none}
+.s-kicker{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.dark .s-kicker{color:var(--gold-2)}
+.s-title{font-size:27px;font-weight:800;color:#1a1714;margin:6px 0 4px;line-height:1.12}
+.dark .s-title{color:#eef1f4}
+.s-sub{font-size:14px;color:#6a635a;font-weight:500}
+.dark .s-sub{color:#9aa7b4}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.mc{background:#fff;border:1px solid #ececec;border-radius:16px;padding:18px 18px 16px;box-shadow:0 16px 30px -22px rgba(0,0,0,.4)}
+.dark .mc{background:#1b2127;border-color:#2b323b}
+.mc .top{height:4px;border-radius:4px;margin:-18px -18px 14px;background:linear-gradient(90deg,#e11d2a,#ff7a3d)}
+.mc.green .top{background:linear-gradient(90deg,#15803d,#22c55e)}
+.mc.tq .top{background:linear-gradient(90deg,#10cfc0,#2bb6ff)}
+.mc h3{font-size:15px;font-weight:800;color:#1a1714}
+.dark .mc h3{color:#eef1f4}
+.mc .cat{font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#e11d2a}
+.mc.tq .cat{color:#10a99c}.mc.green .cat{color:#15803d}
+.mc p{font-size:11.5px;color:#7a726a;line-height:1.5;margin-top:7px;font-weight:500}
+.dark .mc p{color:#9aa7b4}
+.mc .btn{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#fff;
+  background:linear-gradient(120deg,#e11d2a,#ff7a3d);padding:9px 16px;border-radius:10px}
+.mc.tq .btn{background:linear-gradient(120deg,#10cfc0,#2bb6ff)}
+.lesson{background:#fff;border:1px solid #ececec;border-radius:16px;padding:22px;height:100%}
+.dark .lesson{background:#1b2127;border-color:#2b323b}
+.crumbrow{display:flex;align-items:center;justify-content:space-between}
+.crumb{font-size:11px;font-weight:800;color:#9a9a9a}
+.dark .crumb{color:#9aa7b4}
+.pill{font-size:10.5px;font-weight:800;color:#e11d2a;border:1px solid #f0e0dd;border-radius:99px;padding:5px 11px;background:#fff}
+.dark .pill{background:#222932;border-color:#2b323b;color:#ffb3a0}
+.pbar{height:5px;border-radius:6px;background:#eadfdb;margin:14px 0 16px;overflow:hidden}
+.dark .pbar{background:#2b323b}
+.pbar i{display:block;height:100%;width:20%;background:linear-gradient(90deg,#e11d2a,#ff7a3d);border-radius:6px;transition:width 1.4s ease}
+.lh{font-size:19px;font-weight:800;color:#1a1714;margin-bottom:8px}
+.dark .lh{color:#eef1f4}
+.ll{height:9px;border-radius:5px;background:#eee;margin:9px 0}
+.dark .ll{background:#262c34}
+.ll.w1{width:96%}.ll.w2{width:88%}.ll.w3{width:70%}
+.voix{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:#6a635a;border:1px solid #eee;border-radius:10px;padding:8px 12px;margin-bottom:14px}
+.dark .voix{color:#cdd6df;border-color:#2b323b;background:#222932}
+.navrow{display:flex;justify-content:space-between;margin-top:18px}
+.nbtn{font-size:12px;font-weight:800;padding:10px 16px;border-radius:11px;border:1px solid #e7e7e7;color:#7a726a;background:#fff}
+.dark .nbtn{background:#222932;border-color:#2b323b;color:#cdd6df}
+.nbtn.prim{color:#fff;border:none;background:linear-gradient(120deg,#e11d2a,#ff7a3d)}
+.nbtn.off{opacity:.45}
+.q{background:#fff;border:1px solid #ececec;border-radius:16px;padding:22px;height:100%}
+.dark .q{background:#1b2127;border-color:#2b323b}
+.opt{display:flex;align-items:center;gap:11px;border:1.5px solid #ededed;border-radius:11px;padding:12px 14px;margin-top:10px;font-size:13px;font-weight:600;color:#2a2622}
+.dark .opt{border-color:#2b323b;color:#dfe6ed;background:#222932}
+.opt .mk{width:20px;height:20px;border-radius:50%;border:2px solid #ddd;flex:none}
+.opt.sel{border-color:#e11d2a;background:#fdeeec;color:#e11d2a}
+.opt.ok{border-color:#15a05f;background:#e8f7ef;color:#15a05f}
+.opt.ok .mk{background:#15a05f;border-color:#15a05f}
+.ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;background:conic-gradient(#15a05f var(--p,0%),#e7efe9 0);transition:--p 1s}
+.ringIn{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:21px;font-weight:800;color:#15a05f}
+.dark .ringIn{background:#1b2127}
+.cert{height:100%;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid var(--gold);background:radial-gradient(700px 300px at 50% 0%,rgba(214,163,56,.12),transparent),#fff;gap:8px;padding:20px}
+.dark .cert{background:radial-gradient(700px 300px at 50% 0%,rgba(214,163,56,.16),transparent),#161b21}
+.cert .crow{font-size:46px}
+.cert h2{font-size:24px;font-weight:800;color:#1a1714}
+.dark .cert h2{color:#eef1f4}
+.cert .nm{font-size:26px;font-weight:800;background:linear-gradient(120deg,var(--gold),var(--gold-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cert .meta{display:flex;gap:22px;margin-top:8px;font-size:11px;color:#8a8278;font-weight:700}
+.dark .cert .meta{color:#9aa7b4}
+.tag{position:absolute;font-size:11px;font-weight:800;color:#fff;background:#111;padding:6px 11px;border-radius:9px;box-shadow:0 8px 20px -8px rgba(0,0,0,.6);opacity:0;transition:opacity .4s;z-index:6}
+.tag.on{opacity:1}
+.tag::after{content:"";position:absolute;width:9px;height:9px;background:#111;transform:rotate(45deg)}
+.tag.tl::after{left:14px;top:-4px}.tag.bl::after{left:14px;bottom:-4px}
+.cfgbtn{position:absolute;right:20px;bottom:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(120deg,#e11d2a,#ff7a3d);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:0 12px 26px -8px rgba(0,0,0,.5);border:2px solid #fff;z-index:5}
+.cfgpanel{position:absolute;right:20px;bottom:82px;width:230px;background:#fff;border-radius:14px;padding:13px 15px;box-shadow:0 24px 50px -18px rgba(0,0,0,.5);z-index:5;opacity:0;transform:translateY(8px);transition:.35s;font-size:12px;color:#222}
+.dark .cfgpanel{background:#1b2127;color:#e8edf2}
+.cfgpanel.on{opacity:1;transform:none}
+.cfgpanel .r{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-weight:700}
+.cfgpanel .r+.r{border-top:1px solid rgba(0,0,0,.08)}
+.tog{font-size:11px;font-weight:800;padding:5px 11px;border-radius:99px;background:#eee;color:#555}
+.tog.on{background:#e11d2a;color:#fff}
+.sidemenu{position:absolute;left:18px;top:18px;font-size:11px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);padding:8px 12px;border-radius:9px;z-index:5}
+.cursor{position:absolute;width:26px;height:26px;z-index:20;left:50%;top:50%;transition:transform 1.05s cubic-bezier(.5,.05,.2,1);pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.ripple{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid var(--gold);z-index:19;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4)}
+.ripple.go{animation:rip .6s ease-out}
+@keyframes rip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+.cap{min-height:58px;margin-top:14px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}
+.cap .step{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
+.cap .txt{font-size:18px;font-weight:700;color:#f3efe6;line-height:1.35;max-width:760px}
+.ctrl{display:flex;align-items:center;gap:14px;width:min(960px,96vw);margin-top:2px}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#16161a;color:#f3efe6;font-size:17px;display:grid;place-items:center;cursor:pointer;flex:none;transition:.2s}
+.cbtn:hover{border-color:var(--gold);color:var(--gold)}
+.timeline{flex:1;display:flex;gap:6px}
+.seg{flex:1;height:6px;border-radius:6px;background:#2a2a30;overflow:hidden;cursor:pointer}
+.seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.seg.done i{width:100%}
+.count{font-size:12px;font-weight:700;color:#a59f93;flex:none;min-width:46px;text-align:right}
+.foot{font-size:11px;color:#6f6a60;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="brand">MCR Academy</div>
+  <h1>Comment suivre votre formation</h1>
+  <p>Un mini-film avec voix off — appuyez sur ▶ et laissez-vous guider.</p>
+</div>
+
+<div class="player">
+  <div class="bezel">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="url">🔒 mcr-academy.fr</span></div>
+    <div class="screen" id="screen">
+      <div class="cursor" id="cursor"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.4L9 21 4 2z" fill="#fff" stroke="#111" stroke-width="1.2"/></svg></div>
+      <div class="ripple" id="ripple"></div>
+    </div>
+  </div>
+</div>
+
+<div class="cap" id="cap"><div class="step" id="capStep"></div><div class="txt" id="capTxt"></div></div>
+
+<div class="ctrl">
+  <button class="cbtn" id="playBtn" title="Lecture / Pause">▶</button>
+  <button class="cbtn" id="replayBtn" title="Recommencer">↺</button>
+  <button class="cbtn" id="voixBtn" title="Voix off">🔊</button>
+  <div class="timeline" id="timeline"></div>
+  <div class="count" id="count">1 / 8</div>
+</div>
+<div class="foot">Astuce : cliquez sur un segment de la barre pour aller directement à une étape.</div>
+
+<script>
+const screen=document.getElementById('screen');
+const cursor=document.getElementById('cursor'), ripple=document.getElementById('ripple');
+const capStep=document.getElementById('capStep'), capTxt=document.getElementById('capTxt');
+function move(xp,yp){const r=screen.getBoundingClientRect();cursor.style.transform=`translate(${xp/100*r.width-13}px,${yp/100*r.height-13}px)`;}
+function clickAt(xp,yp){const r=screen.getBoundingClientRect();ripple.style.left=(xp/100*r.width)+'px';ripple.style.top=(yp/100*r.height)+'px';ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');}
+function scn(html){return `<div class="scene">${html}</div>`;}
+const cardPortal=(cls,cat,title,desc,btn)=>`<div class="mc ${cls}"><div class="top"></div><div class="cat">${cat}</div><h3>${title}</h3><p>${desc}</p><span class="btn">${btn} →</span></div>`;
+
+const scenes=[
+{step:'Bienvenue',txt:"Voici MCR Academy. En quelques étapes, vous saurez tout faire.",
+ html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
+   <div style="font-size:13px;letter-spacing:3px;font-weight:800;color:#d6a338">M C R   A C A D E M Y</div>
+   <div class="s-title" style="font-size:32px">Votre formation, en toute simplicité</div>
+   <div class="s-sub" style="font-size:15px">Suivez le guide pas à pas 👇</div></div>`),
+ act:()=>{move(50,46);}},
+{step:'Étape 1 — Choisir',txt:"Sur l'accueil, choisissez votre formation et cliquez sur « Ouvrir ».",
+ html:scn(`<div class="s-kicker">Catalogue</div><div class="s-title">Choisissez votre formation</div>
+   <div class="cards">
+     ${cardPortal('tq','Prévention','SST — Acteur de la Prévention','Repérer et remonter les risques. Conforme INRS.','Ouvrir')}
+     ${cardPortal('','Incendie','Sécurité Incendie — EPI','Théorie du feu, extinction, évacuation. 6 modules.','Ouvrir')}
+   </div>`),
+ act:()=>{move(20,30);setTimeout(()=>move(78,57),650);setTimeout(()=>clickAt(78,57),1700);}},
+{step:'Étape 2 — Le programme',txt:"Vous voyez le programme. Cliquez sur « Démarrer la formation » pour commencer.",
+ html:scn(`<div class="hero"><span class="cat">FORMATION · CONFORME INRS</span><h2>Sécurité Incendie — EPI</h2>
+     <div class="stats"><div><span>DURÉE</span><b>4h</b></div><div><span>MODULES</span><b>6</b></div><div><span>SEUIL</span><b>60%</b></div></div></div>
+   <div style="display:flex;justify-content:flex-end;margin-top:18px"><span class="nbtn prim" style="font-size:13px">Démarrer la formation ▶</span></div>
+   <div class="sidemenu">← Menu principal</div>`),
+ act:()=>{move(20,16);setTimeout(()=>move(86,46),900);setTimeout(()=>clickAt(86,46),1900);}},
+{step:'Étape 3 — Le confort',txt:"Le bouton réglages ajuste le confort : taille du texte, mode sombre, et voix off.",
+ html:scn(`<div class="s-kicker">Réglages</div><div class="s-title">À votre confort</div>
+   <div class="s-sub">Agrandissez le texte, passez en sombre, activez la lecture à voix haute.</div>
+   <div class="cfgbtn">⚙</div>
+   <div class="cfgpanel on"><div style="font-weight:800;margin-bottom:6px">⚙ Confort de lecture</div>
+     <div class="r"><span>Taille du texte</span><b>A− 110% A+</b></div>
+     <div class="r"><span>Mode sombre</span><span class="tog on">Activé</span></div>
+     <div class="r"><span>Voix off</span><span class="tog on">Activée</span></div></div>`),
+ act:()=>{move(89,90);setTimeout(()=>clickAt(89,90),700);setTimeout(()=>{screen.classList.add('dark');},1300);setTimeout(()=>move(80,60),1700);}},
+{step:'Étape 4 — Lire le cours',txt:"Lisez le cours. Le bouton Suivant s'active une fois arrivé en bas de page.",
+ html:scn(`<div class="lesson"><div class="crumbrow"><span class="crumb">MODULE 1 · Théorie du feu</span><span class="pill">⏱ 8 min</span></div>
+   <div class="pbar"><i id="pb"></i></div>
+   <div class="lh">Le triangle du feu</div>
+   <div class="voix">🔊 Écouter le cours</div>
+   <div class="ll w1"></div><div class="ll w2"></div><div class="ll w1"></div><div class="ll w3"></div>
+   <div class="navrow"><span class="nbtn">← Précédent</span><span class="nbtn prim off" id="nx">Suivant →</span></div></div>`),
+ act:()=>{move(50,30);setTimeout(()=>{const pb=document.getElementById('pb');if(pb)pb.style.width='100%';move(50,80);},700);
+   setTimeout(()=>{const nx=document.getElementById('nx');if(nx)nx.classList.remove('off');},2000);
+   setTimeout(()=>{move(86,84);clickAt(86,84);},2500);}},
+{step:'Étape 5 — Le quiz',txt:"À la fin du module, un petit quiz. Il faut 60% de bonnes réponses pour valider.",
+ html:scn(`<div class="q"><div class="crumb" style="margin-bottom:8px">QUIZ · MODULE 1 — seuil 60%</div>
+   <div class="lh" style="font-size:16px">Que faut-il pour qu'un feu démarre ?</div>
+   <div class="opt" id="o1"><span class="mk"></span><span>De l'eau et du froid</span></div>
+   <div class="opt" id="o2"><span class="mk"></span><span>Un combustible, de l'oxygène et une source de chaleur</span></div>
+   <div class="opt"><span class="mk"></span><span>Uniquement de l'électricité</span></div>
+   <div class="navrow"><span class="nbtn">← Revoir</span><span class="nbtn prim" id="val">Valider mes réponses</span></div></div>`),
+ act:()=>{move(40,46);setTimeout(()=>{clickAt(40,46);document.getElementById('o2').classList.add('sel');},900);
+   setTimeout(()=>{move(85,82);clickAt(85,82);},1800);
+   setTimeout(()=>{const o2=document.getElementById('o2');o2.classList.remove('sel');o2.classList.add('ok');},2400);}},
+{step:'Étape 6 — Votre attestation',txt:"Tous les modules validés ? Vous obtenez votre attestation, prête à imprimer.",
+ html:scn(`<div class="cert"><div class="crow">🏆</div><h2>Attestation de réussite</h2>
+   <div class="s-sub">Décerné à</div><div class="nm">Votre Nom</div>
+   <div class="s-sub">Sécurité Incendie — EPI · score moyen 88%</div>
+   <div class="meta"><div>ORGANISME<br><b style="color:#d6a338">MCR Academy</b></div><div>DÉLIVRÉ LE<br><b style="color:#d6a338">aujourd'hui</b></div></div></div>`),
+ act:()=>{move(50,46);}},
+{step:'C\'est à vous !',txt:"Vous êtes prêt. Bonne formation ! Appuyez sur recommencer pour revoir ce guide.",
+ html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
+   <div style="font-size:46px">🚀</div>
+   <div class="s-title" style="font-size:30px">Vous savez tout !</div>
+   <div class="s-sub" style="font-size:15px">Choisissez une formation et lancez-vous.</div></div>`),
+ act:()=>{move(50,44);}}
+];
+
+const timeline=document.getElementById('timeline');
+const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
+const count=document.getElementById('count');
+const DUR=4200;
+let idx=0,playing=false,timer=null,segTimer=null,t0=0;
+const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
+function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
+pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
+function speak(t){try{synth.cancel();if(!voixOn||!t)return;var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
+function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
+function showScene(i){
+  idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
+  screen.classList.remove('dark');
+  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;const node=wrap.firstElementChild;screen.appendChild(node);
+  void node.offsetWidth;node.classList.add('on');
+  capStep.textContent=scenes[i].step;capTxt.textContent=scenes[i].txt;count.textContent=(i+1)+' / '+scenes.length;
+  segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
+  try{scenes[i].act&&scenes[i].act();}catch(e){}
+}
+function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
+  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
+  segTimer=requestAnimationFrame(step);}
+function play(){playing=true;document.getElementById('playBtn').textContent='⏸';speak(scenes[idx].txt);animateSeg();
+  timer=setTimeout(()=>{if(idx<scenes.length-1){goTo(idx+1);}else{pause();}},curDur());}
+function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
+function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
+function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
+document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
+document.getElementById('replayBtn').onclick=replay;
+document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
+window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
+showScene(0);setTimeout(()=>play(),600);
+</script>
+</body>
+</html>
