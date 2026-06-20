@@ -67,6 +67,31 @@ td{padding:10px 10px;border-bottom:1px solid #262c34;color:#dfe6ed}
 .seg.done i{width:100%}
 .count{font-size:12px;font-weight:700;color:#a59f93;flex:none;min-width:46px;text-align:right}
 .foot{font-size:11px;color:#6f6a60;margin-top:2px}
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width:640px){
+  .head h1{font-size:18px}
+  .head p{font-size:12px}
+  .player{width:100%}
+  .bezel{padding:10px;border-radius:14px}
+  .bar .url{font-size:10px}
+  .screen{height:470px}
+  .scene{padding:18px 15px}
+  .title,.s-title{font-size:20px}
+  .sub,.s-sub{font-size:13px}
+  .row3{grid-template-columns:1fr;gap:8px}
+  .cards{grid-template-columns:1fr;gap:12px}
+  .panel{padding:14px}
+  .mail{padding:14px}
+  table{font-size:11px}
+  th,td{padding:7px 7px}
+  .cap{min-height:50px}
+  .cap .txt{font-size:14.5px}
+  .ctrl{gap:8px;flex-wrap:wrap}
+  .cbtn{width:38px;height:38px;font-size:15px}
+  .timeline{order:3;flex-basis:100%}
+  .count{min-width:38px;font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -192,35 +217,4 @@ const scenes=[
 ];
 
 const timeline=document.getElementById('timeline');
-const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
-const count=document.getElementById('count');
-const DUR=4200;
-let idx=0,playing=false,timer=null,segTimer=null,t0=0;
-const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
-function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
-pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
-function speak(t,cb){try{synth.cancel();if(!voixOn||!t){if(cb)cb();return;}var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-'’!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.9;u.pitch=1.02;if(frVoice)u.voice=frVoice;u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};synth.speak(u);}catch(e){if(cb)cb();}}
-function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
-function showScene(i){
-  idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
-  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;const node=wrap.firstElementChild;screen.appendChild(node);
-  void node.offsetWidth;node.classList.add('on');
-  capStep.textContent=scenes[i].step;capTxt.textContent=scenes[i].txt;count.textContent=(i+1)+' / '+scenes.length;
-  segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
-  try{scenes[i].act&&scenes[i].act();}catch(e){}
-}
-function animateSeg(){const bar=segs[idx].querySelector('i');t0=performance.now();cancelAnimationFrame(segTimer);
-  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
-  segTimer=requestAnimationFrame(step);}
-function play(){playing=true;document.getElementById('playBtn').textContent='⏸';animateSeg();var myIdx=idx,adv1=false;function adv(){if(adv1||!playing||idx!==myIdx)return;adv1=true;if(idx<scenes.length-1){goTo(idx+1);}else{pause();}}if(voixOn){speak(scenes[idx].txt,adv);timer=setTimeout(adv,curDur()+6000);}else{speak(scenes[idx].txt);timer=setTimeout(adv,DUR);}}
-function pause(){playing=false;document.getElementById('playBtn').textContent='▶';clearTimeout(timer);cancelAnimationFrame(segTimer);try{synth.cancel();}catch(e){}}
-function goTo(i){clearTimeout(timer);cancelAnimationFrame(segTimer);showScene(i);if(playing){play();}}
-function replay(){showScene(0);playing=true;document.getElementById('playBtn').textContent='⏸';play();}
-document.getElementById('playBtn').onclick=()=>{if(playing)pause();else{if(idx>=scenes.length-1)showScene(0);play();}};
-document.getElementById('replayBtn').onclick=replay;
-document.getElementById('voixBtn').onclick=()=>{voixOn=!voixOn;const b=document.getElementById('voixBtn');b.textContent=voixOn?'🔊':'🔇';b.title=voixOn?'Voix off activée':'Voix off coupée';if(!voixOn){try{synth.cancel();}catch(e){}}else if(playing){speak(scenes[idx].txt);}};
-window.addEventListener('resize',()=>{try{scenes[idx].act&&scenes[idx].act();}catch(e){}});
-showScene(0);setTimeout(()=>play(),600);
-</script>
-</body>
-</html>
+const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';s.onclick=()=>goTo(i);timeline.appendChil

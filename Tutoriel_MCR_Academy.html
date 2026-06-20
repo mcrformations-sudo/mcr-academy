@@ -160,6 +160,31 @@ body{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;background:
 .seg.done i{width:100%}
 .count{font-size:12px;font-weight:700;color:#a59f93;flex:none;min-width:46px;text-align:right}
 .foot{font-size:11px;color:#6f6a60;margin-top:2px}
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width:640px){
+  .head h1{font-size:18px}
+  .head p{font-size:12px}
+  .player{width:100%}
+  .bezel{padding:10px;border-radius:14px}
+  .bar .url{font-size:10px}
+  .screen{height:470px}
+  .scene{padding:18px 15px}
+  .title,.s-title{font-size:20px}
+  .sub,.s-sub{font-size:13px}
+  .row3{grid-template-columns:1fr;gap:8px}
+  .cards{grid-template-columns:1fr;gap:12px}
+  .panel{padding:14px}
+  .mail{padding:14px}
+  table{font-size:11px}
+  th,td{padding:7px 7px}
+  .cap{min-height:50px}
+  .cap .txt{font-size:14.5px}
+  .ctrl{gap:8px;flex-wrap:wrap}
+  .cbtn{width:38px;height:38px;font-size:15px}
+  .timeline{order:3;flex-basis:100%}
+  .count{min-width:38px;font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -304,47 +329,4 @@ const scenes=[
  act:()=>{move(50,34);setTimeout(()=>{move(50,78);clickAt(50,78);},1400);}},
 
 {step:'C\'est à vous !',txt:"Vous êtes prêt. Bonne formation 👏 — appuyez sur ↺ pour revoir ce guide.",
- html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
-   <div class="crow" style="font-size:46px">🚀</div>
-   <div class="s-title" style="font-size:30px">Vous savez tout !</div>
-   <div class="s-sub" style="font-size:15px">Choisissez une formation et lancez-vous.</div></div>`),
- act:()=>{move(50,44);}},
-];
-
-// build timeline
-const timeline=document.getElementById('timeline');
-const segs=scenes.map((_,i)=>{const s=document.createElement('div');s.className='seg';s.innerHTML='<i></i>';
-  s.onclick=()=>goTo(i);timeline.appendChild(s);return s;});
-const count=document.getElementById('count');
-const DUR=4200; // ms par scène (mode sans voix)
-let idx=0,playing=false,timer=null,segTimer=null,t0=0;
-/* ---- Voix off (synthèse vocale FR du navigateur) ---- */
-const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
-function pickVoice(){try{const vs=synth.getVoices();frVoice=vs.find(v=>/fr[-_]?FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null;}catch(e){}}
-pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
-function speak(t){try{synth.cancel();if(!voixOn||!t)return;const u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-''!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.98;if(frVoice)u.voice=frVoice;synth.speak(u);}catch(e){}}
-function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
-
-function showScene(i){
-  idx=i;
-  // reset screen content (keep cursor + ripple)
-  [...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
-  screen.classList.remove('dark');
-  const wrap=document.createElement('div');wrap.innerHTML=scenes[i].html;
-  const node=wrap.firstElementChild;screen.appendChild(node);
-  void node.offsetWidth; node.classList.add('on');
-  capStep.textContent=scenes[i].step; capTxt.textContent=scenes[i].txt;
-  count.textContent=(i+1)+' / '+scenes.length;
-  segs.forEach((s,k)=>{s.classList.toggle('done',k<i);s.querySelector('i').style.width=k<i?'100%':'0';});
-  try{scenes[i].act&&scenes[i].act();}catch(e){}
-}
-function animateSeg(){
-  const bar=segs[idx].querySelector('i');t0=performance.now();
-  cancelAnimationFrame(segTimer);
-  function step(now){const p=Math.min(1,(now-t0)/curDur());bar.style.width=(p*100)+'%';
-    if(p<1&&playing){segTimer=requestAnimationFrame(step);}}
-  segTimer=requestAnimationFrame(step);
-}
-function play(){
-  playing=true;document.getElementById('playBtn').textContent='⏸';
-  speak(scenes[idx]
+ html:scn(`<div style="height:100%;display:flex;flex-direction:column;align-item

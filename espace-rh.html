@@ -59,6 +59,25 @@
   .cert-meta b{display:block;font-size:14px;color:#15202b;margin-top:3px;text-transform:none}
   .cert-foot{font-size:10.5px;color:#9aa6b2;line-height:1.5;margin-top:24px;max-width:600px;margin:24px auto 0}
   @media print{body{background:#fff!important}body *{visibility:hidden!important}#certModal,#certModal .cert-sheet,#certModal .cert-sheet *{visibility:visible!important}#certModal{position:absolute;inset:0;background:#fff;display:block;padding:0}.cert-actions{display:none!important}.cert-sheet{box-shadow:none;width:100%}}
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width:640px){
+  .wrap{padding:18px 12px 50px}
+  header{gap:8px}
+  .brand h1{font-size:16px}
+  .brand .sub{font-size:10px}
+  .tabs{gap:6px}
+  .tab{padding:8px 13px;font-size:12.5px}
+  .card{padding:16px 14px}
+  .card h2{font-size:15px}
+  .card table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  form.row{flex-direction:column;align-items:stretch}
+  form.row input,form.row button{width:100%;min-width:0}
+  .codebox{flex-wrap:wrap}
+  .cert-sheet{padding:34px 20px}
+  .cert-meta{gap:16px}
+  .cert-name{font-size:26px}
+}
 </style>
 </head>
 <body>
@@ -200,29 +219,4 @@
 
   el("addForm").onsubmit=async e=>{
     e.preventDefault(); const m=el("addMsg"); m.className="msg"; m.textContent="Enregistrement…";
-    const rec={prenom:el("f_prenom").value.trim(),nom:el("f_nom").value.trim(),email:el("f_email").value.trim(),entreprise:ENT.nom,entreprise_id:ENT.id};
-    if(!rec.prenom||!rec.nom){m.className="msg err";m.textContent="Prénom et nom requis.";return;}
-    const {error}=await sb.from("stagiaires").insert(rec);
-    if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
-    m.className="msg ok";m.textContent="✓ "+rec.prenom+" ajouté(e).";
-    ["f_prenom","f_nom","f_email"].forEach(id=>el(id).value=""); loadSal();
-  };
-
-  el("logout").onclick=async()=>{await sb.auth.signOut();location.href="connexion.html";};
-  el("copyCode").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(el("entCode").textContent);el("copyCode").textContent="Copié !";setTimeout(()=>el("copyCode").textContent="Copier",1500);};
-  el("copyUrl").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(el("loginUrl").textContent);el("copyUrl").textContent="Copié !";setTimeout(()=>el("copyUrl").textContent="Copier",1500);};
-
-  function certRef(a){const y=(a.created_at?new Date(a.created_at):new Date()).getFullYear();const idp=(String(a.id||"").replace(/[^a-zA-Z0-9]/g,"").slice(-4)||"0000").toUpperCase();return "MCR-"+y+"-"+idp;}
-  function openCert(a){
-    if(!a)return;
-    const meta='<div>Organisme<b>MCR Formations</b></div>'+(a.entreprise?'<div>Entreprise<b>'+esc(a.entreprise)+'</b></div>':'')+'<div>Délivré le<b>'+fdate(a.created_at)+'</b></div><div>Référence<b>'+certRef(a)+'</b></div>';
-    el("certBody").innerHTML='<div class="cert-crest"><img src="MCR_corbeau.png" alt="MCR" style="width:80%;height:80%;object-fit:contain"></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';
-    el("certModal").classList.add("open");
-  }
-  el("certClose").onclick=()=>el("certModal").classList.remove("open");
-  el("certPrint").onclick=()=>window.print();
-  el("certModal").addEventListener("click",e=>{if(e.target.id==="certModal")e.currentTarget.classList.remove("open");});
-})();
-</script>
-</body>
-</html>
+    const r
