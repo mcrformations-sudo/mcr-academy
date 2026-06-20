@@ -219,4 +219,105 @@
   function rnd(){return Math.floor(1000+Math.random()*9000);}
   async function loadEnt(){
     const e=el("entTable"); e.innerHTML='<div class="empty">Chargement…</div>';
-    const {data,error}=await sb.from("entreprises").select("*").order("created_at",{asc
+    const {data,error}=await sb.from("entreprises").select("*").order("created_at",{ascending:false});
+    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    el("entCount").textContent=data.length; window.__ent=data;
+    if(!data.length){e.innerHTML='<div class="empty">Aucune entreprise. Créez-en une ci-dessus.</div>';return;}
+    e.innerHTML='<table><thead><tr><th>Entreprise</th><th>Code stagiaire</th><th>Code RH</th><th>Statut</th><th>Créée le</th><th></th></tr></thead><tbody>'+
+      data.map(c=>{var sus=!!c.suspendu;return '<tr><td>'+esc(c.nom)+'</td><td><code class="codetag">'+esc(c.code_acces)+'</code></td><td><code class="codetag">'+esc(c.code_rh)+'</code></td><td>'+(sus?'<span class="pill no">Suspendue</span>':'<span class="pill ok">Active</span>')+'</td><td>'+fdate(c.created_at)+'</td><td><button class="btn ghost ent-tog" data-id="'+esc(c.id)+'" data-sus="'+(sus?1:0)+'" style="padding:6px 12px;font-size:12px">'+(sus?'Réactiver':'Suspendre')+'</button></td></tr>';}).join("")+'</tbody></table>';
+    e.querySelectorAll(".ent-tog").forEach(b=>b.onclick=async()=>{
+      const to=b.dataset.sus!=="1"; const c=(window.__ent||[]).find(x=>String(x.id)===b.dataset.id);
+      if(to && !confirm("Suspendre « "+(c?c.nom:'')+" » ? Ses stagiaires et son responsable ne pourront plus se connecter (impayés).")) return;
+      b.disabled=true; const {error}=await sb.from("entreprises").update({suspendu:to}).eq("id",b.dataset.id);
+      if(error){alert("Erreur : "+error.message);b.disabled=false;return;} loadEnt();
+    });
+  }
+  el("entForm").onsubmit=async ev=>{
+    ev.preventDefault(); const m=el("entMsg"); m.className="msg"; m.textContent="Création…";
+    const nom=el("e_nom").value.trim(); if(!nom){m.className="msg err";m.textContent="Nom requis.";return;}
+    const base=slug(nom); const rec={nom:nom,rh_email:el("e_rh").value.trim()||null,code_acces:base+"-"+rnd(),code_rh:base+"-RH"+rnd()};
+    const {error}=await sb.from("entreprises").insert(rec);
+    if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
+    m.className="msg ok";m.textContent="✓ "+nom+" créée — code stagiaire "+rec.code_acces+" / code RH "+rec.code_rh;
+    el("e_nom").value="";el("e_rh").value=""; loadEnt();
+  };
+
+  // ---- Stagiaires ----
+  async function loadStag(){
+    const e=el("stagTable"); e.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("stagiaires").select("*").order("created_at",{ascending:false});
+    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    el("stagCount").textContent=data.length; window.__stag=data;
+    if(!data.length){e.innerHTML='<div class="empty">Aucun stagiaire.</div>';return;}
+    e.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Statut</th><th>Inscrit le</th><th></th></tr></thead><tbody>'+
+      data.map(s=>{var bl=!!s.bloque;return '<tr><td>'+esc(s.prenom)+' '+esc(s.nom)+'</td><td>'+(esc(s.email)||"—")+'</td><td>'+(esc(s.entreprise)||"—")+'</td><td>'+(bl?'<span class="pill no">Bloqué</span>':'<span class="pill ok">Actif</span>')+'</td><td>'+fdate(s.created_at)+'</td><td><button class="btn ghost stag-tog" data-id="'+esc(s.id)+'" data-bl="'+(bl?1:0)+'" style="padding:6px 12px;font-size:12px">'+(bl?'Débloquer':'Bloquer')+'</button></td></tr>';}).join("")+'</tbody></table>';
+    e.querySelectorAll(".stag-tog").forEach(b=>b.onclick=async()=>{
+      const to=b.dataset.bl!=="1"; const s=(window.__stag||[]).find(x=>String(x.id)===b.dataset.id);
+      if(to && !confirm("Bloquer "+(s?s.prenom+' '+s.nom:'ce stagiaire')+" ? Il ne pourra plus se connecter (manquement au règlement).")) return;
+      b.disabled=true; const {error}=await sb.from("stagiaires").update({bloque:to}).eq("id",b.dataset.id);
+      if(error){alert("Erreur : "+error.message);b.disabled=false;return;} loadStag();
+    });
+  }
+  el("addForm").onsubmit=async ev=>{
+    ev.preventDefault(); const m=el("addMsg"); m.className="msg"; m.textContent="Enregistrement…";
+    const rec={prenom:el("f_prenom").value.trim(),nom:el("f_nom").value.trim(),email:el("f_email").value.trim(),entreprise:el("f_entreprise").value.trim()};
+    if(!rec.prenom||!rec.nom){m.className="msg err";m.textContent="Prénom et nom requis.";return;}
+    const {error}=await sb.from("stagiaires").insert(rec);
+    if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
+    m.className="msg ok";m.textContent="✓ ajouté.";["f_prenom","f_nom","f_email","f_entreprise"].forEach(id=>el(id).value=""); loadStag();
+  };
+
+  // ---- Attestations ----
+  async function loadAtt(){
+    const e=el("attTable"); e.innerHTML='<div class="empty">Chargement…</div>';
+    const {data,error}=await sb.from("attestations").select("*").order("created_at",{ascending:false});
+    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
+    el("attCount").textContent=data.length; window.__att=data;
+    if(!data.length){e.innerHTML='<div class="empty">Aucune attestation.</div>';return;}
+    e.innerHTML='<table><thead><tr><th>Stagiaire</th><th>Formation</th><th>Entreprise</th><th>Score</th><th>Résultat</th><th>Date</th><th></th></tr></thead><tbody>'+
+      data.map(a=>'<tr class="clickable" data-id="'+esc(a.id)+'"><td>'+esc(a.prenom)+' '+esc(a.nom)+'</td><td>'+esc(a.formation)+'</td><td>'+(esc(a.entreprise)||"—")+'</td><td>'+(a.pourcentage!=null?a.pourcentage+"%":"—")+'</td><td>'+(a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>')+'</td><td>'+fdate(a.created_at)+'</td><td><span class="go">📄 PDF</span></td></tr>').join("")+'</tbody></table>';
+    e.querySelectorAll("tr.clickable").forEach(tr=>{tr.onclick=()=>openCert(data.find(x=>String(x.id)===tr.dataset.id));});
+  }
+  el("csvBtn").onclick=()=>{const d=window.__att||[];if(!d.length)return;const head=["Prénom","Nom","Email","Entreprise","Formation","Score","Total","Pourcentage","Réussi","Date"];const lines=[head.join(";")].concat(d.map(a=>[a.prenom,a.nom,a.email,a.entreprise,a.formation,a.score,a.total,a.pourcentage,a.reussi?"Oui":"Non",fdate(a.created_at)].map(x=>'"'+String(x==null?"":x).replace(/"/g,'""')+'"').join(";")));const blob=new Blob(["﻿"+lines.join("\n")],{type:"text/csv;charset=utf-8"});const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download="attestations_mcr.csv";a.click();URL.revokeObjectURL(u);};
+
+  // ---- Notes / avis ----
+  async function loadNotes(){
+    const fr=el("frTable"), or=el("orTable");
+    fr.innerHTML='<div class="empty">Chargement…</div>'; or.innerHTML='<div class="empty">Chargement…</div>';
+    // tables de correspondance noms
+    let pmap={}, emap={};
+    try{const {data:ps}=await sb.from("profiles").select("id,prenom,nom"); (ps||[]).forEach(p=>pmap[p.id]=((p.prenom||'')+' '+(p.nom||'')).trim());}catch(e){}
+    try{const {data:es}=await sb.from("entreprises").select("id,nom"); (es||[]).forEach(c=>emap[c.id]=c.nom);}catch(e){}
+    const who=r=>esc(pmap[r.user_id]||"—"), ent=r=>esc(emap[r.entreprise_id]||"—");
+    // formations
+    const {data:f,error:ef}=await sb.from("formation_ratings").select("*").order("created_at",{ascending:false});
+    if(ef){fr.innerHTML='<div class="empty">Table absente — appliquez la migration. ('+esc(ef.message)+')</div>';}
+    else{
+      el("frCount").textContent=f.length; el("frAvg").textContent=f.length?(f.reduce((a,b)=>a+(b.note||0),0)/f.length).toFixed(1):"—";
+      fr.innerHTML=!f.length?'<div class="empty">Aucune note de formation.</div>':
+        '<table><thead><tr><th>Stagiaire</th><th>Entreprise</th><th>Formation</th><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
+        f.map(r=>'<tr><td>'+who(r)+'</td><td>'+ent(r)+'</td><td>'+esc(r.formation)+'</td><td>'+stars(r.note)+'</td><td>'+(esc(r.commentaire)||"—")+'</td><td>'+fdate(r.created_at)+'</td></tr>').join("")+'</tbody></table>';
+    }
+    // organisme
+    const {data:o,error:eo}=await sb.from("organisme_ratings").select("*").order("created_at",{ascending:false});
+    if(eo){or.innerHTML='<div class="empty">Table absente — appliquez la migration. ('+esc(eo.message)+')</div>';}
+    else{
+      el("orCount").textContent=o.length; el("orAvg").textContent=o.length?(o.reduce((a,b)=>a+(b.note||0),0)/o.length).toFixed(1):"—";
+      or.innerHTML=!o.length?'<div class="empty">Aucun avis sur l\'organisme.</div>':
+        '<table><thead><tr><th>Responsable</th><th>Entreprise</th><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
+        o.map(r=>'<tr><td>'+who(r)+'</td><td>'+ent(r)+'</td><td>'+stars(r.note)+'</td><td>'+(esc(r.commentaire)||"—")+'</td><td>'+fdate(r.created_at)+'</td></tr>').join("")+'</tbody></table>';
+    }
+  }
+
+  el("refreshBtn").onclick=loadAll;
+  el("logout").onclick=async()=>{await sb.auth.signOut();location.href="connexion.html";};
+
+  function certRef(a){const y=(a.created_at?new Date(a.created_at):new Date()).getFullYear();const idp=(String(a.id||"").replace(/[^a-zA-Z0-9]/g,"").slice(-4)||"0000").toUpperCase();return "MCR-"+y+"-"+idp;}
+  function openCert(a){if(!a)return;const meta='<div>Organisme<b>MCR Formations</b></div>'+(a.entreprise?'<div>Entreprise<b>'+esc(a.entreprise)+'</b></div>':'')+'<div>Délivré le<b>'+fdate(a.created_at)+'</b></div><div>Référence<b>'+certRef(a)+'</b></div>';el("certBody").innerHTML='<div class="cert-crest"><img src="MCR_corbeau.png" alt="MCR" style="width:80%;height:80%;object-fit:contain"></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';el("certModal").classList.add("open");}
+  el("certClose").onclick=()=>el("certModal").classList.remove("open");
+  el("certPrint").onclick=()=>window.print();
+  el("certModal").addEventListener("click",e=>{if(e.target.id==="certModal")e.currentTarget.classList.remove("open");});
+})();
+</script>
+</body>
+</html>
