@@ -11,7 +11,8 @@
   .wrap{max-width:1000px;margin:0 auto;padding:26px 20px 60px}
   header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
   .brand{display:flex;align-items:center;gap:12px}
-  .brand .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold-2));display:grid;place-items:center;font-size:22px}
+  .brand .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#1a1407,#0d0d0d);border:1px solid var(--gold);display:grid;place-items:center;overflow:hidden}
+  .brand .logo img{width:84%;height:84%;object-fit:contain}
   .brand .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800}
   .brand h1{font-size:18px;margin:0;font-weight:800}
   .btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
@@ -63,7 +64,7 @@
 <body>
 <div class="wrap hidden" id="app">
   <header>
-    <div class="brand"><div class="logo">🐦</div><div><div class="sub">MCR Academy</div><h1 id="entName">Espace entreprise</h1></div></div>
+    <div class="brand"><div class="logo"><img src="MCR_corbeau.png" alt="MCR"></div><div><div class="sub">MCR Academy</div><h1 id="entName">Espace entreprise</h1></div></div>
     <a class="btn ghost" href="guide-entreprise.html" target="_blank" style="text-decoration:none;margin-right:8px">❓ Guide</a><button class="btn ghost" id="logout">Se déconnecter</button>
   </header>
 
@@ -215,7 +216,7 @@
   function openCert(a){
     if(!a)return;
     const meta='<div>Organisme<b>MCR Formations</b></div>'+(a.entreprise?'<div>Entreprise<b>'+esc(a.entreprise)+'</b></div>':'')+'<div>Délivré le<b>'+fdate(a.created_at)+'</b></div><div>Référence<b>'+certRef(a)+'</b></div>';
-    el("certBody").innerHTML='<div class="cert-crest"><span>🐦</span></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';
+    el("certBody").innerHTML='<div class="cert-crest"><img src="MCR_corbeau.png" alt="MCR" style="width:80%;height:80%;object-fit:contain"></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';
     el("certModal").classList.add("open");
   }
   el("certClose").onclick=()=>el("certModal").classList.remove("open");
