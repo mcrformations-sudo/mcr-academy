@@ -159,7 +159,7 @@ let idx=0,playing=false,timer=null,segTimer=null,t0=0;
 const synth=window.speechSynthesis; let voixOn=true, frVoice=null;
 function pickVoice(){try{var vs=synth.getVoices(),fr=vs.filter(function(v){return /^fr/i.test(v.lang);});frVoice=fr.find(function(v){return /google/i.test(v.name);})||fr.find(function(v){return /natural|naturelle|online/i.test(v.name);})||fr.find(function(v){return /Denise|Henri|Eloise|Vivienne|Julie|Paul/i.test(v.name);})||fr.find(function(v){return /fr[-_]?FR/i.test(v.lang);})||fr[0]||null;}catch(e){}}
 pickVoice(); try{synth.onvoiceschanged=pickVoice;}catch(e){}
-function speak(t,cb){try{synth.cancel();if(!voixOn||!t){if(cb)cb();return;}var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-'’!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.95;if(frVoice)u.voice=frVoice;u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};synth.speak(u);}catch(e){if(cb)cb();}}
+function speak(t,cb){try{synth.cancel();if(!voixOn||!t){if(cb)cb();return;}var u=new SpeechSynthesisUtterance(String(t).replace(/[^\p{L}\p{N} ,.\-'’!?:%]/gu,' '));u.lang='fr-FR';u.rate=0.9;u.pitch=1.02;if(frVoice)u.voice=frVoice;u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};synth.speak(u);}catch(e){if(cb)cb();}}
 function curDur(){return voixOn?Math.max(DUR,Math.min(15000,((scenes[idx]&&scenes[idx].txt||'').length)*72)):DUR;}
 function showScene(i){
   idx=i;[...screen.querySelectorAll('.scene')].forEach(e=>e.remove());
