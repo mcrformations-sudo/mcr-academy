@@ -179,14 +179,20 @@
       if(!session){location.href="connexion.html";return;}
       const {data:prof,error:pe}=await withTimeout(sb.from("profiles").select("role,entreprise_id").eq("id",session.user.id).maybeSingle(),9000,"PROFILE");
       if(pe) throw pe;
-      if(!prof||prof.role!=="rh"){ if(prof&&prof.role==="admin"){location.href="admin.html";return;} location.href="connexion.html";return; }
-      const {data:ent}=await withTimeout(sb.from("entreprises").select("*").eq("id",prof.entreprise_id).maybeSingle(),9000,"ENT");
-      ENT=ent;
-      el("entName").textContent=ent?ent.nom:"Mon entreprise";
-      el("entCode").textContent=ent?ent.code_acces:"—";
+      const isAdmin = !!(prof && prof.role==="admin");
+      if(!prof || (prof.role!=="rh" && !isAdmin)){ location.href="connexion.html"; return; }
+      let entList=[];
+      if(isAdmin){
+        const {data:ents}=await withTimeout(sb.from("entreprises").select("*").order("nom",{ascending:true}),9000,"ENTS");
+        entList=ents||[]; ENT=entList[0]||null;
+      }else{
+        const {data:ent}=await withTimeout(sb.from("entreprises").select("*").eq("id",prof.entreprise_id).maybeSingle(),9000,"ENT");
+        ENT=ent;
+      }
       el("loginUrl").textContent=location.origin+location.pathname.replace(/espace-rh\.html$/,"connexion.html");
+      if(isAdmin) buildAdminBar(entList);
+      refreshEnt();
       el("loading").classList.add("hidden"); el("app").classList.remove("hidden");
-      load();
     }catch(ex){
       var m=String((ex&&ex.message)||ex);
       if(m.indexOf("TIMEOUT")>=0) showFatal("Le serveur met trop de temps à répondre (connexion lente ou instable). Réessayez dans un instant.");
@@ -194,6 +200,27 @@
       else showFatal("Une erreur est survenue : "+m);
     }
   })();
+
+  // ---- Vue créateur (admin) : sélecteur d'entreprise ----
+  function buildAdminBar(entList){
+    var bar=document.createElement('div');
+    bar.style.cssText="display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#1a1610;border:1px solid var(--gold);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:13px";
+    bar.innerHTML='<span style="color:var(--gold);font-weight:800">👑 Vue créateur</span><span style="color:var(--muted)">Entreprise :</span>';
+    var sel=document.createElement('select');
+    sel.style.cssText="background:#0f141a;border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink);font-family:inherit;font-size:13px";
+    sel.innerHTML=(entList.length?entList:[{nom:'(aucune entreprise)'}]).map(function(e,i){return '<option value="'+i+'">'+esc(e.nom||'(sans nom)')+'</option>';}).join('');
+    sel.onchange=function(){ ENT=entList[+this.value]||null; refreshEnt(); };
+    bar.appendChild(sel);
+    var back=document.createElement('a'); back.href="admin.html"; back.textContent="← Console admin";
+    back.style.cssText="margin-left:auto;color:var(--gold);font-weight:700;text-decoration:none;font-size:13px";
+    bar.appendChild(back);
+    var appEl=el("app"); appEl.insertBefore(bar, appEl.querySelector('.tabs'));
+  }
+  function refreshEnt(){
+    el("entName").textContent=ENT?ENT.nom:"Aucune entreprise";
+    el("entCode").textContent=ENT?ENT.code_acces:"—";
+    load();
+  }
 
   document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["sal","att","invit","avis"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
 
@@ -216,7 +243,10 @@
     }catch(e){m.className="msg err";m.textContent="Erreur : "+e;el("avisSend").disabled=false;}
   };
 
-  async function load(){ await Promise.all([loadSal(),loadAtt()]); }
+  async function load(){
+    if(!ENT){ el("salTable").innerHTML='<div class="empty">Sélectionnez une entreprise.</div>'; el("attTable").innerHTML=''; el("salCount").textContent='0'; el("attCount").textContent='0'; return; }
+    await Promise.all([loadSal(),loadAtt()]);
+  }
 
   async function loadSal(){
     const el2=el("salTable"); el2.innerHTML='<div class="empty">Chargement…</div>';
@@ -240,6 +270,7 @@
 
   el("addForm").onsubmit=async e=>{
     e.preventDefault(); const m=el("addMsg"); m.className="msg"; m.textContent="Enregistrement…";
+    if(!ENT){m.className="msg err";m.textContent="Choisissez d'abord une entreprise.";return;}
     const rec={prenom:el("f_prenom").value.trim(),nom:el("f_nom").value.trim(),email:el("f_email").value.trim(),entreprise:ENT.nom,entreprise_id:ENT.id};
     if(!rec.prenom||!rec.nom){m.className="msg err";m.textContent="Prénom et nom requis.";return;}
     const {error}=await sb.from("stagiaires").insert(rec);
