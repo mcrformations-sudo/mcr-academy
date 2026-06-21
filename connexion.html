@@ -211,7 +211,7 @@
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
         if(!el("consent").checked){msg.className="msg err";msg.textContent="Veuillez accepter la politique de confidentialité.";return;}
         const {data,error}=await getSB().auth.signUp({email,password:pwd});
-        if(error){msg.className="msg err";msg.textContent="Inscription impossible : "+error.message;return;}
+        if(error){if(/already.?(registered|exists)|User already/i.test(error.message||"")){var _li=await getSB().auth.signInWithPassword({email:email,password:pwd});if(_li.error){msg.className="msg err";msg.textContent="Cet email a deja un compte. Connectez-vous via l\u2019onglet Se connecter avec votre mot de passe.";return;}try{await getSB().rpc("claim_profile",{p_code:code,p_prenom:prenom,p_nom:nom,p_naissance:naissance});}catch(e){}var _pr=await getSB().from("profiles").select("role").eq("id",_li.data.user.id).maybeSingle();var _r=_pr.data?_pr.data.role:null;if(!_r){msg.className="msg err";msg.textContent="Connecte, mais compte sans role. Contactez MCR Formations.";return;}msg.className="msg ok";msg.textContent="Deja inscrit, connexion...";if(_r==="admin")location.href="admin.html";else if(_r==="rh")location.href="espace-rh.html";else location.href="MCR_Academy.html";return;}msg.className="msg err";msg.textContent="Inscription impossible : "+error.message;return;}
         if(!data.session){ // au cas où autoconfirm off
           const r=await getSB().auth.signInWithPassword({email,password:pwd});
           if(r.error){msg.className="msg ok";msg.textContent="Compte créé. Vérifiez votre email puis connectez-vous.";return;}
