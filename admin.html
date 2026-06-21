@@ -216,7 +216,7 @@
 
   // ---- Entreprises ----
   function slug(s){return (s||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,8)||"ENT";}
-  function rnd(){return Math.floor(1000+Math.random()*9000);}
+  function rnd(){return Math.floor(1000+Math.random()*9000);} function code6(){var a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",s="";for(var i=0;i<6;i++){s+=a.charAt(Math.floor(Math.random()*a.length));}return s;}
   async function loadEnt(){
     const e=el("entTable"); e.innerHTML='<div class="empty">Chargement…</div>';
     const {data,error}=await sb.from("entreprises").select("*").order("created_at",{ascending:false});
@@ -235,7 +235,7 @@
   el("entForm").onsubmit=async ev=>{
     ev.preventDefault(); const m=el("entMsg"); m.className="msg"; m.textContent="Création…";
     const nom=el("e_nom").value.trim(); if(!nom){m.className="msg err";m.textContent="Nom requis.";return;}
-    const base=slug(nom); const rec={nom:nom,rh_email:el("e_rh").value.trim()||null,code_acces:base+"-"+rnd(),code_rh:base+"-RH"+rnd()};
+    const base=slug(nom); const rec={nom:nom,rh_email:el("e_rh").value.trim()||null,code_acces:code6(),code_rh:code6()};
     const {error}=await sb.from("entreprises").insert(rec);
     if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
     m.className="msg ok";m.textContent="✓ "+nom+" créée — code stagiaire "+rec.code_acces+" / code RH "+rec.code_rh;
