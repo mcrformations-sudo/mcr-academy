@@ -36,6 +36,15 @@
   .roles button{border:1px solid var(--line);background:#0f141a;color:var(--muted);border-radius:11px;padding:9px 4px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.25;text-align:center}
   .roles button .ic{display:block;font-size:18px;margin-bottom:3px}
   .roles button.on{border-color:var(--gold);color:var(--ink);background:#1a1610;box-shadow:0 0 0 1px var(--gold) inset}
+  /* oeil mot de passe */
+  .pwd{position:relative}
+  .pwd input{padding-right:46px}
+  .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:18px;line-height:1;padding:7px;color:var(--muted);opacity:.75}
+  .eye:hover{opacity:1}.eye.on{color:var(--gold);opacity:1}
+  /* date de naissance (listes) */
+  .dob{display:flex;gap:8px}
+  .dob select{flex:1;min-width:0;background:#0f141a;border:1px solid var(--line);border-radius:11px;padding:12px 10px;color:var(--ink);font-size:14.5px;font-family:inherit}
+  .dob select:focus{outline:none;border-color:var(--gold)}
   .hidden{display:none!important}
 </style>
 </head>
@@ -60,7 +69,8 @@
       <label>Prénom</label><input id="prenom" autocomplete="given-name">
       <label>Nom</label><input id="nom" autocomplete="family-name">
       <div id="naissanceWrap">
-        <label>Date de naissance</label><input id="naissance" type="date">
+        <label>Date de naissance</label>
+        <div class="dob"><select id="n_jour"></select><select id="n_mois"></select><select id="n_annee"></select></div>
       </div>
       <div id="secuWrap">
         <label>N° de sécurité sociale <span class="opt">(facultatif)</span></label>
@@ -70,7 +80,8 @@
     </div>
 
     <label>Email</label><input id="email" type="email" autocomplete="email">
-    <label>Mot de passe</label><input id="password" type="password" autocomplete="current-password">
+    <label>Mot de passe</label>
+    <div class="pwd"><input id="password" type="password" autocomplete="current-password"><button type="button" id="eye" class="eye" title="Afficher le mot de passe">👁</button></div>
 
     <div id="codeWrap" class="hidden">
       <label id="codeLabel">Code d'accès</label>
@@ -139,6 +150,26 @@
   }
   el("toggle").onclick=()=>setMode("signup");
 
+  // Œil : afficher / masquer le mot de passe
+  el("eye").onclick=()=>{
+    const p=el("password"), on=(p.type==="password");
+    p.type=on?"text":"password";
+    el("eye").classList.toggle("on",on);
+    el("eye").title=on?"Masquer le mot de passe":"Afficher le mot de passe";
+  };
+
+  // Date de naissance : 3 listes (année choisie directement = rapide sur mobile)
+  (function fillDOB(){
+    const j=el("n_jour"),m=el("n_mois"),a=el("n_annee");
+    if(!j||!m||!a) return;
+    j.innerHTML='<option value="">Jour</option>'+Array.from({length:31},(_,i)=>{var d=String(i+1).padStart(2,'0');return '<option value="'+d+'">'+(i+1)+'</option>';}).join('');
+    var mois=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    m.innerHTML='<option value="">Mois</option>'+mois.map((nm,i)=>'<option value="'+String(i+1).padStart(2,'0')+'">'+nm+'</option>').join('');
+    var now=new Date().getFullYear(), opts='<option value="">Année</option>';
+    for(var y=now-14;y>=1940;y--) opts+='<option value="'+y+'">'+y+'</option>';
+    a.innerHTML=opts;
+  })();
+
   function route(role){
     if(role==="admin") location.href="admin.html";
     else if(role==="rh") location.href="espace-rh.html";
@@ -174,7 +205,7 @@
         msg.className="msg ok";msg.textContent="Connecté, redirection…";route(role);
       } else {
         const prenom=el("prenom").value.trim(), nom=el("nom").value.trim(), code=el("code").value.trim();
-        const naissance=(signRole==="stagiaire") ? (el("naissance").value||null) : null;
+        const naissance=(signRole==="stagiaire") ? (function(){var a=el("n_annee").value,m=el("n_mois").value,j=el("n_jour").value;return (a&&m&&j)?(a+"-"+m+"-"+j):null;})() : null;
         const secu=(signRole==="stagiaire") ? el("secu").value.trim() : "";
         if(!prenom||!nom){msg.className="msg err";msg.textContent="Prénom et nom requis.";return;}
         if(!code){msg.className="msg err";msg.textContent="Le code d'accès est requis.";return;}
