@@ -262,8 +262,14 @@ const FORMATIONS=[
   { id:"incendie-epi", file:"Incendie_EPI_Elearning.html", available:true,
     category:"Incendie", icon:"🔥", accent:"#e11d2a", accent2:"#ff7a3d",
     title:"Sécurité Incendie — Équipier de Première Intervention (EPI)",
-    desc:"Parcours complet EPI : théorie du feu, fumées, moyens d'extinction, détection (SSI), alerte et évacuation. 6 modules, quiz de validation par module. Avec voix off.",
+    desc:"Parcours complet EPI : théorie du feu, fumées, moyens d'extinction, détection et alarme, alerte et évacuation. 6 modules, quiz de validation par module. Avec voix off.",
     duration:"4h", level:"EPI", units:6, storeKey:"incendie_epi_progress_v1" },
+
+  { id:"incendie-theorie", file:"Incendie_Theorie_du_Feu_Elearning.html", available:true,
+    category:"Incendie", icon:"🔺", accent:"#ea580c", accent2:"#f59e0b",
+    title:"Sécurité Incendie — La théorie du feu",
+    desc:"Module court de sensibilisation : le triangle du feu, les classes de feux (NF EN 2), la propagation et les causes en entreprise. 3 modules, quiz par module. Avec voix off.",
+    duration:"45 min", level:"Sensibilisation", units:3, storeKey:"incendie_theorie_progress_v1" },
 
   { id:"evac-guide-serre", file:"Guide_Serre_File_Evacuation_Elearning.html", available:true,
     category:"Évacuation", icon:"🏃", accent:"#15803d", accent2:"#22c55e",
@@ -275,8 +281,8 @@ const FORMATIONS=[
   { id:"gestes", file:"Gestes_Postures_TMS_Elearning.html", available:true,
     category:"Gestes & postures", icon:"🧍", accent:"#7c3aed", accent2:"#a855f7",
     title:"Gestes, Postures & Prévention des TMS",
-    desc:"Parcours Acteur PRAP (INRS) : anatomie & biomécanique du dos, pression discale, les 3 dimensions des TMS, principes de sécurité physique et d'économie d'effort, check-list de poste. Quiz final 10 questions. Avec voix off.",
-    duration:"7h00", level:"Acteur PRAP", units:3, storeKey:"gestes_tms_prap_progress_v1" },
+    desc:"Parcours prévention des TMS (référentiel INRS) : anatomie & biomécanique du dos, pression discale, les 3 dimensions des TMS, principes de sécurité physique et d'économie d'effort, check-list de poste. Quiz final 10 questions. Avec voix off.",
+    duration:"7h00", level:"Prévention TMS", units:3, storeKey:"gestes_tms_prap_progress_v1" },
 
   { id:"rps", file:"Prevention_RPS_Elearning.html", available:true,
     category:"Risques psychosociaux", icon:"💬", accent:"#be185d", accent2:"#ec4899",
@@ -497,6 +503,6 @@ renderStats();
   }
 }catch(e){}})();
 </script>
-<script src="qr-widget.js"></script>
 </body>
+
 </html>
