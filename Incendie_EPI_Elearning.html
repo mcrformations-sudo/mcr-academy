@@ -503,19 +503,20 @@ const COURSE={ modules:[
       {q:"Quel est l'avantage du RIA par rapport à l'extincteur ?",opts:["Il est plus léger","Il offre un débit d'eau continu et illimité","Il fonctionne sur l'électrique sous tension","Il ne nécessite aucune eau"],a:1,ex:"Le RIA est relié au réseau d'eau : débit continu, contrairement à l'extincteur dont la réserve dure quelques secondes."},
       {q:"Le CO₂ a pour particularité de…",opts:["laisser beaucoup de résidus","étouffer sans résidu, utilisable sur matériel sous tension","refroidir comme l'eau","être réservé aux feux de métaux"],a:1,ex:"Le CO₂ étouffe le feu, ne laisse pas de résidu et convient aux appareils électriques sous tension."}
     ] },
-  { id:"m4", icon:"🚨", title:"Détection & moyens de secours", desc:"Le SSI, le désenfumage et la sécurité du bâtiment.", duration:"35 min",
+  { id:"m4", icon:"🚨", title:"Détection & moyens de secours", desc:"La détection, l'alarme et la sécurité du bâtiment.", duration:"35 min",
     lessons:[
-      { id:"m4l1", title:"Le Système de Sécurité Incendie (SSI)", duration:"18 min",
+      { id:"m4l1", title:"Détecter le feu et donner l'alarme", duration:"10 min",
         body:`
-        <p>Le <strong>Système de Sécurité Incendie (SSI)</strong> regroupe les équipements qui <strong>détectent</strong> un incendie, donnent l'<strong>alarme</strong> et mettent le bâtiment en <strong>sécurité</strong>.</p>
-        <h3>Ses trois fonctions</h3>
+        <p>Avant d'éteindre ou d'évacuer, il faut <strong>détecter</strong> le feu et <strong>donner l'alarme</strong> au plus vite. C'est l'affaire de chacun dans l'entreprise.</p>
+        <h3>La détection</h3>
         <ul>
-          <li><strong>Détection :</strong> détecteurs automatiques (fumée, chaleur) et <strong>déclencheurs manuels</strong> — les boîtiers rouges « bris de glace » qui permettent à chacun de donner l'alarme dès qu'il découvre un feu.</li>
-          <li><strong>Alarme :</strong> un signal sonore (parfois visuel) qui ordonne l'<strong>évacuation</strong> de tous les occupants.</li>
-          <li><strong>Mise en sécurité :</strong> commande automatique du désenfumage, des portes coupe-feu, de l'arrêt de la ventilation et du déverrouillage des issues.</li>
+          <li><strong>Automatique :</strong> détecteurs de fumée ou de chaleur, qui repèrent un départ de feu sans intervention humaine.</li>
+          <li><strong>Manuelle :</strong> les <strong>déclencheurs manuels</strong> — ces boîtiers rouges « bris de glace » qui permettent à <strong>toute personne</strong> de donner l'alarme dès qu'elle découvre un feu.</li>
         </ul>
-        <p>Au signal d'alarme, on n'attend pas de « voir » le feu : on <strong>évacue immédiatement</strong>.</p>`,
-        vo:`Le Système de Sécurité Incendie, le SSI, regroupe les équipements qui détectent un incendie, donnent l'alarme et mettent le bâtiment en sécurité. La détection se fait par des détecteurs automatiques de fumée ou de chaleur, et par des déclencheurs manuels, ces boîtiers rouges qui permettent à chacun de donner l'alarme dès qu'il découvre un feu. L'alarme est un signal sonore qui ordonne l'évacuation de tous. La mise en sécurité commande automatiquement le désenfumage, les portes coupe-feu et le déverrouillage des issues. Retenez l'essentiel : au signal d'alarme, on n'attend pas de voir le feu, on évacue immédiatement.`,
+        <h3>L'alarme</h3>
+        <p>Un <strong>signal sonore</strong> (parfois visuel) ordonne l'<strong>évacuation</strong> de tous les occupants. Au signal d'alarme, on n'attend pas de « voir » le feu : on <strong>évacue immédiatement</strong>.</p>
+        <p><em>Ces équipements font partie du Système de Sécurité Incendie du bâtiment, qui fait l'objet d'une formation dédiée.</em></p>`,
+        vo:`Avant d'éteindre ou d'évacuer, il faut détecter le feu et donner l'alarme au plus vite. La détection peut être automatique, par des détecteurs de fumée ou de chaleur, ou manuelle, grâce aux déclencheurs manuels, ces boîtiers rouges qui permettent à toute personne de donner l'alarme dès qu'elle découvre un feu. L'alarme est un signal sonore, parfois visuel, qui ordonne l'évacuation de tous les occupants. Retenez l'essentiel : au signal d'alarme, on n'attend pas de voir le feu, on évacue immédiatement. Ces équipements font partie du Système de Sécurité Incendie du bâtiment, qui fait l'objet d'une formation spécifique.`,
         callouts:[{type:"reg",title:"Déclencheur manuel",text:"Les boîtiers rouges (déclencheurs manuels d'alarme) permettent à toute personne de déclencher l'alarme dès la découverte d'un feu."},
           {type:"key",title:"À retenir",text:"Au signal d'alarme : on évacue, sans attendre de voir les flammes."}] },
       { id:"m4l2", title:"Désenfumage, compartimentage, éclairage de sécurité", duration:"17 min",
@@ -529,14 +530,31 @@ const COURSE={ modules:[
         <p>Les <strong>BAES</strong> (blocs autonomes d'éclairage de sécurité) balisent les issues en cas de coupure de courant. Les <strong>issues de secours</strong> et cheminements doivent rester <strong>dégagés, signalés et déverrouillables</strong> à tout moment.</p>`,
         vo:`Le bâtiment participe à la sécurité. Le désenfumage évacue les fumées toxiques et opaques vers l'extérieur, pour garder les chemins d'évacuation praticables. Le compartimentage limite la propagation du feu et des fumées grâce à des parois et des portes coupe-feu ; ces portes ne doivent jamais être calées en position ouverte. L'éclairage de sécurité, les blocs BAES, balise les issues en cas de coupure de courant. Enfin, les issues de secours et les cheminements doivent rester en permanence dégagés, signalés et déverrouillables.`,
         callouts:[{type:"danger",title:"Portes coupe-feu",text:"Ne jamais caler une porte coupe-feu : ouverte, elle laisse passer le feu et les fumées d'un compartiment à l'autre."},
-          {type:"key",title:"À retenir",text:"Issues de secours toujours dégagées, signalées et déverrouillables — jamais encombrées."}] }
+          {type:"key",title:"À retenir",text:"Issues de secours toujours dégagées, signalées et déverrouillables — jamais encombrées."}] },
+      { id:"m4l3", title:"Risques particuliers : électricité & batteries lithium", duration:"8 min",
+        body:`
+        <p>Certains feux exigent des réflexes spécifiques. Les connaître évite d'aggraver l'accident.</p>
+        <h3>Feux d'origine électrique</h3>
+        <p><strong>Couper le courant</strong> si possible, puis utiliser un extincteur <strong>CO₂ ou à poudre</strong>. <strong>Jamais d'eau en jet</strong> sur un appareil sous tension : risque d'électrisation.</p>
+        <h3>Batteries lithium-ion</h3>
+        <p>Téléphones, ordinateurs, vélos et trottinettes : une batterie endommagée ou en surcharge peut partir en <strong>emballement thermique</strong> — chaleur intense, flammes, projections et fumées toxiques. Le feu se <strong>réactive</strong> facilement.</p>
+        <ul>
+          <li>Ne jamais recharger sans surveillance ni sur un matériel abîmé.</li>
+          <li>En cas de départ de feu : <strong>alerter et évacuer</strong>, éloigner les objets combustibles si c'est sans danger ; l'extinction d'une batterie en feu relève des secours.</li>
+        </ul>
+        <h3>Liquides inflammables &amp; points chauds</h3>
+        <p>Stocker les liquides inflammables à l'écart des sources de chaleur ; les travaux par <strong>point chaud</strong> (soudage, meulage) imposent un <strong>permis de feu</strong> et une surveillance après travaux.</p>`,
+        vo:`Certains feux exigent des réflexes particuliers. Pour un feu d'origine électrique, on coupe le courant si c'est possible, puis on utilise un extincteur au dioxyde de carbone ou à poudre ; jamais d'eau en jet sur un appareil sous tension, à cause du risque d'électrisation. Les batteries lithium-ion, présentes dans les téléphones, les ordinateurs, les vélos et les trottinettes, peuvent partir en emballement thermique lorsqu'elles sont endommagées ou en surcharge : chaleur intense, flammes, projections et fumées toxiques, avec un feu qui se réactive facilement. On ne recharge jamais sans surveillance ni sur un matériel abîmé ; en cas de départ de feu, on alerte et on évacue, l'extinction relevant des secours. Enfin, les liquides inflammables se stockent à l'écart des sources de chaleur, et les travaux par point chaud, comme le soudage ou le meulage, imposent un permis de feu et une surveillance après travaux.`,
+        callouts:[{type:"danger",title:"Batterie lithium en feu",text:"Emballement thermique : flammes et fumées toxiques, réactivation possible. On alerte, on évacue — l'extinction relève des secours."},
+          {type:"key",title:"Feu électrique",text:"Couper le courant, extincteur CO₂ ou poudre, jamais d'eau en jet sous tension."}] }
     ],
     quiz:[
       {q:"À quoi sert un déclencheur manuel (boîtier rouge) ?",opts:["À appeler l'ascenseur","À permettre à toute personne de donner l'alarme","À éteindre le feu","À couper l'électricité"],a:1,ex:"Le déclencheur manuel permet à chacun de déclencher l'alarme d'évacuation dès qu'il découvre un feu, sans attendre la détection automatique."},
       {q:"Au déclenchement de l'alarme sonore, il faut…",opts:["attendre de voir le feu","évacuer immédiatement","continuer à travailler","ouvrir les fenêtres"],a:1,ex:"L'alarme ordonne l'évacuation : on quitte les lieux immédiatement, sans chercher à confirmer la présence de flammes."},
       {q:"À quoi sert le compartimentage ?",opts:["À éclairer les couloirs","À limiter la propagation du feu et des fumées","À déclencher les sprinkleurs","À ventiler les bureaux"],a:1,ex:"Parois et portes coupe-feu cloisonnent le bâtiment pour freiner la propagation du feu et des fumées."},
       {q:"Une porte coupe-feu doit…",opts:["être calée en position ouverte","pouvoir se fermer librement, jamais calée","être verrouillée en permanence","rester ouverte la nuit"],a:1,ex:"Calée ouverte, elle ne joue plus son rôle : une porte coupe-feu doit pouvoir se fermer pour bloquer feu et fumées."},
-      {q:"Les BAES (éclairage de sécurité) servent à…",opts:["détecter la fumée","baliser les issues en cas de coupure de courant","déclencher l'alarme","fermer les portes"],a:1,ex:"Les blocs autonomes d'éclairage de sécurité éclairent et balisent les cheminements d'évacuation même sans courant."}
+      {q:"Les BAES (éclairage de sécurité) servent à…",opts:["détecter la fumée","baliser les issues en cas de coupure de courant","déclencher l'alarme","fermer les portes"],a:1,ex:"Les blocs autonomes d'éclairage de sécurité éclairent et balisent les cheminements d'évacuation même sans courant."},
+      {q:"Face à une batterie lithium-ion en feu, le bon réflexe est…",opts:["l'arroser abondamment et continuer à travailler","alerter, évacuer et laisser l'extinction aux secours","la couvrir et la ranger dans un tiroir","la prendre à mains nues pour la sortir"],a:1,ex:"L'emballement thermique est violent et se réactive : on alerte et on évacue, l'extinction relève des secours."}
     ] },
 
   { id:"m5", icon:"📢", title:"Conduite à tenir & alerte", desc:"Donner l'alarme, alerter les secours, attaquer un feu en sécurité.", duration:"35 min",
