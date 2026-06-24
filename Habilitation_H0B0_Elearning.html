@@ -936,6 +936,13 @@ window.MCR_mountRating=function(formation){
   };
 };
 </script>
+<div id="mcrConsent" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#12100b;color:#f4eddc;border-top:2px solid #d6a338;padding:14px 18px;font-family:system-ui,Segoe UI,Roboto,sans-serif;font-size:13.5px;display:none;box-shadow:0 -8px 24px rgba(0,0,0,.4)">
+  <div style="max-width:980px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <span style="flex:1;min-width:240px">Cette plateforme utilise le stockage local de votre navigateur pour votre progression et vos pr&eacute;f&eacute;rences. Aucune publicit&eacute;, aucun pistage. <a href="politique-confidentialite.html" style="color:#f0c462">En savoir plus</a>.</span>
+    <button id="mcrConsentOk" style="border:0;border-radius:9px;padding:9px 18px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#d6a338,#b9842a);color:#1a1407;font-family:inherit">J&rsquo;ai compris</button>
+  </div>
+</div>
+<script>(function(){try{if(localStorage.getItem('mcrConsent')!=='ok'){var b=document.getElementById('mcrConsent');if(b){b.style.display='block';var k=document.getElementById('mcrConsentOk');if(k)k.onclick=function(){try{localStorage.setItem('mcrConsent','ok');}catch(e){}b.style.display='none';};}}}catch(e){}})();</script>
 </body>
 
 </html>
