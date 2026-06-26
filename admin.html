@@ -202,47 +202,8 @@
   </section>
 
   <section id="tab-tarif" class="hidden">
-    <div class="card">
-      <h2>Calculateur de prix — devis express</h2>
-      <p class="desc">Estimez le prix d'une commande en quelques secondes. Les tarifs sont provisoires (à valider avec Fred) — modifiez-les plus bas, le calcul se met à jour tout seul.</p>
-      <div class="calc">
-        <div class="calc-left">
-          <div class="flabel">Formule</div>
-          <div class="packs" id="calcPacks">
-            <label class="pack sel" data-cpack="standard"><input type="radio" name="cpack" value="standard" checked><div class="pname">Standard</div><div class="pdesc">Le RH inscrit ses salariés.</div></label>
-            <label class="pack" data-cpack="premium"><input type="radio" name="cpack" value="premium"><div class="pname">Premium</div><div class="pdesc">On gère tout pour le client.</div></label>
-          </div>
-          <div class="flabel">Type d'offre</div>
-          <div class="packs" id="calcTypes">
-            <label class="pack sel" data-ctype="unite"><input type="radio" name="ctype" value="unite" checked><div class="pname">À la formation</div><div class="pdesc">Un ou plusieurs modules choisis.</div></label>
-            <label class="pack" data-ctype="catalogue"><input type="radio" name="ctype" value="catalogue"><div class="pname">Pack complet</div><div class="pdesc">Accès à tout le catalogue / an.</div></label>
-          </div>
-          <div class="calc-fields">
-            <div><label class="flabel">Nombre de stagiaires</label><input id="c_stag" type="number" min="1" value="1"></div>
-            <div id="c_modwrap"><label class="flabel">Modules / stagiaire</label><input id="c_mod" type="number" min="1" value="1"></div>
-          </div>
-        </div>
-        <div class="calc-right">
-          <div class="calc-total">
-            <div class="ct-line"><span>Prix unitaire</span><b id="ct_unit">—</b></div>
-            <div class="ct-line"><span>Quantité</span><b id="ct_qty">—</b></div>
-            <div class="ct-line"><span>Total HT</span><b id="ct_ht">—</b></div>
-            <div class="ct-line"><span>TVA 20 %</span><b id="ct_tva">—</b></div>
-            <div class="ct-line big"><span>Total TTC</span><b id="ct_ttc">—</b></div>
-          </div>
-          <div id="ct_detail" class="ct-detail"></div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <h2>Tarifs de référence (modifiables)</h2>
-      <p class="desc">Prix provisoires — ajuste-les ici, le calculateur les utilise immédiatement.</p>
-      <div class="calc-prices">
-        <div><label class="flabel">Standard — module / stagiaire (€ HT)</label><input id="p_su" type="number" min="0" value="45"></div>
-        <div><label class="flabel">Premium — module / stagiaire (€ HT)</label><input id="p_pu" type="number" min="0" value="65"></div>
-        <div><label class="flabel">Standard — catalogue / stagiaire / an (€ HT)</label><input id="p_sc" type="number" min="0" value="120"></div>
-        <div><label class="flabel">Premium — catalogue / stagiaire / an (€ HT)</label><input id="p_pc" type="number" min="0" value="180"></div>
-      </div>
+    <div class="card" style="padding:0;overflow:hidden;border-radius:16px">
+      <iframe src="Calculateur_Prix_MCR.html" title="Calculateur de prix MCR" style="width:100%;height:1480px;border:0;display:block"></iframe>
     </div>
   </section>
 </div>
