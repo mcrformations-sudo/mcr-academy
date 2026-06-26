@@ -5,44 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Administration — MCR Academy</title>
 <style>
-  :root{--gold:#d6a338;--gold-2:#b9842a;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2;--ok:#22c55e;--bad:#ef4444;--admin:#5b8def;--panel:#0e1218}
+  :root{--gold:#d6a338;--gold-2:#b9842a;--card:#161b22;--line:#262c34;--ink:#e8edf2;--muted:#9aa6b2;--ok:#22c55e;--bad:#ef4444}
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(1100px 650px at 80% -10%,#1a2230,#0b0e13);color:var(--ink);min-height:100vh}
-  a{color:inherit}
-  /* ===== Layout master : sidebar + contenu ===== */
-  .shell{display:flex;min-height:100vh}
-  .side{width:248px;flex:0 0 248px;background:linear-gradient(180deg,#10151c,#0b0e13);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 16px;position:sticky;top:0;height:100vh}
-  .side .brand{display:flex;align-items:center;gap:11px;margin-bottom:6px}
-  .side .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a1407,#0d0d0d);border:1px solid var(--gold);display:grid;place-items:center;overflow:hidden;flex:0 0 auto}
-  .side .logo img{width:84%;height:84%;object-fit:contain}
-  .side .brand h1{font-size:16px;margin:0;font-weight:800;line-height:1.1}
-  .side .brand .sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-top:2px}
-  .adminbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(91,141,239,.14);color:#9bbcff;border:1px solid rgba(91,141,239,.45);border-radius:99px;padding:4px 11px;font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 18px}
-  .nav{display:flex;flex-direction:column;gap:4px}
-  .nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:700;padding:11px 13px;border-radius:11px;cursor:pointer}
-  .nav button .ic{font-size:17px;width:20px;text-align:center}
-  .nav button:hover{background:#161b22;color:var(--ink)}
-  .nav button.on{background:linear-gradient(135deg,rgba(214,163,56,.18),rgba(185,132,42,.06));color:var(--ink);box-shadow:inset 3px 0 0 var(--gold)}
-  .side .spacer{flex:1}
-  .side .foot{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:14px}
-  /* ===== Contenu ===== */
-  .main{flex:1;min-width:0;padding:26px 30px 60px}
-  .pagehead{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-  .pagehead h2{margin:0;font-size:23px;font-weight:800}
-  .pagehead .lead{color:var(--muted);font-size:13.5px;margin:4px 0 0}
-  .btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+  .wrap{max-width:1050px;margin:0 auto;padding:26px 20px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#1a1407,#0d0d0d);border:1px solid var(--gold);display:grid;place-items:center;overflow:hidden}
+  .brand .logo img{width:84%;height:84%;object-fit:contain}
+  .brand h1{font-size:19px;margin:0;font-weight:800}
+  .brand .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit}
   .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407}
   .btn.ghost{background:#1b2127;color:var(--ink);border:1px solid var(--line)}
-  .btn.sm{padding:6px 12px;font-size:12px}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{padding:9px 18px;border-radius:99px;border:1px solid var(--line);background:#1b2127;color:var(--muted);font-weight:700;font-size:13.5px;cursor:pointer}
+  .tab.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;border-color:transparent}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px}
-  .card h3{margin:0 0 4px;font-size:16px}
+  .card h2{margin:0 0 4px;font-size:16px}
   .card .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
   .stat{display:inline-flex;align-items:baseline;gap:7px;font-size:13px;color:var(--muted);margin-bottom:12px}
   .stat b{font-size:22px;color:var(--gold)}
-  .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px}
-  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-  .kpi b{display:block;font-size:28px;color:var(--gold);font-weight:800;line-height:1}
-  .kpi span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
   form.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
   input{background:#0f141a;border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--ink);font-size:14px;font-family:inherit;flex:1;min-width:130px}
   input:focus{outline:none;border-color:var(--gold)}
@@ -57,13 +40,6 @@
   .empty{color:var(--muted);text-align:center;padding:28px;font-size:14px}
   .msg{font-size:13px;margin-top:8px;min-height:18px}.msg.ok{color:#5ee9a0}.msg.err{color:#ff8c82}
   .hidden{display:none!important}
-  .back{display:inline-flex;align-items:center;gap:7px;background:none;border:0;color:var(--muted);font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;padding:0;margin-bottom:6px}
-  .back:hover{color:var(--gold)}
-  .codebox{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#0f141a;border:1px dashed var(--gold);border-radius:12px;padding:12px 16px;margin-top:8px}
-  .codebox .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:800}
-  .codebox b{font-size:18px;letter-spacing:2px;color:var(--gold)}
-  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  /* certificat */
   #certModal{position:fixed;inset:0;z-index:120;background:rgba(4,7,11,.8);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 16px}
   #certModal.open{display:flex}
   .cert-actions{position:sticky;top:0;display:flex;gap:10px;justify-content:flex-end;width:min(820px,96vw);margin-bottom:10px}
@@ -71,6 +47,7 @@
   .cert-sheet::before{content:"";position:absolute;inset:14px;border:2px solid var(--gold);border-radius:6px;pointer-events:none}
   .cert-sheet .inner{position:relative;text-align:center}
   .cert-crest{width:74px;height:74px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#1a1407,#0d0d0d);display:grid;place-items:center;border:2px solid var(--gold)}
+  .cert-crest span{font-size:34px}
   .cert-org{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#b9842a;font-weight:800}
   .cert-sheet h1{font-size:30px;margin:14px 0 2px;color:#15202b}
   .cert-sheet .formation{font-size:15px;color:#5a6675;margin:4px 0 22px;font-style:italic}
@@ -81,149 +58,193 @@
   .cert-meta b{display:block;font-size:14px;color:#15202b;margin-top:3px;text-transform:none}
   .cert-foot{font-size:10.5px;color:#9aa6b2;line-height:1.5;margin:24px auto 0;max-width:600px}
   @media print{body{background:#fff!important}body *{visibility:hidden!important}#certModal,#certModal .cert-sheet,#certModal .cert-sheet *{visibility:visible!important}#certModal{position:absolute;inset:0;background:#fff;display:block;padding:0}.cert-actions{display:none!important}.cert-sheet{box-shadow:none;width:100%}}
-  /* ===== Mobile ===== */
-  @media (max-width:820px){
-    .shell{flex-direction:column}
-    .side{width:auto;flex:none;height:auto;position:static;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 14px}
-    .side .brand{margin:0}
-    .adminbadge{margin:0}
-    .nav{flex-direction:row;flex-wrap:wrap;gap:6px;width:100%;order:3}
-    .nav button{width:auto;padding:8px 12px;font-size:13px}
-    .nav button.on{box-shadow:none;border:1px solid var(--gold)}
-    .side .spacer{display:none}
-    .side .foot{flex-direction:row;border-top:0;padding-top:0;margin-left:auto}
-    .main{padding:18px 14px 50px}
-    .pagehead h2{font-size:20px}
-    .twocol{grid-template-columns:1fr}
-    .card table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
-    .cert-sheet{padding:34px 20px}.cert-meta{gap:16px}.cert-name{font-size:26px}
-  }
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width:640px){
+  .wrap{padding:18px 12px 50px}
+  header{gap:8px}
+  .brand h1{font-size:16px}
+  .brand .sub{font-size:10px}
+  .tabs{gap:6px}
+  .tab{padding:8px 13px;font-size:12.5px}
+  .card{padding:16px 14px}
+  .card h2{font-size:15px}
+  .card table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  form.row{flex-direction:column;align-items:stretch}
+  form.row input,form.row button{width:100%;min-width:0}
+  .codebox{flex-wrap:wrap}
+  .cert-sheet{padding:34px 20px}
+  .cert-meta{gap:16px}
+  .cert-name{font-size:26px}
+}
   .formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
   .fcard{background:#0f141a;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
   .fcard h4{font-size:14px;margin:0;color:var(--ink);line-height:1.3}
   .fcard .open{align-self:flex-start;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:9px}
+  .flabel{font-size:12px;color:var(--muted);font-weight:700;margin:2px 0 7px}
+  .packs{display:flex;gap:10px;flex-wrap:wrap;width:100%;margin-bottom:12px}
+  .pack{flex:1;min-width:210px;cursor:pointer;background:#0f141a;border:1px solid var(--line);border-radius:12px;padding:13px 15px;transition:border-color .15s,box-shadow .15s}
+  .pack:hover{border-color:#3a4250}
+  .pack.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .pack input{display:none}
+  .pack .pname{font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pack .ptag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);background:rgba(214,163,56,.12);padding:2px 7px;border-radius:99px}
+  .pack .pdesc{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.45}
+  .pack .pprice{margin-top:8px;font-size:13px;color:var(--ink);font-weight:800}
+  .pack .pprice span{color:var(--muted);font-weight:500;font-size:11px}
+  .calc{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+  @media(max-width:720px){.calc{grid-template-columns:1fr}}
+  .calc-fields{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .calc-fields>div{flex:1;min-width:150px}
+  .calc-prices{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .calc-total{background:#0f141a;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .ct-line{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+  .ct-line b{color:var(--ink);font-size:15px}
+  .ct-line.big{border-bottom:0;margin-top:4px}
+  .ct-line.big span{color:var(--ink);font-weight:800;font-size:15px}
+  .ct-line.big b{color:var(--gold);font-size:24px}
+  .ct-detail{color:var(--muted);font-size:12.5px;margin-top:10px;line-height:1.5}
 </style>
 </head>
 <body>
-<div class="shell hidden" id="app">
-  <!-- ====== Sidebar ====== -->
-  <aside class="side">
-    <div class="brand">
-      <div class="logo"><img src="MCR_corbeau.png" alt="MCR"></div>
-      <div><h1>MCR Academy</h1><div class="sub">Console</div></div>
+<div class="wrap hidden" id="app">
+  <header>
+    <div class="brand"><div class="logo"><img src="MCR_corbeau.png" alt="MCR"></div><div><div class="sub">MCR Academy — Administration</div><h1>Console MCR Formations</h1></div></div>
+    <div><a class="btn ghost" href="guide-admin.html" target="_blank" style="text-decoration:none">❓ Guide</a> <button class="btn ghost" id="refreshBtn">↻ Rafraîchir</button> <button class="btn ghost" id="logout">Déconnexion</button></div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab on" data-tab="ent">Entreprises</div>
+    <div class="tab" data-tab="stag">Stagiaires</div>
+    <div class="tab" data-tab="att">Attestations</div>
+    <div class="tab" data-tab="notes">Notes ★</div>
+    <div class="tab" data-tab="form">Formations</div>
+    <div class="tab" data-tab="tarif">Tarifs 🧮</div>
+  </div>
+
+  <section id="tab-ent">
+    <div class="card">
+      <h2>Créer une entreprise cliente</h2>
+      <p class="desc">Génère automatiquement un code stagiaire (pour les salariés) et un code RH (pour le responsable). Transmettez le code RH au chef d'entreprise et le code stagiaire à ses salariés.</p>
+      <form id="entForm">
+        <div class="row" style="margin-bottom:10px">
+          <input id="e_nom" placeholder="Nom de l'entreprise" required>
+          <input id="e_rh" type="email" placeholder="Email du RH (optionnel)">
+        </div>
+        <div class="flabel">Formule</div>
+        <div class="packs">
+          <label class="pack sel" data-pack="standard">
+            <input type="radio" name="pack" value="standard" checked>
+            <div class="pname">Standard <span class="ptag">le RH gère</span></div>
+            <div class="pdesc">Le responsable de l'entreprise inscrit lui-même ses salariés via son espace RH.</div>
+            <div class="pprice">45 € HT <span>/ stagiaire / module · 120 € HT / an le catalogue complet</span></div>
+          </label>
+          <label class="pack" data-pack="premium">
+            <input type="radio" name="pack" value="premium">
+            <div class="pname">Premium <span class="ptag">on gère tout</span></div>
+            <div class="pdesc">MCR Formations saisit et gère tous les stagiaires à partir de la liste fournie par le RH.</div>
+            <div class="pprice">65 € HT <span>/ stagiaire / module · 180 € HT / an le catalogue complet</span></div>
+          </label>
+        </div>
+        <button class="btn gold" type="submit">+ Créer</button>
+      </form>
+      <div id="entMsg" class="msg"></div>
     </div>
-    <span class="adminbadge">🛡️ Administration</span>
-    <nav class="nav">
-      <button class="on" data-view="ent"><span class="ic">🏢</span>Entreprises</button>
-      <button data-view="stag"><span class="ic">👥</span>Stagiaires</button>
-      <button data-view="att"><span class="ic">📄</span>Attestations</button>
-      <button data-view="avis"><span class="ic">★</span>Avis &amp; notes</button>
-      <button data-view="form"><span class="ic">🎓</span>Formations</button>
-    </nav>
-    <div class="spacer"></div>
-    <div class="foot">
-      <a class="btn ghost sm" href="guide-admin.html" target="_blank">❓ Guide</a>
-      <button class="btn ghost sm" id="refreshBtn">↻ Rafraîchir</button>
-      <button class="btn ghost sm" id="logout">Déconnexion</button>
+    <div class="card">
+      <div class="stat"><b id="entCount">—</b> entreprise(s)</div>
+      <div id="entTable"></div>
     </div>
-  </aside>
+  </section>
 
-  <!-- ====== Contenu ====== -->
-  <main class="main">
+  <section id="tab-stag" class="hidden">
+    <div class="card">
+      <h2>Ajouter un stagiaire</h2>
+      <p class="desc">Ajout manuel. Les stagiaires qui s'inscrivent ou terminent une formation y apparaissent automatiquement.</p>
+      <form class="row" id="addForm">
+        <input id="f_prenom" placeholder="Prénom" required><input id="f_nom" placeholder="Nom" required>
+        <input id="f_email" type="email" placeholder="Email"><input id="f_entreprise" placeholder="Entreprise">
+        <button class="btn gold" type="submit">+ Ajouter</button>
+      </form>
+      <div id="addMsg" class="msg"></div>
+    </div>
+    <div class="card"><div class="stat"><b id="stagCount">—</b> stagiaire(s)</div><div id="stagTable"></div></div>
+  </section>
 
-    <!-- ENTREPRISES : liste -->
-    <section id="view-ent">
-      <div id="entList">
-        <div class="pagehead">
-          <div><h2>Entreprises clientes</h2><p class="lead">Vous créez les entreprises. Chaque entreprise gère ensuite ses propres stagiaires via son espace responsable (code RH).</p></div>
-        </div>
-        <div class="card">
-          <h3>Créer une entreprise cliente</h3>
-          <p class="desc">Génère automatiquement un <b>code stagiaire</b> (pour les salariés) et un <b>code RH</b> (pour le responsable). Transmettez le code RH au chef d'entreprise et le code stagiaire à ses salariés.</p>
-          <form class="row" id="entForm">
-            <input id="e_nom" placeholder="Nom de l'entreprise" required>
-            <input id="e_rh" type="email" placeholder="Email du responsable (optionnel)">
-            <button class="btn gold" type="submit">+ Créer l'entreprise</button>
-          </form>
-          <div id="entMsg" class="msg"></div>
-        </div>
-        <div class="card">
-          <div class="stat"><b id="entCount">—</b> entreprise(s) — cliquez une ligne pour voir le détail</div>
-          <div id="entTable"></div>
-        </div>
-      </div>
+  <section id="tab-att" class="hidden">
+    <div class="card">
+      <div class="stat"><b id="attCount">—</b> attestation(s) — conservées pour le suivi Qualiopi</div>
+      <button class="btn ghost" id="csvBtn" style="float:right">⬇ Export CSV</button>
+      <div id="attTable"></div>
+    </div>
+  </section>
 
-      <!-- ENTREPRISES : détail d'une entreprise -->
-      <div id="entDetail" class="hidden">
-        <button class="back" id="entBack">← Toutes les entreprises</button>
-        <div class="pagehead">
-          <div><h2 id="d_nom">—</h2><p class="lead" id="d_meta"></p></div>
-          <div id="d_actions"></div>
-        </div>
-        <div class="kpis">
-          <div class="kpi"><b id="d_salCount">0</b><span>Salariés</span></div>
-          <div class="kpi"><b id="d_attCount">0</b><span>Attestations</span></div>
-          <div class="kpi"><b id="d_okCount">0</b><span>Réussites</span></div>
-        </div>
-        <div class="card">
-          <h3>Codes d'accès de l'entreprise</h3>
-          <p class="desc">À transmettre par l'entreprise. Le RH s'inscrit avec le code responsable ; les salariés avec le code stagiaire.</p>
-          <div class="twocol">
-            <div class="codebox"><div><div class="lbl">Code stagiaire</div><b id="d_codeStag">—</b></div><button class="btn ghost sm" id="d_copyStag" style="margin-left:auto">Copier</button></div>
-            <div class="codebox"><div><div class="lbl">Code responsable (RH)</div><b id="d_codeRh">—</b></div><button class="btn ghost sm" id="d_copyRh" style="margin-left:auto">Copier</button></div>
+  <section id="tab-notes" class="hidden">
+    <div class="card">
+      <h2>Notes des formations (par les stagiaires)</h2>
+      <p class="desc">Étoiles attribuées par les stagiaires à la fin de chaque formation.</p>
+      <div class="stat"><b id="frAvg">—</b> moyenne &nbsp;·&nbsp; <span id="frCount">0</span> avis</div>
+      <div id="frTable"></div>
+    </div>
+    <div class="card">
+      <h2>Avis sur MCR Formations (par les responsables)</h2>
+      <p class="desc">Note globale de l'organisme laissée par les responsables d'entreprise.</p>
+      <div class="stat"><b id="orAvg">—</b> moyenne &nbsp;·&nbsp; <span id="orCount">0</span> avis</div>
+      <div id="orTable"></div>
+    </div>
+  </section>
+
+  <section id="tab-form" class="hidden">
+    <div class="card">
+      <h2>Les formations — aperçu & test</h2>
+      <p class="desc">Ouvrez n'importe quelle formation pour la parcourir et la tester comme un stagiaire (vérifier que tout est bon). Elle s'ouvre dans un nouvel onglet.</p>
+      <div id="formList" class="formgrid"></div>
+    </div>
+  </section>
+
+  <section id="tab-tarif" class="hidden">
+    <div class="card">
+      <h2>Calculateur de prix — devis express</h2>
+      <p class="desc">Estimez le prix d'une commande en quelques secondes. Les tarifs sont provisoires (à valider avec Fred) — modifiez-les plus bas, le calcul se met à jour tout seul.</p>
+      <div class="calc">
+        <div class="calc-left">
+          <div class="flabel">Formule</div>
+          <div class="packs" id="calcPacks">
+            <label class="pack sel" data-cpack="standard"><input type="radio" name="cpack" value="standard" checked><div class="pname">Standard</div><div class="pdesc">Le RH inscrit ses salariés.</div></label>
+            <label class="pack" data-cpack="premium"><input type="radio" name="cpack" value="premium"><div class="pname">Premium</div><div class="pdesc">On gère tout pour le client.</div></label>
+          </div>
+          <div class="flabel">Type d'offre</div>
+          <div class="packs" id="calcTypes">
+            <label class="pack sel" data-ctype="unite"><input type="radio" name="ctype" value="unite" checked><div class="pname">À la formation</div><div class="pdesc">Un ou plusieurs modules choisis.</div></label>
+            <label class="pack" data-ctype="catalogue"><input type="radio" name="ctype" value="catalogue"><div class="pname">Pack complet</div><div class="pdesc">Accès à tout le catalogue / an.</div></label>
+          </div>
+          <div class="calc-fields">
+            <div><label class="flabel">Nombre de stagiaires</label><input id="c_stag" type="number" min="1" value="1"></div>
+            <div id="c_modwrap"><label class="flabel">Modules / stagiaire</label><input id="c_mod" type="number" min="1" value="1"></div>
           </div>
         </div>
-        <div class="card">
-          <h3>Salariés de l'entreprise</h3>
-          <p class="desc">Ajoutés par le responsable de l'entreprise. En tant qu'admin vous pouvez consulter et, si besoin, bloquer un accès.</p>
-          <div id="d_salTable"></div>
+        <div class="calc-right">
+          <div class="calc-total">
+            <div class="ct-line"><span>Prix unitaire</span><b id="ct_unit">—</b></div>
+            <div class="ct-line"><span>Quantité</span><b id="ct_qty">—</b></div>
+            <div class="ct-line"><span>Total HT</span><b id="ct_ht">—</b></div>
+            <div class="ct-line"><span>TVA 20 %</span><b id="ct_tva">—</b></div>
+            <div class="ct-line big"><span>Total TTC</span><b id="ct_ttc">—</b></div>
+          </div>
+          <div id="ct_detail" class="ct-detail"></div>
         </div>
-        <div class="card">
-          <h3>Attestations de l'entreprise</h3>
-          <div id="d_attTable"></div>
-        </div>
       </div>
-    </section>
-
-    <!-- STAGIAIRES (vue globale, lecture + modération) -->
-    <section id="view-stag" class="hidden">
-      <div class="pagehead">
-        <div><h2>Tous les stagiaires</h2><p class="lead">Vue globale en lecture seule. La création des stagiaires se fait dans l'espace de chaque entreprise — ici vous supervisez et pouvez bloquer un accès.</p></div>
+    </div>
+    <div class="card">
+      <h2>Tarifs de référence (modifiables)</h2>
+      <p class="desc">Prix provisoires — ajuste-les ici, le calculateur les utilise immédiatement.</p>
+      <div class="calc-prices">
+        <div><label class="flabel">Standard — module / stagiaire (€ HT)</label><input id="p_su" type="number" min="0" value="45"></div>
+        <div><label class="flabel">Premium — module / stagiaire (€ HT)</label><input id="p_pu" type="number" min="0" value="65"></div>
+        <div><label class="flabel">Standard — catalogue / stagiaire / an (€ HT)</label><input id="p_sc" type="number" min="0" value="120"></div>
+        <div><label class="flabel">Premium — catalogue / stagiaire / an (€ HT)</label><input id="p_pc" type="number" min="0" value="180"></div>
       </div>
-      <div class="card"><div class="stat"><b id="stagCount">—</b> stagiaire(s) au total</div><div id="stagTable"></div></div>
-    </section>
-
-    <!-- ATTESTATIONS (global) -->
-    <section id="view-att" class="hidden">
-      <div class="pagehead">
-        <div><h2>Attestations</h2><p class="lead">Toutes les attestations délivrées — conservées pour le suivi Qualiopi.</p></div>
-        <button class="btn ghost" id="csvBtn">⬇ Export CSV</button>
-      </div>
-      <div class="card"><div class="stat"><b id="attCount">—</b> attestation(s)</div><div id="attTable"></div></div>
-    </section>
-
-    <!-- AVIS -->
-    <section id="view-avis" class="hidden">
-      <div class="pagehead"><div><h2>Avis &amp; notes</h2><p class="lead">Retours des stagiaires sur les formations et des responsables sur l'organisme.</p></div></div>
-      <div class="card">
-        <h3>Notes des formations (par les stagiaires)</h3>
-        <div class="stat"><b id="frAvg">—</b> moyenne &nbsp;·&nbsp; <span id="frCount">0</span> avis</div>
-        <div id="frTable"></div>
-      </div>
-      <div class="card">
-        <h3>Avis sur MCR Formations (par les responsables)</h3>
-        <div class="stat"><b id="orAvg">—</b> moyenne &nbsp;·&nbsp; <span id="orCount">0</span> avis</div>
-        <div id="orTable"></div>
-      </div>
-    </section>
-
-    <!-- FORMATIONS -->
-    <section id="view-form" class="hidden">
-      <div class="pagehead"><div><h2>Les formations — aperçu &amp; test</h2><p class="lead">Ouvrez n'importe quelle formation pour la parcourir comme un stagiaire et vérifier que tout est bon.</p></div></div>
-      <div class="card"><div id="formList" class="formgrid"></div></div>
-    </section>
-
-  </main>
+    </div>
+  </section>
 </div>
 
 <div id="loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa6b2;font-family:system-ui">Chargement…</div>
@@ -238,10 +259,8 @@
 (function(){
   const SB_URL="https://mmaolkpsaroxqblthmhk.supabase.co";
   const SB_KEY="sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg";
-  let sb=(window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null);
+  let sb=null;
   const el=id=>document.getElementById(id);
-  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
-  function fdate(s){if(!s)return"—";try{return new Date(s).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});}catch(e){return s;}}
   function showFatal(msg){
     var l=el("loading"); l.classList.remove("hidden");
     l.innerHTML='<div style="max-width:400px;text-align:center;padding:24px">'
@@ -253,24 +272,24 @@
   }
   function withTimeout(p,ms,label){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error("TIMEOUT_"+label)),ms))]);}
   function waitForLib(){return new Promise((res,rej)=>{if(window.supabase)return res();var n=0,t=setInterval(()=>{if(window.supabase){clearInterval(t);res();}else if(++n>80){clearInterval(t);rej(new Error("LIB"));}},100);});}
-  function stars(n){n=Math.round(n||0);return '<span style="color:#f5c451;letter-spacing:1px">'+'★'.repeat(n)+'<span style="color:#3a4250">'+'★'.repeat(5-n)+'</span></span>';}
-  function copy(txt,btn){if(navigator.clipboard)navigator.clipboard.writeText(txt);var o=btn.textContent;btn.textContent="Copié !";setTimeout(()=>btn.textContent=o,1500);}
+  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+  function fdate(s){if(!s)return"—";try{return new Date(s).toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});}catch(e){return s;}}
 
-  const FORMATIONS=[["SST_Prevention_Elearning.html","Acteur de la Prévention des Risques Professionnels"],["Incendie_EPI_Elearning.html","Sécurité Incendie — EPI"],["Guide_Serre_File_Evacuation_Elearning.html","Guide-File, Serre-File & Évacuation"],["Gestes_Postures_TMS_Elearning.html","Gestes, Postures & Prévention des TMS"],["Prevention_RPS_Elearning.html","Prévention des Risques Psychosociaux (RPS)"],["Habilitation_H0B0_Elearning.html","Habilitation Électrique H0 B0"],["Habilitation_BS_BE_Manoeuvre_Elearning.html","Habilitation Électrique BS / BE Manœuvre"]];
-
-  // ====== Auth + garde de rôle ======
   (async()=>{
     try{
       await waitForLib();
-      if(!sb) sb=window.supabase.createClient(SB_URL,SB_KEY);
-      const {data:{session}}=await withTimeout(sb.auth.getSession(),9000,"SESSION");
-      if(!session){location.href="connexion.html";return;}
-      const {data:prof,error:pe}=await withTimeout(sb.from("profiles").select("role").eq("id",session.user.id).maybeSingle(),9000,"PROFILE");
-      if(pe) throw pe;
-      if(!prof||prof.role!=="admin"){ if(prof&&prof.role==="rh"){location.href="espace-rh.html";return;} location.href="connexion.html"; return; }
+      sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{lock:(n,a,fn)=>fn()}});
+      // Vérif d'accès robuste : lecture directe du jeton + appel REST brut (jamais de blocage)
+      let _tok=null,_uid=null;
+      try{ var _r=localStorage.getItem("sb-mmaolkpsaroxqblthmhk-auth-token"); if(_r){ var _j=JSON.parse(_r); _tok=_j&&_j.access_token; _uid=_j&&_j.user&&_j.user.id; } }catch(e){}
+      if(!_tok||!_uid){ location.href="connexion.html"; return; }
+      const _pr=await withTimeout(fetch(SB_URL+"/rest/v1/profiles?select=role&id=eq."+_uid,{headers:{apikey:SB_KEY,Authorization:"Bearer "+_tok}}).then(r=>r.ok?r.json():[]),9000,"PROFILE");
+      const prof=(Array.isArray(_pr)&&_pr.length)?_pr[0]:null;
+      if(!prof){ location.href="connexion.html"; return; }
+      if(prof.role!=="admin"){ if(prof.role==="rh"){location.href="espace-rh.html";return;} location.href="connexion.html"; return; }
       el("loading").classList.add("hidden"); el("app").classList.remove("hidden");
       loadAll();
-      el("formList").innerHTML=FORMATIONS.map(f=>'<div class="fcard"><h4>'+esc(f[1])+'</h4><a class="open" href="'+f[0]+'" target="_blank" rel="noopener">Ouvrir ▶</a></div>').join("");
+      el("formList").innerHTML=[["SST_Prevention_Elearning.html","Acteur de la Prévention des Risques Professionnels"],["Incendie_EPI_Elearning.html","Sécurité Incendie — EPI"],["Guide_Serre_File_Evacuation_Elearning.html","Guide-File, Serre-File & Évacuation"],["Gestes_Postures_TMS_Elearning.html","Gestes, Postures & Prévention des TMS"],["Prevention_RPS_Elearning.html","Prévention des Risques Psychosociaux (RPS)"],["Habilitation_H0B0_Elearning.html","Habilitation Électrique H0 B0"],["Habilitation_BS_BE_Manoeuvre_Elearning.html","Habilitation Électrique BS / BE Manœuvre"]].map(f=>'<div class="fcard"><h4>'+esc(f[1])+'</h4><a class="open" href="'+f[0]+'" target="_blank" rel="noopener">Ouvrir ▶</a></div>').join("");
     }catch(ex){
       var m=String((ex&&ex.message)||ex);
       if(m.indexOf("TIMEOUT")>=0) showFatal("Le serveur met trop de temps à répondre (connexion lente ou instable). Réessayez dans un instant.");
@@ -279,158 +298,163 @@
     }
   })();
 
-  // ====== Navigation latérale ======
-  document.querySelectorAll(".nav button").forEach(b=>{b.onclick=()=>{
-    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
-    ["ent","stag","att","avis","form"].forEach(k=>el("view-"+k).classList.toggle("hidden",k!==b.dataset.view));
-    if(b.dataset.view==="ent") showEntList();
-  };});
+  document.querySelectorAll(".tab").forEach(t=>{t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["ent","stag","att","notes","form","tarif"].forEach(k=>el("tab-"+k).classList.toggle("hidden",k!==t.dataset.tab));};});
 
   async function loadAll(){ await Promise.all([loadEnt(),loadStag(),loadAtt(),loadNotes()]); }
-  el("refreshBtn").onclick=loadAll;
-  el("logout").onclick=async()=>{await sb.auth.signOut();location.href="connexion.html";};
+  function stars(n){n=Math.round(n||0);return '<span style="color:#f5c451;letter-spacing:1px">'+'★'.repeat(n)+'<span style="color:#3a4250">'+'★'.repeat(5-n)+'</span></span>';}
 
-  // ====== ENTREPRISES ======
-  function code6(){var a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",s="";for(var i=0;i<6;i++){s+=a.charAt(Math.floor(Math.random()*a.length));}return s;}
-  function showEntList(){el("entList").classList.remove("hidden");el("entDetail").classList.add("hidden");}
-  function showEntDetail(){el("entList").classList.add("hidden");el("entDetail").classList.remove("hidden");window.scrollTo(0,0);}
-  el("entBack").onclick=showEntList;
-
+  // ---- Entreprises ----
+  function slug(s){return (s||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,8)||"ENT";}
+  function rnd(){return Math.floor(1000+Math.random()*9000);}
+  function packPill(p){p=String(p||"").toLowerCase();
+    if(p==="premium")return '<span class="pill" style="background:rgba(214,163,56,.18);color:#e9c178">Premium</span>';
+    if(p==="standard")return '<span class="pill" style="background:#1b2127;color:#9aa6b2;border:1px solid var(--line)">Standard</span>';
+    return '<span style="color:#9aa6b2">—</span>';}
+  document.querySelectorAll("#entForm .pack").forEach(p=>{p.addEventListener("click",()=>{
+    document.querySelectorAll("#entForm .pack").forEach(x=>x.classList.remove("sel"));
+    p.classList.add("sel"); var r=p.querySelector("input"); if(r) r.checked=true;});});
   async function loadEnt(){
     const e=el("entTable"); e.innerHTML='<div class="empty">Chargement…</div>';
     const {data,error}=await sb.from("entreprises").select("*").order("created_at",{ascending:false});
-    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
-    el("entCount").textContent=data.length; window.__ent=data;
-    if(!data.length){e.innerHTML='<div class="empty">Aucune entreprise. Créez-en une ci-dessus.</div>';return;}
-    e.innerHTML='<table><thead><tr><th>Entreprise</th><th>Code stagiaire</th><th>Code RH</th><th>Statut</th><th>Créée le</th><th></th></tr></thead><tbody>'+
-      data.map(c=>{var sus=!!c.suspendu;return '<tr class="clickable" data-id="'+esc(c.id)+'"><td><b>'+esc(c.nom)+'</b></td><td><code class="codetag">'+esc(c.code_acces)+'</code></td><td><code class="codetag">'+esc(c.code_rh)+'</code></td><td>'+(sus?'<span class="pill no">Suspendue</span>':'<span class="pill ok">Active</span>')+'</td><td>'+fdate(c.created_at)+'</td><td><span class="go">Ouvrir →</span></td></tr>';}).join("")+'</tbody></table>';
-    e.querySelectorAll("tr.clickable").forEach(tr=>{tr.onclick=()=>openEnt((window.__ent||[]).find(x=>String(x.id)===tr.dataset.id));});
+    if(error){ e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>'; return; }
+    el("entCount").textContent=data.length;
+    if(!data.length){ e.innerHTML='<div class="empty">Aucune entreprise pour le moment.</div>'; return; }
+    e.innerHTML='<table><thead><tr><th>Entreprise</th><th>Formule</th><th>Code d\'accès</th><th>Email RH</th><th>Créée le</th><th>Statut</th></tr></thead><tbody>'+
+      data.map(en=>'<tr><td>'+esc(en.nom)+'</td><td>'+packPill(en.pack)+'</td><td><code class="codetag">'+esc(en.code_acces||"—")+'</code></td><td>'+(esc(en.rh_email)||"—")+'</td><td>'+fdate(en.created_at)+'</td><td>'+(en.suspendu?'<span class="pill no">Suspendue</span>':'<span class="pill ok">Active</span>')+'</td></tr>').join("")+'</tbody></table>';
   }
-
   el("entForm").onsubmit=async ev=>{
-    ev.preventDefault(); const m=el("entMsg"); m.className="msg"; m.textContent="Création…";
-    const nom=el("e_nom").value.trim(); if(!nom){m.className="msg err";m.textContent="Nom requis.";return;}
-    const rec={nom:nom,rh_email:el("e_rh").value.trim()||null,code_acces:code6(),code_rh:code6()};
-    const {error}=await sb.from("entreprises").insert(rec);
-    if(error){m.className="msg err";m.textContent="Erreur : "+error.message;return;}
-    m.className="msg ok";m.textContent="✓ "+nom+" créée — code stagiaire "+rec.code_acces+" / code RH "+rec.code_rh;
-    el("e_nom").value="";el("e_rh").value=""; loadEnt();
+    ev.preventDefault();
+    const m=el("entMsg"); m.className="msg"; m.textContent="Création…";
+    const nom=el("e_nom").value.trim(); const rh=el("e_rh").value.trim();
+    if(!nom){ m.className="msg err"; m.textContent="Indiquez le nom de l'entreprise."; return; }
+    const code=slug(nom)+"-"+rnd();
+    const pack=(document.querySelector('input[name="pack"]:checked')||{}).value||"standard";
+    let ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code, pack:pack});
+    // Si la colonne "pack" n'existe pas encore côté base, on crée quand même l'entreprise (zéro régression)
+    if(ins.error && /pack/i.test(ins.error.message||"")){
+      ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code});
+    }
+    if(ins.error){ m.className="msg err"; m.textContent="Erreur : "+ins.error.message; return; }
+    m.className="msg ok";
+    m.innerHTML='✅ Entreprise créée — formule <b>'+(pack==="premium"?"Premium":"Standard")+'</b>. Code d\'accès : <code class="codetag">'+esc(code)+'</code> — transmettez-le au responsable et à ses salariés (ils choisissent leur rôle à l\'inscription).';
+    el("e_nom").value=""; el("e_rh").value="";
+    loadEnt();
   };
 
-  // ---- Détail d'une entreprise ----
-  async function openEnt(c){
-    if(!c)return; window.__curEnt=c; showEntDetail();
-    el("d_nom").textContent=c.nom;
-    el("d_meta").innerHTML=(c.suspendu?'<span class="pill no">Suspendue</span>':'<span class="pill ok">Active</span>')+' &nbsp; Créée le '+fdate(c.created_at)+(c.rh_email?' &nbsp;·&nbsp; RH : '+esc(c.rh_email):'');
-    el("d_codeStag").textContent=c.code_acces||"—";
-    el("d_codeRh").textContent=c.code_rh||"—";
-    el("d_copyStag").onclick=function(){copy(c.code_acces||"",this);};
-    el("d_copyRh").onclick=function(){copy(c.code_rh||"",this);};
-    el("d_actions").innerHTML='<button class="btn '+(c.suspendu?'gold':'ghost')+'" id="d_susBtn">'+(c.suspendu?'Réactiver l\'entreprise':'Suspendre l\'entreprise')+'</button>';
-    el("d_susBtn").onclick=async()=>{
-      const to=!c.suspendu;
-      if(to && !confirm("Suspendre « "+c.nom+" » ? Ses stagiaires et son responsable ne pourront plus se connecter (impayés).")) return;
-      el("d_susBtn").disabled=true;
-      const {error}=await sb.from("entreprises").update({suspendu:to}).eq("id",c.id);
-      if(error){alert("Erreur : "+error.message);el("d_susBtn").disabled=false;return;}
-      c.suspendu=to; openEnt(c); loadEnt();
-    };
-    loadEntSal(c); loadEntAtt(c);
-  }
-  async function loadEntSal(c){
-    const t=el("d_salTable"); t.innerHTML='<div class="empty">Chargement…</div>';
-    const {data,error}=await sb.from("stagiaires").select("*").eq("entreprise_id",c.id).order("created_at",{ascending:false});
-    if(error){t.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
-    el("d_salCount").textContent=data.length;
-    if(!data.length){t.innerHTML='<div class="empty">Aucun salarié pour le moment. Le responsable les ajoute depuis son espace.</div>';return;}
-    t.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Compte</th><th>Inscrit le</th><th></th></tr></thead><tbody>'+
-      data.map(s=>{var bl=!!s.bloque;return '<tr><td>'+esc(s.prenom)+' '+esc(s.nom)+'</td><td>'+(esc(s.email)||"—")+'</td><td>'+(bl?'<span class="pill no">Bloqué</span>':(s.user_id?'<span class="pill ok">Actif</span>':'<span class="pill no">À créer</span>'))+'</td><td>'+fdate(s.created_at)+'</td><td><button class="btn ghost sm stag-tog" data-id="'+esc(s.id)+'" data-bl="'+(bl?1:0)+'">'+(bl?'Débloquer':'Bloquer')+'</button></td></tr>';}).join("")+'</tbody></table>';
-    t.querySelectorAll(".stag-tog").forEach(b=>b.onclick=async()=>{
-      const to=b.dataset.bl!=="1"; const s=data.find(x=>String(x.id)===b.dataset.id);
-      if(to && !confirm("Bloquer "+(s?s.prenom+' '+s.nom:'ce stagiaire')+" ? Il ne pourra plus se connecter.")) return;
-      b.disabled=true; const {error}=await sb.from("stagiaires").update({bloque:to}).eq("id",b.dataset.id);
-      if(error){alert("Erreur : "+error.message);b.disabled=false;return;} loadEntSal(c); loadStag();
-    });
-  }
-  async function loadEntAtt(c){
-    const t=el("d_attTable"); t.innerHTML='<div class="empty">Chargement…</div>';
-    const {data,error}=await sb.from("attestations").select("*").eq("entreprise_id",c.id).order("created_at",{ascending:false});
-    if(error){t.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
-    el("d_attCount").textContent=data.length;
-    el("d_okCount").textContent=data.filter(a=>a.reussi).length;
-    if(!data.length){t.innerHTML='<div class="empty">Aucune attestation pour cette entreprise.</div>';return;}
-    t.innerHTML='<table><thead><tr><th>Salarié</th><th>Formation</th><th>Score</th><th>Résultat</th><th>Date</th><th></th></tr></thead><tbody>'+
-      data.map(a=>'<tr class="clickable" data-id="'+esc(a.id)+'"><td>'+esc(a.prenom)+' '+esc(a.nom)+'</td><td>'+esc(a.formation)+'</td><td>'+(a.pourcentage!=null?a.pourcentage+"%":"—")+'</td><td>'+(a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>')+'</td><td>'+fdate(a.created_at)+'</td><td><span class="go">📄 PDF</span></td></tr>').join("")+'</tbody></table>';
-    t.querySelectorAll("tr.clickable").forEach(tr=>tr.onclick=()=>openCert(data.find(x=>String(x.id)===tr.dataset.id)));
-  }
-
-  // ====== STAGIAIRES (vue globale, lecture + blocage) ======
+  // ---- Stagiaires ----
   async function loadStag(){
     const e=el("stagTable"); e.innerHTML='<div class="empty">Chargement…</div>';
     const {data,error}=await sb.from("stagiaires").select("*").order("created_at",{ascending:false});
-    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
-    el("stagCount").textContent=data.length; window.__stag=data;
-    if(!data.length){e.innerHTML='<div class="empty">Aucun stagiaire.</div>';return;}
-    e.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Statut</th><th>Inscrit le</th><th></th></tr></thead><tbody>'+
-      data.map(s=>{var bl=!!s.bloque;return '<tr><td>'+esc(s.prenom)+' '+esc(s.nom)+'</td><td>'+(esc(s.email)||"—")+'</td><td>'+(esc(s.entreprise)||"—")+'</td><td>'+(bl?'<span class="pill no">Bloqué</span>':'<span class="pill ok">Actif</span>')+'</td><td>'+fdate(s.created_at)+'</td><td><button class="btn ghost sm gstag-tog" data-id="'+esc(s.id)+'" data-bl="'+(bl?1:0)+'">'+(bl?'Débloquer':'Bloquer')+'</button></td></tr>';}).join("")+'</tbody></table>';
-    e.querySelectorAll(".gstag-tog").forEach(b=>b.onclick=async()=>{
-      const to=b.dataset.bl!=="1"; const s=(window.__stag||[]).find(x=>String(x.id)===b.dataset.id);
-      if(to && !confirm("Bloquer "+(s?s.prenom+' '+s.nom:'ce stagiaire')+" ? Il ne pourra plus se connecter (manquement au règlement).")) return;
-      b.disabled=true; const {error}=await sb.from("stagiaires").update({bloque:to}).eq("id",b.dataset.id);
-      if(error){alert("Erreur : "+error.message);b.disabled=false;return;} loadStag();
-    });
+    if(error){ e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>'; return; }
+    el("stagCount").textContent=data.length;
+    if(!data.length){ e.innerHTML='<div class="empty">Aucun stagiaire pour le moment.</div>'; return; }
+    e.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Compte</th><th>Inscrit le</th></tr></thead><tbody>'+
+      data.map(s=>'<tr><td>'+esc(s.prenom)+' '+esc(s.nom)+'</td><td>'+(esc(s.email)||"—")+'</td><td>'+(esc(s.entreprise)||"—")+'</td><td>'+(s.user_id?'<span class="pill ok">Actif</span>':'<span class="pill no">À créer</span>')+'</td><td>'+fdate(s.created_at)+'</td></tr>').join("")+'</tbody></table>';
   }
+  el("addForm").onsubmit=async ev=>{
+    ev.preventDefault();
+    const m=el("addMsg"); m.className="msg"; m.textContent="Enregistrement…";
+    const prenom=el("f_prenom").value.trim(), nom=el("f_nom").value.trim();
+    if(!prenom||!nom){ m.className="msg err"; m.textContent="Prénom et nom requis."; return; }
+    const {error}=await sb.from("stagiaires").insert({prenom:prenom, nom:nom, email:el("f_email").value.trim()||null, entreprise:el("f_entreprise").value.trim()||null});
+    if(error){ m.className="msg err"; m.textContent="Erreur : "+error.message; return; }
+    m.className="msg ok"; m.textContent="✅ Stagiaire ajouté.";
+    el("f_prenom").value=""; el("f_nom").value=""; el("f_email").value=""; el("f_entreprise").value="";
+    loadStag();
+  };
 
-  // ====== ATTESTATIONS (global) ======
+  // ---- Attestations ----
+  let ATT=[];
   async function loadAtt(){
     const e=el("attTable"); e.innerHTML='<div class="empty">Chargement…</div>';
     const {data,error}=await sb.from("attestations").select("*").order("created_at",{ascending:false});
-    if(error){e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>';return;}
-    el("attCount").textContent=data.length; window.__att=data;
-    if(!data.length){e.innerHTML='<div class="empty">Aucune attestation.</div>';return;}
-    e.innerHTML='<table><thead><tr><th>Stagiaire</th><th>Formation</th><th>Entreprise</th><th>Score</th><th>Résultat</th><th>Date</th><th></th></tr></thead><tbody>'+
-      data.map(a=>'<tr class="clickable" data-id="'+esc(a.id)+'"><td>'+esc(a.prenom)+' '+esc(a.nom)+'</td><td>'+esc(a.formation)+'</td><td>'+(esc(a.entreprise)||"—")+'</td><td>'+(a.pourcentage!=null?a.pourcentage+"%":"—")+'</td><td>'+(a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>')+'</td><td>'+fdate(a.created_at)+'</td><td><span class="go">📄 PDF</span></td></tr>').join("")+'</tbody></table>';
-    e.querySelectorAll("tr.clickable").forEach(tr=>tr.onclick=()=>openCert((window.__att||[]).find(x=>String(x.id)===tr.dataset.id)));
+    if(error){ e.innerHTML='<div class="empty">Erreur : '+esc(error.message)+'</div>'; return; }
+    ATT=data||[]; el("attCount").textContent=ATT.length;
+    if(!ATT.length){ e.innerHTML='<div class="empty">Aucune attestation pour le moment.</div>'; return; }
+    e.innerHTML='<table><thead><tr><th>Stagiaire</th><th>Formation</th><th>Score</th><th>Résultat</th><th>Date</th><th></th></tr></thead><tbody>'+
+      ATT.map(a=>'<tr class="clickable" data-id="'+esc(a.id)+'"><td>'+esc(a.prenom)+' '+esc(a.nom)+'</td><td>'+esc(a.formation)+'</td><td>'+(a.pourcentage!=null?a.pourcentage+"%":"—")+'</td><td>'+(a.reussi?'<span class="pill ok">Réussi</span>':'<span class="pill no">Échec</span>')+'</td><td>'+fdate(a.created_at||a.date_obtention)+'</td><td><span class="go">📄 PDF</span></td></tr>').join("")+'</tbody></table>';
+    e.querySelectorAll("tr.clickable").forEach(tr=>{tr.onclick=()=>openCert(ATT.find(x=>String(x.id)===tr.dataset.id));});
   }
-  el("csvBtn").onclick=()=>{const d=window.__att||[];if(!d.length)return;const head=["Prénom","Nom","Email","Entreprise","Formation","Score","Total","Pourcentage","Réussi","Date"];const lines=[head.join(";")].concat(d.map(a=>[a.prenom,a.nom,a.email,a.entreprise,a.formation,a.score,a.total,a.pourcentage,a.reussi?"Oui":"Non",fdate(a.created_at)].map(x=>'"'+String(x==null?"":x).replace(/"/g,'""')+'"').join(";")));const blob=new Blob(["﻿"+lines.join("\n")],{type:"text/csv;charset=utf-8"});const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download="attestations_mcr.csv";a.click();URL.revokeObjectURL(u);};
+  el("csvBtn").onclick=()=>{
+    if(!ATT.length){ return; }
+    const rows=[["Prénom","Nom","Email","Formation","Pourcentage","Résultat","Date"]].concat(
+      ATT.map(a=>[a.prenom||"",a.nom||"",a.email||"",a.formation||"",(a.pourcentage!=null?a.pourcentage:""),(a.reussi?"Réussi":"Échec"),fdate(a.created_at||a.date_obtention)]));
+    const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(";")).join("\n");
+    const blob=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="attestations_mcr.csv"; a.click();
+  };
 
-  // ====== AVIS / NOTES ======
-  async function loadNotes(){
-    const fr=el("frTable"), or=el("orTable");
-    fr.innerHTML='<div class="empty">Chargement…</div>'; or.innerHTML='<div class="empty">Chargement…</div>';
-    let pmap={}, emap={};
-    try{const {data:ps}=await sb.from("profiles").select("id,prenom,nom"); (ps||[]).forEach(p=>pmap[p.id]=((p.prenom||'')+' '+(p.nom||'')).trim());}catch(e){}
-    try{const {data:es}=await sb.from("entreprises").select("id,nom"); (es||[]).forEach(c=>emap[c.id]=c.nom);}catch(e){}
-    const who=r=>esc(pmap[r.user_id]||"—"), ent=r=>esc(emap[r.entreprise_id]||"—");
-    const {data:f,error:ef}=await sb.from("formation_ratings").select("*").order("created_at",{ascending:false});
-    if(ef){fr.innerHTML='<div class="empty">Table absente — appliquez la migration. ('+esc(ef.message)+')</div>';}
-    else{
-      el("frCount").textContent=f.length; el("frAvg").textContent=f.length?(f.reduce((a,b)=>a+(b.note||0),0)/f.length).toFixed(1):"—";
-      fr.innerHTML=!f.length?'<div class="empty">Aucune note de formation.</div>':
-        '<table><thead><tr><th>Stagiaire</th><th>Entreprise</th><th>Formation</th><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
-        f.map(r=>'<tr><td>'+who(r)+'</td><td>'+ent(r)+'</td><td>'+esc(r.formation)+'</td><td>'+stars(r.note)+'</td><td>'+(esc(r.commentaire)||"—")+'</td><td>'+fdate(r.created_at)+'</td></tr>').join("")+'</tbody></table>';
-    }
-    const {data:o,error:eo}=await sb.from("organisme_ratings").select("*").order("created_at",{ascending:false});
-    if(eo){or.innerHTML='<div class="empty">Table absente — appliquez la migration. ('+esc(eo.message)+')</div>';}
-    else{
-      el("orCount").textContent=o.length; el("orAvg").textContent=o.length?(o.reduce((a,b)=>a+(b.note||0),0)/o.length).toFixed(1):"—";
-      or.innerHTML=!o.length?'<div class="empty">Aucun avis sur l\'organisme.</div>':
-        '<table><thead><tr><th>Responsable</th><th>Entreprise</th><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
-        o.map(r=>'<tr><td>'+who(r)+'</td><td>'+ent(r)+'</td><td>'+stars(r.note)+'</td><td>'+(esc(r.commentaire)||"—")+'</td><td>'+fdate(r.created_at)+'</td></tr>').join("")+'</tbody></table>';
-    }
-  }
-
-  // ====== Certificat ======
-  function certRef(a){const y=(a.created_at?new Date(a.created_at):new Date()).getFullYear();const idp=(String(a.id||"").replace(/[^a-zA-Z0-9]/g,"").slice(-4)||"0000").toUpperCase();return "MCR-"+y+"-"+idp;}
+  // ---- Certificat (modal) ----
   function openCert(a){
-    if(!a)return;
-    const meta='<div>Organisme<b>MCR Formations</b></div>'+(a.entreprise?'<div>Entreprise<b>'+esc(a.entreprise)+'</b></div>':'')+'<div>Délivré le<b>'+fdate(a.created_at)+'</b></div><div>Référence<b>'+certRef(a)+'</b></div>';
-    el("certBody").innerHTML='<div class="cert-crest"><img src="MCR_corbeau.png" alt="MCR" style="width:80%;height:80%;object-fit:contain"></div><div class="cert-org">MCR Formations</div><h1>Attestation de réussite</h1><div class="formation">« '+(esc(a.formation)||"Formation")+' »</div><div class="to">Décerné à</div><div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div><div class="body">a suivi l\'intégralité du parcours e-learning et '+(a.reussi?'<strong>validé la formation</strong>':'participé à la formation')+(a.pourcentage!=null?' avec un score de <strong>'+a.pourcentage+'%</strong>':'')+' (seuil de réussite : 60%).</div><div class="cert-meta">'+meta+'</div><div class="cert-foot">Parcours e-learning de sensibilisation / formation théorique. Ne remplace pas, selon la formation, les exercices pratiques obligatoires organisés par l\'employeur.</div>';
+    if(!a) return;
+    el("certBody").innerHTML=
+      '<div class="cert-crest"><span>🦅</span></div>'+
+      '<div class="cert-org">MCR Formations</div>'+
+      '<h1>Attestation de formation</h1>'+
+      '<div class="formation">'+esc(a.formation)+'</div>'+
+      '<div class="to">Délivrée à</div>'+
+      '<div class="cert-name">'+esc(a.prenom)+' '+esc(a.nom)+'</div>'+
+      '<div class="body">A suivi et '+(a.reussi?'validé':'participé à')+' la formation ci-dessus'+(a.pourcentage!=null?' avec un score de <b>'+a.pourcentage+'%</b>':'')+'.</div>'+
+      '<div class="cert-meta"><div>Résultat<b>'+(a.reussi?'Réussite':'Non validé')+'</b></div><div>Date<b>'+fdate(a.created_at||a.date_obtention)+'</b></div></div>'+
+      '<div class="cert-foot">MCR Formations — Organisme de formation. Attestation conservée pour le suivi qualité Qualiopi.</div>';
     el("certModal").classList.add("open");
   }
   el("certClose").onclick=()=>el("certModal").classList.remove("open");
   el("certPrint").onclick=()=>window.print();
-  el("certModal").addEventListener("click",e=>{if(e.target.id==="certModal")e.currentTarget.classList.remove("open");});
+
+  // ---- Notes ----
+  function avg(arr){ if(!arr.length) return null; return Math.round((arr.reduce((s,x)=>s+(x.note||0),0)/arr.length)*10)/10; }
+  async function loadNotes(){
+    const fr=el("frTable"), or=el("orTable");
+    fr.innerHTML='<div class="empty">Chargement…</div>'; or.innerHTML='<div class="empty">Chargement…</div>';
+    const r1=await sb.from("formation_ratings").select("*").order("created_at",{ascending:false});
+    if(r1.error){ fr.innerHTML='<div class="empty">Erreur : '+esc(r1.error.message)+'</div>'; }
+    else{
+      const d=r1.data||[]; const a=avg(d);
+      el("frAvg").innerHTML=a!=null?a+' '+stars(a):'—'; el("frCount").textContent=d.length;
+      fr.innerHTML=d.length?('<table><thead><tr><th>Formation</th><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
+        d.map(x=>'<tr><td>'+esc(x.formation)+'</td><td>'+stars(x.note)+'</td><td>'+(esc(x.commentaire)||"—")+'</td><td>'+fdate(x.created_at)+'</td></tr>').join("")+'</tbody></table>'):'<div class="empty">Aucun avis pour le moment.</div>';
+    }
+    const r2=await sb.from("organisme_ratings").select("*").order("created_at",{ascending:false});
+    if(r2.error){ or.innerHTML='<div class="empty">Erreur : '+esc(r2.error.message)+'</div>'; }
+    else{
+      const d=r2.data||[]; const a=avg(d);
+      el("orAvg").innerHTML=a!=null?a+' '+stars(a):'—'; el("orCount").textContent=d.length;
+      or.innerHTML=d.length?('<table><thead><tr><th>Note</th><th>Commentaire</th><th>Date</th></tr></thead><tbody>'+
+        d.map(x=>'<tr><td>'+stars(x.note)+'</td><td>'+(esc(x.commentaire)||"—")+'</td><td>'+fdate(x.created_at)+'</td></tr>').join("")+'</tbody></table>'):'<div class="empty">Aucun avis pour le moment.</div>';
+    }
+  }
+
+  // ---- Calculateur de prix (devis express) ----
+  (function(){
+    function euros(n){return (Math.round(n*100)/100).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
+    function selRadio(g){var x=document.querySelector('input[name="'+g+'"]:checked');return x?x.value:null;}
+    function bindCards(sel){document.querySelectorAll(sel).forEach(p=>{p.addEventListener("click",()=>{
+      document.querySelectorAll(sel).forEach(x=>x.classList.remove("sel"));p.classList.add("sel");
+      var r=p.querySelector("input");if(r){r.checked=true;}calc();});});}
+    function calc(){
+      if(!el("c_stag"))return;
+      var formule=selRadio("cpack")||"standard", type=selRadio("ctype")||"unite";
+      var su=+el("p_su").value||0, pu=+el("p_pu").value||0, sc=+el("p_sc").value||0, pc=+el("p_pc").value||0;
+      var stag=Math.max(1,+el("c_stag").value||1), mod=Math.max(1,+el("c_mod").value||1);
+      el("c_modwrap").style.display=(type==="unite")?"":"none";
+      var unit,qty,detail,lbl=(formule==="premium")?"Premium":"Standard";
+      if(type==="unite"){ unit=(formule==="premium")?pu:su; qty=stag*mod;
+        detail=stag+" stagiaire(s) × "+mod+" module(s) × "+euros(unit)+" — "+lbl+", à la formation."; }
+      else { unit=(formule==="premium")?pc:sc; qty=stag;
+        detail=stag+" stagiaire(s) × "+euros(unit)+" / an — "+lbl+", catalogue complet."; }
+      var ht=unit*qty, tva=ht*0.2, ttc=ht+tva;
+      el("ct_unit").textContent=euros(unit); el("ct_qty").textContent=qty;
+      el("ct_ht").textContent=euros(ht); el("ct_tva").textContent=euros(tva); el("ct_ttc").textContent=euros(ttc);
+      el("ct_detail").textContent=detail;
+    }
+    bindCards("#calcPacks .pack"); bindCards("#calcTypes .pack");
+    ["c_stag","c_mod","p_su","p_pu","p_sc","p_pc"].forEach(id=>{var e=el(id);if(e)e.addEventListener("input",calc);});
+    calc();
+  })();
+
+  el("refreshBtn").onclick=()=>loadAll();
+  el("logout").onclick=async()=>{ try{ await sb.auth.signOut(); }catch(e){} try{ localStorage.removeItem("sb-mmaolkpsaroxqblthmhk-auth-token"); }catch(e){} location.href="connexion.html"; };
 })();
 </script>
 </body>
