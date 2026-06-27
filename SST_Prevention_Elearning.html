@@ -768,7 +768,7 @@ function renderHome(){
   main.innerHTML=`
     <div class="hero">
       <img class="hlogo" src="${LOGO}" alt="MCR Formations">
-      <span class="tag">Formation professionnelle · Conforme INRS</span>
+      <span class="tag">Formation professionnelle · Prévention des risques</span>
       <h2>Acteur de la Prévention des Risques Professionnels</h2>
       <p>Le volet « prévention » des risques professionnels. Un cours sur chaque point, puis un quiz à valider (60 %) avant de passer au suivant.</p>
       <div class="meta">
@@ -1076,16 +1076,16 @@ render();
   var CODES = { "MCR-ESSAI":"Essai", "PARIS-DEMO":"Collaborateur Paris" };
   var KEY = "mcrAccesOk";
   function ok(){ try{ return CODES[localStorage.getItem(KEY)] != null; }catch(e){ return false; } }
-  if(ok()||localStorage.getItem('sb-mmaolkpsaroxqblthmhk-auth-token')) return;
+  try{localStorage.removeItem(KEY);}catch(e){} if(localStorage.getItem('sb-mmaolkpsaroxqblthmhk-auth-token')) return; window.location.replace('connexion.html'); return;
   function build(){
     if(document.getElementById('mcrGate')) return;
     var o=document.createElement('div'); o.id='mcrGate';
     o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(900px 600px at 50% -10%,#1a2230,#0b0e13);font-family:system-ui,Segoe UI,Roboto,sans-serif;padding:24px';
     o.innerHTML='<div style="width:min(380px,92vw);background:#12161c;border:1px solid #2b323b;border-radius:18px;padding:32px 28px;box-shadow:0 30px 80px -20px #000;text-align:center">'
       +'<div style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#d6a338;font-weight:800">MCR Academy</div>'
-      +'<h2 style="margin:14px 0 6px;color:#fff;font-size:21px;font-weight:800">Espace d&rsquo;essai protege</h2>'
-      +'<p style="margin:0 0 18px;color:#9aa6b2;font-size:13.5px;line-height:1.5">Saisissez le code d&rsquo;acces qui vous a ete communique.</p>'
-      +'<input id="mcrCode" type="text" autocomplete="off" placeholder="Code d&rsquo;acces" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:11px;border:1px solid #2b323b;background:#1b2127;color:#fff;font-size:15px;text-align:center;letter-spacing:1px">'
+      +'<h2 style="margin:14px 0 6px;color:#fff;font-size:21px;font-weight:800">Espace d&rsquo;essai protégé</h2>'
+      +'<p style="margin:0 0 18px;color:#9aa6b2;font-size:13.5px;line-height:1.5">Saisissez le code d&rsquo;accès qui vous a été communiqué.</p>'
+      +'<input id="mcrCode" type="text" autocomplete="off" placeholder="Code d&rsquo;accès" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:11px;border:1px solid #2b323b;background:#1b2127;color:#fff;font-size:15px;text-align:center;letter-spacing:1px">'
       +'<div id="mcrErr" style="color:#ff7a6e;font-size:12.5px;min-height:16px;margin:9px 0 4px"></div>'
       +'<button id="mcrGo" style="width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#d6a338,#b9842a);color:#1a1407;font-weight:800;font-size:15px;cursor:pointer">Entrer</button>'
       +'</div>';
@@ -1099,7 +1099,7 @@ render();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));try{var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;if(u){rec.user_id=u.id;var pr=await sb.from("profiles").select("entreprise_id").eq("id",u.id).maybeSingle();if(pr&&pr.data&&pr.data.entreprise_id)rec.entreprise_id=pr.data.entreprise_id;var stg=await sb.from("stagiaires").select("id").eq("user_id",u.id).maybeSingle();if(stg&&stg.data)rec.stagiaire_id=stg.data.id;}}catch(e){}var r=await sb.from("attestations").insert(rec);if(r&&!r.error){try{window.MCR_mountRating(rec.formation);}catch(e){}}return r;}catch(e){return{error:String(e)};}};
+window.MCR_saveAttestation=async function(rec){try{if(!window.supabase)return{error:"lib"};var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg",{auth:{lock:(n,a,fn)=>fn()}}));try{var s=await sb.auth.getSession();var u=s&&s.data&&s.data.session?s.data.session.user:null;if(u){rec.user_id=u.id;var pr=await sb.from("profiles").select("entreprise_id").eq("id",u.id).maybeSingle();if(pr&&pr.data&&pr.data.entreprise_id)rec.entreprise_id=pr.data.entreprise_id;var stg=await sb.from("stagiaires").select("id").eq("user_id",u.id).maybeSingle();if(stg&&stg.data)rec.stagiaire_id=stg.data.id;}}catch(e){}var r=await sb.from("attestations").insert(rec);if(r&&!r.error){try{window.MCR_mountRating(rec.formation);}catch(e){}}return r;}catch(e){return{error:String(e)};}};
 window.MCR_mountRating=function(formation){
   if(document.getElementById('mcrRateBox'))return;
   var anchor=document.getElementById('saveAttMsg');var host=anchor?anchor.parentNode:document.body;
@@ -1121,7 +1121,7 @@ window.MCR_mountRating=function(formation){
     var msg=box.querySelector('#mcrRateMsg');
     if(!cur){msg.textContent='Choisissez un nombre d\u2019\u00e9toiles.';return;}
     this.disabled=true;msg.textContent='Envoi\u2026';
-    try{var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg"));
+    try{var sb=window.__mcrsb||(window.__mcrsb=window.supabase.createClient("https://mmaolkpsaroxqblthmhk.supabase.co","sb_publishable_6DNAf0gSz0b-tvwlQZ5g8A_5TjA-SGg",{auth:{lock:(n,a,fn)=>fn()}}));
       var r=await sb.rpc('save_rating',{p_type:'formation',p_note:cur,p_commentaire:box.querySelector('#mcrRateTxt').value.trim(),p_formation:formation});
       if(r&&r.error){msg.textContent='Erreur : '+r.error.message;this.disabled=false;return;}
       box.innerHTML='<div style="font-weight:800;font-size:14px;color:#5ee9a0">\u2605 Merci pour votre note !</div>';
