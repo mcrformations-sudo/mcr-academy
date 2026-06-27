@@ -104,6 +104,11 @@
   .ct-line.big span{color:var(--ink);font-weight:800;font-size:15px}
   .ct-line.big b{color:var(--gold);font-size:24px}
   .ct-detail{color:var(--muted);font-size:12.5px;margin-top:10px;line-height:1.5}
+  .entforms{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .fchip{cursor:pointer;font-size:12px;padding:7px 12px;border-radius:99px;border:1px solid var(--line);background:#0f141a;color:var(--muted);font-weight:600;user-select:none}
+  .fchip.sel{border-color:var(--gold);color:var(--gold);background:rgba(214,163,56,.10)}
+  .fcbtns{display:flex;gap:8px;margin-bottom:8px}
+  .fcbtns .btn{padding:6px 12px;font-size:12px}
 </style>
 </head>
 <body>
@@ -146,6 +151,9 @@
             <div class="pprice">65 € HT <span>/ stagiaire / module · 180 € HT / an le catalogue complet</span></div>
           </label>
         </div>
+        <div class="flabel">Formations incluses pour ce client</div>
+        <div class="fcbtns"><button type="button" class="btn ghost" id="fcAll">Tout cocher</button><button type="button" class="btn ghost" id="fcNone">Tout décocher</button></div>
+        <div id="entFormations" class="entforms"></div>
         <button class="btn gold" type="submit">+ Créer</button>
       </form>
       <div id="entMsg" class="msg"></div>
@@ -274,6 +282,14 @@
   document.querySelectorAll("#entForm .pack").forEach(p=>{p.addEventListener("click",()=>{
     document.querySelectorAll("#entForm .pack").forEach(x=>x.classList.remove("sel"));
     p.classList.add("sel"); var r=p.querySelector("input"); if(r) r.checked=true;});});
+  const FORMATIONS=["Acteur de la Prévention des Risques Professionnels","Sécurité Incendie — EPI","Guide-File, Serre-File & Évacuation","Gestes, Postures & Prévention des TMS","Prévention des Risques Psychosociaux (RPS)","Habilitation Électrique H0 B0","Habilitation Électrique BS / BE Manœuvre"];
+  (function(){var c=el("entFormations"); if(!c) return;
+    c.innerHTML=FORMATIONS.map(f=>'<span class="fchip" data-f="'+f.replace(/"/g,"&quot;")+'">'+f+'</span>').join("");
+    c.querySelectorAll(".fchip").forEach(ch=>ch.addEventListener("click",()=>ch.classList.toggle("sel")));
+    var a=el("fcAll"),n=el("fcNone");
+    if(a)a.onclick=()=>c.querySelectorAll(".fchip").forEach(ch=>ch.classList.add("sel"));
+    if(n)n.onclick=()=>c.querySelectorAll(".fchip").forEach(ch=>ch.classList.remove("sel"));
+  })();
   async function loadEnt(){
     const e=el("entTable"); e.innerHTML='<div class="empty">Chargement…</div>';
     const {data,error}=await sb.from("entreprises").select("*").order("created_at",{ascending:false});
@@ -290,11 +306,11 @@
     if(!nom){ m.className="msg err"; m.textContent="Indiquez le nom de l'entreprise."; return; }
     const code=slug(nom)+"-"+rnd();
     const pack=(document.querySelector('input[name="pack"]:checked')||{}).value||"standard";
-    let ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code, pack:pack});
-    // Si la colonne "pack" n'existe pas encore côté base, on crée quand même l'entreprise (zéro régression)
-    if(ins.error && /pack/i.test(ins.error.message||"")){
-      ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code});
-    }
+    const formations=Array.from(document.querySelectorAll('#entFormations .fchip.sel')).map(c=>c.getAttribute("data-f"));
+    // On tente avec tout ; si une colonne manque côté base, on retombe en douceur sans jamais bloquer la création
+    let ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code, pack:pack, formations:formations});
+    if(ins.error){ ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code, pack:pack}); }
+    if(ins.error){ ins=await sb.from("entreprises").insert({nom:nom, rh_email:rh||null, code_acces:code}); }
     if(ins.error){ m.className="msg err"; m.textContent="Erreur : "+ins.error.message; return; }
     m.className="msg ok";
     m.innerHTML='✅ Entreprise créée — formule <b>'+(pack==="premium"?"Premium":"Standard")+'</b>. Code d\'accès : <code class="codetag">'+esc(code)+'</code> — transmettez-le au responsable et à ses salariés (ils choisissent leur rôle à l\'inscription).';
